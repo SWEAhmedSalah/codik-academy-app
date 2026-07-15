@@ -1,0 +1,23 @@
+<div class="h-screen w-full flex overflow-hidden bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Left column: Navigation sidebar -->
+  <div class="w-64 bg-white border-r border-gray-100 flex-shrink-0">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Center column: Main dashboard content -->
+  <div class="flex-1 overflow-y-auto p-8">
+    <app-dashboard></app-dashboard>
+  </div>
+
+  <!-- Right column: Sessions list -->
+  <div class="w-80 bg-white border-l border-gray-100 flex-shrink-0 overflow-y-auto">
+    <app-sessions-sidebar></app-sessions-sidebar>
+  </div>
+
+  <!-- Right column: Session details -->
+  <div class="w-96 bg-white border-l border-gray-100 flex-shrink-0 overflow-y-auto">
+      <app-session-details></app-session-details>
+  </div>
+
+</div>

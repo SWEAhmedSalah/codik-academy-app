@@ -1,0 +1,63 @@
+<div class="p-6 h-full bg-white">
+  <!-- Header -->
+  <h2 class="text-xl font-bold text-gray-800 mb-1">Sessions</h2>
+  <p class="text-xs text-gray-500 mb-6 flex items-center">
+    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+    Java Spring Bootcamp - Patch 5
+  </p>
+
+  <!-- Sessions list -->
+  <div class="space-y-2">
+    @for (session of sessions; track session.id; let i = $index) {
+      <!-- Session item -->
+      <div (click)="onSessionSelect(session)"
+           [class.border-indigo-500]="stateService.selectedSession()?.id === session.id"
+           [class.bg-indigo-50]="stateService.selectedSession()?.id === session.id"
+           class="flex items-center justify-between p-3 rounded-xl border border-transparent transition-all cursor-pointer hover:bg-gray-50"
+           [class.bg-indigo-50]="session.student_status === 'In Progress'"
+           [class.border-indigo-100]="session.student_status === 'In Progress'">
+
+        <div class="flex items-center gap-4">
+
+          <!-- Numbered circle -->
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border-2 text-sm font-semibold"
+               [class.border-green-500]="session.student_status === 'Completed'"
+               [class.text-green-600]="session.student_status === 'Completed'"
+               [class.border-indigo-500]="session.student_status === 'In Progress'"
+               [class.text-indigo-600]="session.student_status === 'In Progress'"
+               [class.bg-indigo-500]="session.student_status === 'In Progress'"
+               [class.!text-white]="session.student_status === 'In Progress'"
+               [class.border-gray-300]="!session.student_status || session.student_status === 'Upcoming'"
+               [class.text-gray-400]="!session.student_status || session.student_status === 'Upcoming'">
+            {{session.order_index}}
+          </div>
+
+          <!-- Session name and details -->
+          <div class="flex flex-col">
+            <h3 class="text-sm font-medium"
+                [class.text-gray-500]="session.student_status === 'Upcoming'"
+                [class.text-gray-800]="session.student_status !== 'Upcoming'">
+              {{session.title}}
+            </h3>
+            <span class="text-xs text-gray-400">
+              {{session.duration}}
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Status badge -->
+          <span class="text-[10px] px-2 py-1 rounded-md font-medium w-20 text-center"
+                [class.bg-green-100]="session.student_status === 'Completed'"
+                [class.text-green-700]="session.student_status === 'Completed'"
+                [class.bg-indigo-100]="session.student_status === 'In Progress'"
+                [class.text-indigo-700]="session.student_status === 'In Progress'"
+                [class.bg-gray-50]="!session.student_status || session.student_status === 'Upcoming'"
+                [class.text-gray-400]="!session.student_status || session.student_status === 'Upcoming'">
+            {{session.student_status || 'Upcoming'}}
+          </span>
+        </div>
+      </div>
+    }
+  </div>
+</div>
