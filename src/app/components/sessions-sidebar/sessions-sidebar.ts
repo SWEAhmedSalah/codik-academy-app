@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../core/services/supabase';
 import { StudentStateService } from '../../core/services/student-state';
+import { TranslationService } from '../../core/services/translation.service';
 import { Session } from '../../core/models/session.model';
 
 @Component({
@@ -11,12 +12,13 @@ import { Session } from '../../core/models/session.model';
   templateUrl: './sessions-sidebar.html'
 })
 export class SessionsSidebar implements OnInit {
-  private supabaseService = inject(SupabaseService);
-  stateService = inject(StudentStateService);
+  private readonly supabaseService = inject(SupabaseService);
+  readonly stateService = inject(StudentStateService);
+  readonly t = inject(TranslationService);
 
   sessions: Session[] = [];
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     try {
       this.sessions = await this.supabaseService.getPublishedSessions();
 
@@ -30,7 +32,7 @@ export class SessionsSidebar implements OnInit {
     }
   }
 
-  onSessionSelect(session: Session) {
+  onSessionSelect(session: Session): void {
     this.stateService.selectedSession.set(session);
   }
 }

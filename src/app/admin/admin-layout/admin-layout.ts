@@ -4,6 +4,7 @@ import { AdminStatistics } from '../admin-statistics/admin-statistics';
 import { AdminSessions } from '../admin-sessions/admin-sessions';
 import { AdminSubmissions } from '../admin-submissions/admin-submissions';
 import { SupabaseService } from '../../core/services/supabase';
+import { TranslationService } from '../../core/services/translation.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,12 +14,13 @@ import { Router } from '@angular/router';
   templateUrl: './admin-layout.html'
 })
 export class AdminLayout {
-  private router = inject(Router);
-  private supabaseService = inject(SupabaseService);
+  private readonly router = inject(Router);
+  private readonly supabaseService = inject(SupabaseService);
+  readonly t = inject(TranslationService);
 
   activeTab: 'dashboard' | 'sessions' | 'submissions' = 'dashboard';
 
-  async logout() {
+  async logout(): Promise<void> {
     await this.supabaseService.signOut();
     this.router.navigate(['/login']);
   }

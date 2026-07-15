@@ -1,35 +1,32 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { SupabaseService } from '../services/supabase';
+import { APP_CONSTANTS, UserRole } from '../constants/app.constants';
 
-export const adminGuard: CanActivateFn = async (route, state) => {
+export const adminGuard: CanActivateFn = async (_route, _state) => {
   const router = inject(Router);
   const supabaseService = inject(SupabaseService);
 
   try {
-    // 1. نجيب بيانات المستخدم
-    const user = await supabaseService.getCurrentUser(); 
-    
-    // 2. لو مفيش مستخدم أو مفيش إيميل، ارميه على اللوجين
+    const user = await supabaseService.getCurrentUser();
+
     if (!user || !user.email) {
-      router.navigate(['/login']);
+      router.navigate([APP_CONSTANTS.ROUTES.LOGIN]);
       return false;
     }
 
-    // 3. نستخدم الميثود بتاعتك ونبعتلها الإيميل
     const role = await supabaseService.getUserRole(user.email);
 
-    // 4. التوجيه بناءً على الصلاحية
-    if (role === 'admin') {
-      return true; // مسموح بالدخول
-    } else {
-      // لو student، امنعه من الدخول ووجهه لمكان تاني (مثلاً لوحة الطلبة)
-      router.navigate(['/']); 
-      return false;
+    if (role === UserRole.ADMIN) {
+      return true;
     }
+
+    // Redirect non-admin users to student area
+    router.navigate([APP_CONSTANTS.ROUTES.STUDENT]);
+    return false;
   } catch (error) {
     console.error('Admin Guard Error:', error);
-    router.navigate(['/login']);
+    router.navigate([APP_CONSTANTS.ROUTES.LOGIN]);
     return false;
   }
 };

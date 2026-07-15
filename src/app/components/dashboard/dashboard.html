@@ -1,29 +1,29 @@
 <!-- الحاوية الرئيسية للداشبورد بالكامل -->
 <div class="flex flex-col gap-8 h-full bg-slate-50 p-2">
-  
+
   <!-- 1. قسم الترحيب -->
   <div>
-    <h1 class="text-2xl font-bold text-gray-900">Welcome back, {{ studentName }}! 👋</h1>
-    <p class="text-sm text-gray-500 mt-1">Keep learning and build amazing things.</p>
+    <h1 class="text-2xl font-bold text-gray-900">{{ t.t('dashboard.welcome') }}، {{ studentName }}! 👋</h1>
+    <p class="text-sm text-gray-500 mt-1">{{ t.t('dashboard.subtitle') }}</p>
   </div>
 
   <!-- 2. شبكة الإحصائيات (4 كروت) -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    
+
     <!-- كارت نسبة التقدم -->
     <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
       <div class="flex items-center gap-3 mb-4">
         <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
         </div>
-        <span class="text-sm font-medium text-gray-600">Course Progress</span>
+        <span class="text-sm font-medium text-gray-600">{{ t.t('dashboard.courseProgress') }}</span>
       </div>
       <div>
         <h2 class="text-3xl font-bold text-gray-900">{{ courseProgress }}%</h2>
         <div class="w-full bg-gray-100 rounded-full h-2 mt-3">
           <div class="bg-indigo-600 h-2 rounded-full" [style.width.%]="courseProgress"></div>
         </div>
-        <p class="text-xs text-gray-400 mt-2">Keep going!</p>
+        <p class="text-xs text-gray-400 mt-2">{{ t.t('dashboard.keepGoing') }}</p>
       </div>
     </div>
 
@@ -33,11 +33,11 @@
         <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
         </div>
-        <span class="text-sm font-medium text-gray-600">Sessions Attended</span>
+        <span class="text-sm font-medium text-gray-600">{{ t.t('dashboard.sessionsAttended') }}</span>
       </div>
       <div>
         <h2 class="text-3xl font-bold text-gray-900">{{ sessionsAttended }} <span class="text-lg text-gray-400 font-medium">/ {{ totalSessions }}</span></h2>
-        <p class="text-xs text-gray-400 mt-3">Good job!</p>
+        <p class="text-xs text-gray-400 mt-3">{{ t.t('dashboard.goodJob') }}</p>
       </div>
     </div>
 
@@ -47,11 +47,11 @@
         <div class="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
         </div>
-        <span class="text-sm font-medium text-gray-600">Assignments Completed</span>
+        <span class="text-sm font-medium text-gray-600">{{ t.t('dashboard.assignmentsCompleted') }}</span>
       </div>
       <div>
         <h2 class="text-3xl font-bold text-gray-900">{{ assignmentsCompleted }} <span class="text-lg text-gray-400 font-medium">/ {{ totalAssignments }}</span></h2>
-        <p class="text-xs text-gray-400 mt-3">On track!</p>
+        <p class="text-xs text-gray-400 mt-3">{{ t.t('dashboard.excellent') }}</p>
       </div>
     </div>
 
@@ -61,12 +61,12 @@
         <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
         </div>
-        <span class="text-sm font-medium text-gray-600">Next Session</span>
+        <span class="text-sm font-medium text-gray-600">{{ t.t('dashboard.nextSession') }}</span>
       </div>
       <div>
-        <h2 class="text-xl font-bold text-gray-900">Sat, 8:00 PM</h2>
-        <p class="text-sm text-indigo-600 font-medium mt-1">Session 7: Spring Data JPA</p>
-        <a href="#" class="text-xs text-gray-400 hover:text-indigo-600 mt-2 inline-block transition-colors">View Schedule</a>
+        <h2 class="text-xl font-bold text-gray-900">{{ nextSessionTime }}</h2>
+        <p class="text-sm text-indigo-600 font-medium mt-1">{{ nextSessionTitle }}</p>
+        <a href="#" class="text-xs text-gray-400 hover:text-indigo-600 mt-2 inline-block transition-colors">{{ t.t('dashboard.viewSchedule') }}</a>
       </div>
     </div>
 
@@ -74,38 +74,38 @@
 
   <!-- 3. قسم المتابعة والتكليفات -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-2">
-    
-    <!-- كارت Continue Learning -->
+
+    <!-- كارت تابع التعلم -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
       <div class="flex items-center gap-2 mb-6">
         <div class="w-1 h-4 bg-indigo-600 rounded-full"></div>
-        <h3 class="text-lg font-bold text-gray-900">Continue Learning</h3>
+        <h3 class="text-lg font-bold text-gray-900">{{ t.t('dashboard.continueLearning') }}</h3>
       </div>
-      
+
       <div class="flex flex-col sm:flex-row gap-5 items-start">
         <div class="w-24 h-24 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center flex-shrink-0">
           <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Spring_Framework_Logo_2018.svg" alt="Spring Boot" class="w-16">
         </div>
-        
+
         <div class="flex-1">
-          <p class="text-xs font-semibold text-gray-500 mb-1">Session {{ currentSession.number }}</p>
-          <h4 class="text-base font-bold text-gray-900 mb-2">{{ currentSession.title }}</h4>
-          
+          <p class="text-xs font-semibold text-gray-500 mb-1">{{ t.t('dashboard.session') }} {{ currentSession?.number }}</p>
+          <h4 class="text-base font-bold text-gray-900 mb-2">{{ currentSession?.title }}</h4>
+
           <div class="flex items-center gap-3 text-xs text-gray-500 mb-4">
             <span class="flex items-center gap-1">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-              Recorded on {{ currentSession.recordedDate }}
+              {{ t.t('dashboard.recordedOn') }} {{ currentSession?.recordedDate }}
             </span>
             <span>•</span>
-            <span>{{ currentSession.duration }}</span>
+            <span>{{ currentSession?.duration }}</span>
           </div>
 
           <div class="flex items-center gap-4">
             <button class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors">
-              Continue Session
+              {{ t.t('dashboard.watchSession') }}
             </button>
             <a href="#" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center gap-1">
-              Open Recording
+              {{ t.t('dashboard.viewMaterials') }}
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
             </a>
           </div>
@@ -113,53 +113,52 @@
       </div>
     </div>
 
-    <!-- كارت Latest Assignment -->
+    <!-- كارت أحدث تكليف -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
       <div>
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center gap-2">
             <div class="w-1 h-4 bg-indigo-600 rounded-full"></div>
-            <h3 class="text-lg font-bold text-gray-900">Latest Assignment</h3>
+            <h3 class="text-lg font-bold text-gray-900">{{ t.t('dashboard.latestAssignment') }}</h3>
           </div>
           <span class="bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-1 rounded-md">
-            Due in {{ latestAssignment.daysLeft }} days
+            {{ t.t('dashboard.dueIn') }} {{ latestAssignment?.daysLeft }} {{ t.t('dashboard.days') }}
           </span>
         </div>
 
-        <h4 class="text-base font-bold text-gray-900 mb-2">{{ latestAssignment.title }}</h4>
+        <h4 class="text-base font-bold text-gray-900 mb-2">{{ latestAssignment?.title }}</h4>
         <p class="text-sm text-gray-500 leading-relaxed mb-4">
-          {{ latestAssignment.description }}
+          {{ latestAssignment?.description }}
         </p>
 
         <div class="flex items-center gap-2 text-xs text-gray-500 font-medium mb-6">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-          Due: {{ latestAssignment.dueDate }}
+          {{ t.t('dashboard.due') }}: {{ latestAssignment?.dueDate }}
         </div>
       </div>
 
       <div>
         <button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold py-2 px-5 rounded-lg transition-colors">
-          View Task
+          {{ t.t('dashboard.startAssignment') }}
         </button>
       </div>
     </div>
 
   </div>
 
-  <!-- ================= قسم الإعلانات والرسم البياني (الجزء السفلي) ================= -->
+  <!-- قسم الإعلانات والرسم البياني -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-2">
-    
-    <!-- 1. كارت الإعلانات (Recent Announcements) -->
+
+    <!-- كارت الإعلانات -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
       <div class="flex items-center justify-between mb-6">
-        <h3 class="text-lg font-bold text-gray-900">Recent Announcements</h3>
-        <a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">View All</a>
+        <h3 class="text-lg font-bold text-gray-900">{{ t.t('dashboard.recentAnnouncements') }}</h3>
+        <a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">{{ t.t('common.viewAll') }}</a>
       </div>
-      
+
       <div class="space-y-6 flex-1">
         @for (announcement of recentAnnouncements; track announcement.title) {
           <div class="flex gap-4 items-start">
-            <!-- الأيقونة -->
             <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0 text-indigo-600 mt-1">
               @if (announcement.icon === 'megaphone') {
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
@@ -167,8 +166,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
               }
             </div>
-            
-            <!-- النص -->
+
             <div>
               <h4 class="text-sm font-bold text-gray-900">{{ announcement.title }}</h4>
               <p class="text-xs text-gray-500 mt-1 leading-relaxed">{{ announcement.message }}</p>
@@ -179,16 +177,13 @@
       </div>
     </div>
 
-    <!-- 2. كارت الرسم البياني للتقدم (Your Progress Overview) -->
+    <!-- كارت نظرة عامة على التقدم -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
       <div class="mb-6">
-        <h3 class="text-lg font-bold text-gray-900">Your Progress Overview</h3>
+        <h3 class="text-lg font-bold text-gray-900">{{ t.t('dashboard.progressOverview') }}</h3>
       </div>
-      
-      <!-- منطقة الرسم البياني (مصممة بالـ SVG لتطابق التصميم بدون مكتبات خارجية) -->
+
       <div class="relative w-full h-48 mt-auto">
-        
-        <!-- خطوط الـ Y-Axis الوهمية والأرقام -->
         <div class="absolute inset-0 flex flex-col justify-between text-[10px] font-semibold text-gray-400">
           <div class="flex items-center gap-2"><span class="w-8 text-right">100%</span><div class="h-px bg-gray-100 flex-1"></div></div>
           <div class="flex items-center gap-2"><span class="w-8 text-right">75%</span><div class="h-px bg-gray-100 flex-1"></div></div>
@@ -197,10 +192,8 @@
           <div class="flex items-center gap-2"><span class="w-8 text-right">0%</span><div class="h-px bg-gray-100 flex-1"></div></div>
         </div>
 
-        <!-- الرسم البياني نفسه (الخط والنقاط) -->
         <div class="absolute inset-0 left-10 bottom-4 top-2">
           <svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100">
-            <!-- التدرج اللوني تحت الخط -->
             <defs>
               <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.2" />
@@ -208,11 +201,7 @@
               </linearGradient>
             </defs>
             <polygon points="0,95 10,90 20,75 30,60 40,45 50,40 60,35 70,25 80,15 90,5 100,2 100,100 0,100" fill="url(#gradient)" />
-            
-            <!-- الخط الأساسي -->
             <polyline points="0,95 10,90 20,75 30,60 40,45 50,40 60,35 70,25 80,15 90,5 100,2" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            
-            <!-- النقاط الدائرية على الخط -->
             <circle cx="0" cy="95" r="2.5" fill="#fff" stroke="#4f46e5" stroke-width="1.5" />
             <circle cx="10" cy="90" r="2.5" fill="#fff" stroke="#4f46e5" stroke-width="1.5" />
             <circle cx="20" cy="75" r="2.5" fill="#fff" stroke="#4f46e5" stroke-width="1.5" />
@@ -227,7 +216,6 @@
           </svg>
         </div>
 
-        <!-- علامات الـ X-Axis في الأسفل (S1, S2, ...) -->
         <div class="absolute left-10 right-0 -bottom-6 flex justify-between text-[9px] font-semibold text-gray-400">
           <span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>S5</span><span>S6</span>
           <span>S7</span><span>S8</span><span>S9</span><span>S10</span><span>S11</span><span>S12</span>

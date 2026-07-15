@@ -1,3 +1,99 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Arabic Font Support */
+@layer base {
+  html[lang="ar"], html[lang="ar"] * {
+    font-family: 'Segoe UI', Tahoma, 'Arial', 'Noto Sans Arabic', sans-serif;
+  }
+
+  html[lang="en"], html[lang="en"] * {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+}
+
+/* RTL Support */
+@layer utilities {
+  /* RTL Flex Direction */
+  [dir="rtl"] .flex-row {
+    flex-direction: row-reverse;
+  }
+
+  [dir="rtl"] .flex-row-reverse {
+    flex-direction: row;
+  }
+
+  /* RTL Text Alignment */
+  [dir="rtl"] .text-left {
+    text-align: right;
+  }
+
+  [dir="rtl"] .text-right {
+    text-align: left;
+  }
+
+  /* RTL Margins */
+  [dir="rtl"] .ml-auto {
+    margin-left: unset;
+    margin-right: auto;
+  }
+
+  [dir="rtl"] .mr-auto {
+    margin-right: unset;
+    margin-left: auto;
+  }
+
+  /* RTL Padding */
+  [dir="rtl"] .pl-10 {
+    padding-left: unset;
+    padding-right: 2.5rem;
+  }
+
+  [dir="rtl"] .pr-4 {
+    padding-right: unset;
+    padding-left: 1rem;
+  }
+
+  /* RTL Positioning */
+  [dir="rtl"] .left-0 {
+    left: unset;
+    right: 0;
+  }
+
+  [dir="rtl"] .right-0 {
+    right: unset;
+    left: 0;
+  }
+
+  [dir="rtl"] .left-3 {
+    left: unset;
+    right: 0.75rem;
+  }
+
+  /* RTL Border Radius */
+  [dir="rtl"] .rounded-l-2xl {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  [dir="rtl"] .rounded-r-2xl {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+}
+
+/* Additional RTL Fixes */
+[dir="rtl"] svg.rotate-icon {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+

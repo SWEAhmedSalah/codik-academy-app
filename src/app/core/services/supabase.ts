@@ -1,22 +1,31 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../../environment/environment';
+import {
+  Session,
+  Submission,
+  AdminStats,
+  CreateSessionData,
+  CreateSubmissionData
+} from '../models/session.model';
+import { UserRole, SubmissionStatus, SessionStatus } from '../constants/app.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SupabaseService {
-
-
-  private supabase: SupabaseClient;
+  private readonly supabase: SupabaseClient;
 
   constructor() {
-    // تهيئة الاتصال بقاعدة البيانات
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
 
-  // دالة أولية لجلب المحاضرات وترتيبها حسب التسلسل
-  async getSessions() {
+  // ================= Session Management =================
+
+  /**
+   * Get all sessions ordered by index
+   */
+  async getSessions(): Promise<Session[]> {
     const { data, error } = await this.supabase
       .from('sessions')
       .select('*')
@@ -26,119 +35,173 @@ export class SupabaseService {
       console.error('Error fetching sessions:', error);
       throw error;
     }
-    return data;
+    return data as Session[];
   }
 
-  // إضافة محاضرة جديدة
-  async addSession(sessionData: any) {
+  /**
+   * Get only published sessions (for student view)
+   */
+  async getPublishedSessions(): Promise<Session[]> {
+    const { data, error } = await this.supabase
+      .from('sessions')
+      .select('*')
+      .eq('status', SessionStatus.PUBLISHED)
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching published sessions:', error);
+      throw error;
+    }
+    return data as Session[];
+  }
+
+  /**
+   * Add a new session
+   */
+  async addSession(sessionData: CreateSessionData): Promise<Session> {
     const { data, error } = await this.supabase
       .from('sessions')
       .insert([sessionData])
-      .select(); // select عشان نرجع بيانات المحاضرة بعد ما تتضاف (نحتاج الـ ID بتاعها)
+      .select()
+      .single();
 
-    if (error) throw error;
-    return data;
+    if (error) {
+      console.error('Error adding session:', error);
+      throw error;
+    }
+    return data as Session;
   }
 
-  async updateSession(id: number, sessionData: any) {
+  /**
+   * Update an existing session
+   */
+  async updateSession(id: number, sessionData: Partial<CreateSessionData>): Promise<Session> {
     const { data, error } = await this.supabase
       .from('sessions')
       .update(sessionData)
       .eq('id', id)
-      .select();
+      .select()
+      .single();
 
-    if (error) throw error;
-    return data;
+    if (error) {
+      console.error('Error updating session:', error);
+      throw error;
+    }
+    return data as Session;
   }
 
-  // حذف محاضرة
-  async deleteSession(id: number) {
+  /**
+   * Delete a session by ID
+   */
+  async deleteSession(id: number): Promise<void> {
     const { error } = await this.supabase
       .from('sessions')
       .delete()
       .eq('id', id);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error deleting session:', error);
+      throw error;
+    }
   }
 
-  // إضافة روابط للمحاضرة (Materials)
-  async addMaterial(materialData: any) {
+  // ================= Submission Management =================
+
+  /**
+   * Submit a new assignment
+   */
+  async submitTask(taskData: CreateSubmissionData): Promise<Submission> {
     const { data, error } = await this.supabase
-      .from('materials')
-      .insert([materialData]);
+      .from('submissions')
+      .insert([taskData])
+      .select()
+      .single();
 
-    if (error) throw error;
-    return data;
+    if (error) {
+      console.error('Error submitting task:', error);
+      throw error;
+    }
+    return data as Submission;
   }
 
-
-  // جلب المحاضرات المنشورة فقط (لواجهة الطالب)
-  async getPublishedSessions() {
-    const { data, error } = await this.supabase
-      .from('sessions')
-      .select('*')
-      .eq('status', 'Published') // فلترة المنشور فقط
-      .order('order_index', { ascending: true });
-
-    if (error) throw error;
-    return data;
-  }
-
-  // إرسال حل التكليف (PR)
-  async submitAssignment(submissionData: { session_id: number, pr_link: string, student_name?: string }) {
-    const { data, error } = await this.supabase
-      .from('submissions') // تأكد من اسم الجدول
-      .insert([submissionData]) // تأكد أن المفاتيح تطابق أسماء الأعمدة في الجدول (session_id, pr_link, student_name)
-      .select();
-
-    if (error) throw error;
-    return data;
-  }
-
-  // جلب كل التكليفات المسلمة للآدمن (مع اسم المحاضرة المرتبطة)
-  async getAllSubmissions() {
+  /**
+   * Get all submissions (for admin view) with related session info
+   */
+  async getAllSubmissions(): Promise<Submission[]> {
     const { data, error } = await this.supabase
       .from('submissions')
       .select(`
         *,
         sessions ( title, order_index )
       `)
-      .order('submitted_at', { ascending: false }); // ترتيب من الأحدث للأقدم
+      .order('submitted_at', { ascending: false });
 
-    if (error) throw error;
-    return data;
+    if (error) {
+      console.error('Error fetching all submissions:', error);
+      throw error;
+    }
+    return data as Submission[];
   }
 
-  // تحديث حالة التكليف (مقبول / يحتاج تعديل)
-  async updateSubmissionStatus(id: number, status: string) {
+  /**
+   * Get submissions for a specific student
+   */
+  async getStudentSubmissions(studentId: string): Promise<Submission[]> {
     const { data, error } = await this.supabase
       .from('submissions')
-      .update({ status })
-      .eq('id', id);
+      .select('*, sessions(title, order_index)')
+      .eq('student_id', studentId)
+      .order('submitted_at', { ascending: false });
 
-    if (error) throw error;
-    return data;
+    if (error) {
+      console.error('Error fetching student submissions:', error);
+      throw error;
+    }
+    return (data as Submission[]) || [];
   }
 
-  // جلب إحصائيات لوحة التحكم للآدمن
-  async getAdminDashboardStats() {
-    // 1. إجمالي عدد المحاضرات
+  /**
+   * Update submission status and feedback
+   */
+  async updateSubmission(
+    id: string,
+    status: SubmissionStatus,
+    feedback: string
+  ): Promise<void> {
+    const { error } = await this.supabase
+      .from('submissions')
+      .update({ status, feedback })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error updating submission:', error);
+      throw error;
+    }
+  }
+
+  // ================= Statistics =================
+
+  /**
+   * Get admin dashboard statistics
+   */
+  async getAdminDashboardStats(): Promise<AdminStats> {
     const { count: sessionsCount, error: err1 } = await this.supabase
       .from('sessions')
       .select('*', { count: 'exact', head: true });
 
-    // 2. إجمالي عدد التسليمات
     const { count: submissionsCount, error: err2 } = await this.supabase
       .from('submissions')
       .select('*', { count: 'exact', head: true });
 
-    // 3. التسليمات التي تنتظر المراجعة (Pending)
     const { count: pendingCount, error: err3 } = await this.supabase
       .from('submissions')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'Pending');
+      .eq('status', SubmissionStatus.PENDING);
 
-    if (err1 || err2 || err3) throw new Error('Error fetching stats');
+    if (err1 || err2 || err3) {
+      console.error('Error fetching stats:', err1 || err2 || err3);
+      throw new Error('Error fetching stats');
+    }
 
     return {
       totalSessions: sessionsCount || 0,
@@ -147,102 +210,59 @@ export class SupabaseService {
     };
   }
 
-  // ================= Auth Methods =================
+  // ================= Authentication =================
 
-  // تسجيل الدخول
-  async signIn(email: string, password: string) {
+  /**
+   * Sign in with email and password
+   */
+  async signIn(email: string, password: string): Promise<{ user: User }> {
     const { data, error } = await this.supabase.auth.signInWithPassword({
       email,
       password,
     });
-    if (error) throw error;
-    return data;
+
+    if (error) {
+      console.error('Sign in error:', error);
+      throw error;
+    }
+
+    return { user: data.user };
   }
 
-  // تسجيل الخروج
-  async signOut() {
+  /**
+   * Sign out current user
+   */
+  async signOut(): Promise<void> {
     const { error } = await this.supabase.auth.signOut();
-    if (error) throw error;
+    if (error) {
+      console.error('Sign out error:', error);
+      throw error;
+    }
   }
 
-  // معرفة المستخدم الحالي (عشان لو عمل Refresh ميفقدش الدخول)
-  async getCurrentUser() {
+  /**
+   * Get current authenticated user
+   */
+  async getCurrentUser(): Promise<User | null> {
     const { data: { user } } = await this.supabase.auth.getUser();
     return user;
   }
 
-  // دالة لمعرفة صلاحية المستخدم
-  async getUserRole(email: string) {
+  /**
+   * Get user role from database
+   * @returns UserRole enum value (defaults to STUDENT if not found)
+   */
+  async getUserRole(email: string): Promise<UserRole> {
     const { data, error } = await this.supabase
       .from('user_roles')
       .select('role')
       .eq('email', email)
       .single();
 
-    // لو ملقاش الإيميل في الجدول، بيعتبره طالب كوضع افتراضي
-    if (error || !data) return 'student';
-    return data.role;
-  }
-
-  // تحديث حالة التكليف وإضافة تعليق (feedback)
-  // عدل التعريف ده في الـ Service
-  async updateSubmission(id: string, status: 'Accepted' | 'Needs Rework', feedback: string) {
-    const { error } = await this.supabase
-      .from('submissions')
-      .update({ status, feedback })
-      .eq('id', id);
-
-    if (error) throw error;
-  }
-
-  /**
-   * جلب التكليفات التي قام الطالب بتسليمها فقط
-   */
-  async getStudentSubmissions(studentId: string) {
-    const { data, error } = await this.supabase
-      .from('submissions')
-      .select('*, sessions(title, order_index)') // بنجيب بيانات المحاضرة المرتبطة بالمرة
-      .eq('student_id', studentId)
-      .order('submitted_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching student submissions:', error);
-      throw error;
+    if (error || !data) {
+      return UserRole.STUDENT;
     }
-
-    return data || [];
-  }
-
-  /**
-   * تسليم تكليف جديد في قاعدة البيانات
-   */
-  async submitTask(taskData: {
-    session_id: number;
-    student_id: string;
-    student_name: string;
-    pr_link: string;
-    status: 'Pending' | 'Accepted' | 'Needs Rework';
-  }) {
-    const { data, error } = await this.supabase
-      .from('submissions')
-      .insert([
-        {
-          session_id: taskData.session_id,
-          student_id: taskData.student_id,
-          student_name: taskData.student_name,
-          pr_link: taskData.pr_link,
-          status: taskData.status || 'Pending'
-        }
-      ])
-      .select()
-      .single(); // بنرجع الريكورد اللي اتعمله insert
-
-    if (error) {
-      console.error('Error submitting task:', error);
-      throw error;
-    }
-
-    return data;
+    return data.role as UserRole;
   }
 
 }

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { StudentStateService } from '../../core/services/student-state';
 import { SupabaseService } from '../../core/services/supabase';
+import { TranslationService } from '../../core/services/translation.service';
+import { APP_CONSTANTS, SubmissionStatus, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../core/constants/app.constants';
 
 @Component({
   selector: 'app-session-details',
@@ -11,24 +13,22 @@ import { SupabaseService } from '../../core/services/supabase';
   templateUrl: './session-details.html'
 })
 export class SessionDetails {
-  stateService = inject(StudentStateService);
-  private supabaseService = inject(SupabaseService);
+  readonly stateService = inject(StudentStateService);
+  private readonly supabaseService = inject(SupabaseService);
+  readonly t = inject(TranslationService);
 
-  // Make selectedSession available to template
   selectedSession = this.stateService.selectedSession;
 
   isSubmitting = false;
   submitSuccess = false;
   submitError = '';
 
-  // FormControl with GitHub URL validation
   prLinkControl = new FormControl('', [
     Validators.required,
-    Validators.pattern(/^https:\/\/github\.com\/.+/)
+    Validators.pattern(APP_CONSTANTS.VALIDATION.GITHUB_URL_PATTERN)
   ]);
 
-  async submitPR() {
-    // Validate form
+  async submitPR(): Promise<void> {
     if (this.prLinkControl.invalid) {
       this.prLinkControl.markAsTouched();
       return;
@@ -38,7 +38,7 @@ export class SessionDetails {
     const currentSession = this.stateService.selectedSession();
 
     if (!currentSession?.id) {
-      this.submitError = 'No session selected!';
+      this.submitError = this.t.t('error.sessionExpired');
       return;
     }
 
@@ -47,26 +47,23 @@ export class SessionDetails {
     this.submitSuccess = false;
 
     try {
-      // Get current authenticated user
       const user = await this.supabaseService.getCurrentUser();
 
       if (!user) {
-        this.submitError = 'You must be logged in to submit.';
+        this.submitError = this.t.t('error.sessionExpired');
         return;
       }
 
-      // Extract student name from user metadata or email
       const studentName = user.user_metadata?.['full_name'] ||
                          user.email?.split('@')[0] ||
                          'Student';
 
-      // Submit with actual user data
       await this.supabaseService.submitTask({
         session_id: currentSession.id,
         student_id: user.id,
         pr_link: cleanLink!,
         student_name: studentName,
-        status: 'Pending'
+        status: SubmissionStatus.PENDING
       });
 
       this.submitSuccess = true;
@@ -74,7 +71,7 @@ export class SessionDetails {
 
     } catch (error) {
       console.error('Error submitting PR:', error);
-      this.submitError = 'Failed to submit. Please try again.';
+      this.submitError = this.t.t('error.submissionFailed');
     } finally {
       this.isSubmitting = false;
     }

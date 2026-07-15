@@ -10,14 +10,13 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    // canActivate: [adminGuard],
+    canActivate: [adminGuard],
     loadComponent: () => import('./admin/admin-layout/admin-layout').then(c => c.AdminLayout),
   },
   {
     path: 'student',
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     loadComponent: () => import('./components/student-layout/student-layout').then(c => c.StudentLayout),
-  }
-
-  // { path: '**', redirectTo: 'login' }
+  },
+  { path: '**', redirectTo: 'login' }
 ];

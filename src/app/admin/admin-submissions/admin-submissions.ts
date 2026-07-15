@@ -2,7 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../core/services/supabase';
+import { TranslationService } from '../../core/services/translation.service';
 import { Submission } from '../../core/models/session.model';
+import { SubmissionStatus, SUCCESS_MESSAGES, ERROR_MESSAGES } from '../../core/constants/app.constants';
 
 @Component({
   selector: 'app-admin-submissions',
@@ -11,46 +13,61 @@ import { Submission } from '../../core/models/session.model';
   templateUrl: './admin-submissions.html'
 })
 export class AdminSubmissions implements OnInit {
-  private supabaseService = inject(SupabaseService);
+  private readonly supabaseService = inject(SupabaseService);
+  readonly t = inject(TranslationService);
 
   submissions: Submission[] = [];
   isLoading = true;
+  errorMessage = '';
+  successMessage = '';
 
-  async ngOnInit() {
+  readonly SubmissionStatus = SubmissionStatus;
+
+  async ngOnInit(): Promise<void> {
     await this.loadSubmissions();
   }
 
-  async loadSubmissions() {
+  async loadSubmissions(): Promise<void> {
     this.isLoading = true;
+    this.clearMessages();
+
     try {
       this.submissions = await this.supabaseService.getAllSubmissions();
     } catch (error) {
       console.error('Error loading submissions:', error);
+      this.errorMessage = this.t.t('error.loadFailed');
     } finally {
       this.isLoading = false;
     }
   }
 
-  async changeStatus(id: string, status: 'Accepted' | 'Needs Rework', feedback?: string) {
+  async changeStatus(id: string, status: SubmissionStatus, feedback?: string): Promise<void> {
     try {
       this.isLoading = true;
+      this.clearMessages();
 
       await this.supabaseService.updateSubmission(id, status, feedback || '');
 
       // Update status locally for immediate UI update
-      const sub = this.submissions.find(s => s.id === id);
-      if (sub) {
-        sub.status = status;
-        sub.feedback = feedback;
-        sub.showFeedback = false;
+      const submission = this.submissions.find(s => s.id === id);
+      if (submission) {
+        submission.status = status;
+        submission.feedback = feedback;
+        submission.showFeedback = false;
       }
 
+      this.successMessage = this.t.t('success.statusUpdated');
     } catch (error) {
       console.error('Error updating submission status:', error);
-      alert('Error updating submission. Please try again.');
+      this.errorMessage = this.t.t('error.submissionFailed');
     } finally {
       this.isLoading = false;
     }
+  }
+
+  private clearMessages(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 }
 

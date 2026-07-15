@@ -9,10 +9,10 @@
     </div>
 
     <h2 class="mt-2 text-center text-3xl font-extrabold text-gray-900 tracking-tight">
-      Codik Academy
+      {{ t.t('auth.welcomeBack') }}
     </h2>
     <p class="mt-2 text-center text-sm text-gray-600">
-      Sign in to access your learning workspace
+      {{ t.t('auth.loginSubtitle') }}
     </p>
   </div>
 
@@ -21,46 +21,46 @@
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
 
-        <!-- رسالة الخطأ في حالة فشل الدخول -->
+        <!-- Error message -->
         @if (errorMessage) {
           <div class="bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-lg font-medium">
             {{ errorMessage }}
           </div>
         }
 
-        <!-- حقل الإيميل -->
+        <!-- Email field -->
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+          <label for="email" class="block text-sm font-medium text-gray-700">{{ t.t('auth.email') }}</label>
           <div class="mt-1.5">
             <input id="email" type="email" formControlName="email"
               class="appearance-none block w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm transition-all"
-              placeholder="student@example.com">
+              [placeholder]="t.t('auth.emailPlaceholder')">
 
             @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-              <p class="mt-1.5 text-xs text-red-500 font-medium">Please enter a valid email.</p>
+              <p class="mt-1.5 text-xs text-red-500 font-medium">{{ t.t('auth.emailError') }}</p>
             }
           </div>
         </div>
 
-        <!-- حقل الباسورد -->
+        <!-- Password field -->
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <label for="password" class="block text-sm font-medium text-gray-700">{{ t.t('auth.password') }}</label>
           <div class="mt-1.5">
             <input id="password" type="password" formControlName="password"
               class="appearance-none block w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm transition-all"
-              placeholder="••••••••">
+              [placeholder]="t.t('auth.passwordPlaceholder')">
 
             @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-              <p class="mt-1.5 text-xs text-red-500 font-medium">Password must be at least 6 characters.</p>
+              <p class="mt-1.5 text-xs text-red-500 font-medium">{{ t.t('auth.passwordError') }}</p>
             }
           </div>
         </div>
 
-        <!-- زرار تسجيل الدخول -->
+        <!-- Sign in button -->
         <div class="pt-2">
           <button type="submit" [disabled]="isLoading || loginForm.invalid"
             class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-            {{ isLoading ? 'Signing in...' : 'Sign in' }}
+            {{ isLoading ? t.t('auth.signingIn') : t.t('auth.signIn') }}
           </button>
         </div>
       </form>
