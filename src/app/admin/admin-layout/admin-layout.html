@@ -1,5 +1,5 @@
 <div class="flex h-screen bg-gray-50 overflow-hidden">
-  
+
   <!-- السايد بار للآدمن -->
   <div class="w-64 bg-slate-900 flex flex-col transition-all duration-300">
     <div class="p-6">
@@ -7,46 +7,56 @@
         <div class="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center font-bold text-white shadow-lg">
           C
         </div>
-        <span class="text-white font-extrabold text-xl tracking-tight">Codik Admin</span>
+        <span class="text-white font-extrabold text-xl tracking-tight">{{ t.t('admin.brandName') }}</span>
       </div>
     </div>
 
     <nav class="flex-1 px-4 space-y-2 mt-4">
-      
+
       <!-- زرار الإحصائيات -->
-      <button type="button" (click)="activeTab = 'dashboard'" 
+      <button type="button" (click)="activeTab = 'dashboard'"
               [class.bg-indigo-600]="activeTab === 'dashboard'" [class.text-white]="activeTab === 'dashboard'"
               [class.text-slate-400]="activeTab !== 'dashboard'" [class.hover:bg-slate-800]="activeTab !== 'dashboard'"
               class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors text-sm">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-        Dashboard
+        {{ t.t('admin.dashboard') }}
       </button>
 
       <!-- زرار المحاضرات -->
-      <button type="button" (click)="activeTab = 'sessions'" 
+      <button type="button" (click)="activeTab = 'sessions'"
               [class.bg-indigo-600]="activeTab === 'sessions'" [class.text-white]="activeTab === 'sessions'"
               [class.text-slate-400]="activeTab !== 'sessions'" [class.hover:bg-slate-800]="activeTab !== 'sessions'"
               class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors text-sm">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        Manage Sessions
+        {{ t.t('admin.sessions') }}
       </button>
 
       <!-- زرار التسليمات -->
-      <button type="button" (click)="activeTab = 'submissions'" 
+      <button type="button" (click)="activeTab = 'submissions'"
               [class.bg-indigo-600]="activeTab === 'submissions'" [class.text-white]="activeTab === 'submissions'"
               [class.text-slate-400]="activeTab !== 'submissions'" [class.hover:bg-slate-800]="activeTab !== 'submissions'"
               class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors text-sm">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        Student PRs
+        {{ t.t('admin.submissions') }}
       </button>
 
     </nav>
-    
-    <!-- زرار تسجيل الخروج -->
-    <div class="p-4 mt-auto">
+
+    <!-- الجزء السفلي -->
+    <div class="p-4 mt-auto space-y-2">
+      <!-- زر تبديل اللغة -->
+      <button type="button" (click)="t.toggleLanguage()"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors text-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+        </svg>
+        {{ t.t('lang.switchLanguage') }}
+      </button>
+
+      <!-- زرار تسجيل الخروج -->
       <button type="button" (click)="logout()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors text-sm">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-        Log out
+        {{ t.t('auth.signOut') }}
       </button>
     </div>
   </div>

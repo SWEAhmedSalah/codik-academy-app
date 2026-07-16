@@ -57,6 +57,8 @@ export class Dashboard implements OnInit {
   // Dynamic cards
   currentSession: CurrentSessionCard | null = null;
   latestAssignment: LatestAssignmentCard | null = null;
+  nextSessionTime = '';
+  nextSessionTitle = '';
 
   // Static announcements (will be translated in template)
   readonly recentAnnouncements: Announcement[] = [
@@ -132,6 +134,9 @@ export class Dashboard implements OnInit {
         recordedDate: targetSession.recorded_date || 'N/A',
         duration: targetSession.duration || 'N/A'
       };
+
+      this.nextSessionTime = targetSession.duration || '';
+      this.nextSessionTitle = targetSession.title;
 
       this.latestAssignment = {
         sessionId: targetSession.id,

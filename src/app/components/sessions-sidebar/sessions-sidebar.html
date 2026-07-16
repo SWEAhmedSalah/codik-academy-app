@@ -39,6 +39,11 @@
                 [class.text-gray-800]="session.student_status !== 'Upcoming'">
               {{session.title}}
             </h3>
+            @if (session.recorded_date) {
+              <span class="text-xs text-gray-400">
+                {{ t.t('dashboard.recordedOn') }} {{ session.recorded_date | date:'d MMM yyyy' }}
+              </span>
+            }
             <span class="text-xs text-gray-400">
               {{session.duration}}
             </span>

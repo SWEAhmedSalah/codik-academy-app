@@ -171,7 +171,6 @@ export interface TranslationKeys {
   'sidebar.settings': string;
   'sidebar.assignments': string;
   'sidebar.attendance': string;
-  'sidebar.announcements': string;
   'sidebar.profile': string;
   'sidebar.studentRole': string;
   'sidebar.bootcampName': string;
@@ -187,6 +186,11 @@ export interface TranslationKeys {
   'admin.assignments': string;
   'admin.students': string;
   'admin.superAdmin': string;
+
+  // Language
+  'lang.switchLanguage': string;
+  'lang.arabic': string;
+  'lang.english': string;
 
   // Errors & Messages
   'error.loadFailed': string;
@@ -246,7 +250,7 @@ export class TranslationService {
       'dashboard.subtitle': 'استمر في التعلم وابنِ أشياء رائعة',
       'dashboard.courseProgress': 'تقدم الدورة',
       'dashboard.keepGoing': 'استمر!',
-      'dashboard.sessionsAttended': 'الجلسات المحضورة',
+      'dashboard.sessionsAttended': 'المحاضرات المحضورة',
       'dashboard.goodJob': 'أحسنت!',
       'dashboard.assignmentsCompleted': 'التكليفات المكتملة',
       'dashboard.excellent': 'ممتاز!',
@@ -254,7 +258,7 @@ export class TranslationService {
       'dashboard.nice': 'رائع!',
       'dashboard.continueLearning': 'تابع التعلم',
       'dashboard.recordedOn': 'تم التسجيل في',
-      'dashboard.watchSession': 'شاهد الجلسة',
+      'dashboard.watchSession': 'شاهد المحاضره',
       'dashboard.viewMaterials': 'عرض المواد',
       'dashboard.latestAssignment': 'أحدث تكليف',
       'dashboard.dueIn': 'متبقي',
@@ -262,8 +266,8 @@ export class TranslationService {
       'dashboard.due': 'الموعد النهائي',
       'dashboard.startAssignment': 'ابدأ التكليف',
       'dashboard.recentAnnouncements': 'الإعلانات الأخيرة',
-      'dashboard.allSessions': 'جميع الجلسات',
-      'dashboard.session': 'الجلسة',
+      'dashboard.allSessions': 'جميع المحاضرات',
+      'dashboard.session': 'المحاضره',
       'dashboard.submitPR': 'إرسال الحل',
       'dashboard.submitted': 'تم الإرسال',
       'dashboard.pending': 'قيد المراجعة',
@@ -271,7 +275,7 @@ export class TranslationService {
       'dashboard.needsRework': 'يحتاج إعادة عمل',
       'dashboard.githubLink': 'رابط GitHub',
       'dashboard.viewFeedback': 'عرض التعليقات',
-      'dashboard.nextSession': 'الجلسة التالية',
+      'dashboard.nextSession': 'المحاضره التالية',
       'dashboard.viewSchedule': 'عرض الجدول',
       'dashboard.progressOverview': 'نظرة عامة على التقدم',
 
@@ -279,7 +283,7 @@ export class TranslationService {
       'admin.sessions': 'الجلسات',
       'admin.searchSessions': 'ابحث عن جلسة...',
       'admin.addSession': 'إضافة جلسة',
-      'admin.editSession': 'تعديل الجلسة',
+      'admin.editSession': 'تعديل المحاضره',
       'admin.title': 'العنوان',
       'admin.description': 'الوصف',
       'admin.orderIndex': 'الترتيب',
@@ -301,7 +305,7 @@ export class TranslationService {
       'admin.inProgress': 'جاري',
       'admin.completed': 'مكتمل',
       'admin.actions': 'الإجراءات',
-      'admin.deleteConfirm': 'هل أنت متأكد من حذف هذه الجلسة؟ لا يمكن التراجع عن هذا الإجراء.',
+      'admin.deleteConfirm': 'هل أنت متأكد من حذف هذه المحاضره؟ لا يمكن التراجع عن هذا الإجراء.',
       'admin.totalSessions': 'إجمالي الجلسات',
       'admin.totalSubmissions': 'إجمالي التسليمات',
       'admin.pendingReviews': 'بانتظار المراجعة',
@@ -337,14 +341,14 @@ export class TranslationService {
       'admin.recordingLinkLabel': 'رابط التسجيل',
       'admin.resourcesLinks': 'الموارد',
       'admin.assignmentDetails': 'تفاصيل التكليف',
-      'admin.saveSession': 'حفظ الجلسة',
-      'admin.updateSession': 'تحديث الجلسة',
+      'admin.saveSession': 'حفظ المحاضره',
+      'admin.updateSession': 'تحديث المحاضره',
       'admin.orderError': 'خطأ في الترتيب',
       'admin.dateError': 'خطأ في التاريخ',
       'admin.dueDateError': 'خطأ في تاريخ التسليم',
 
       // Session Details
-      'session.details': 'تفاصيل الجلسة',
+      'session.details': 'تفاصيل المحاضره',
       'session.materials': 'المواد',
       'session.recording': 'التسجيل',
       'session.slides': 'العرض التقديمي',
@@ -361,14 +365,14 @@ export class TranslationService {
       'session.openSlides': 'افتح العرض التقديمي',
       'session.requiredTask': 'المهمة المطلوبة',
       'session.viewTask': 'عرض المهمة',
-      'session.noAssignment': 'لا توجد تكليفات لهذه الجلسة 🎉',
+      'session.noAssignment': 'لا توجد تكليفات لهذه المحاضره 🎉',
       'session.pastePRLink': 'الصق رابط الـ Pull Request من GitHub',
       'session.updateBeforeDeadline': 'يمكنك تحديث الحل الخاص بك قبل الموعد النهائي.',
       'session.breadcrumbSessions': 'المسارات',
 
       // Sidebar
       'sidebar.dashboard': 'لوحة التحكم',
-      'sidebar.sessions': 'الجلسات',
+      'sidebar.sessions': 'المحاضرات',
       'sidebar.myProgress': 'تقدمي',
       'sidebar.support': 'الدعم',
       'sidebar.adminPanel': 'لوحة الإدارة',
@@ -376,9 +380,8 @@ export class TranslationService {
       'sidebar.settings': 'الإعدادات',
       'sidebar.assignments': 'التكليفات',
       'sidebar.attendance': 'الحضور',
-      'sidebar.announcements': 'الإعلانات',
       'sidebar.profile': 'الملف الشخصي',
-      'sidebar.studentRole': 'الدور',
+      'sidebar.studentRole': 'طالب',
       'sidebar.bootcampName': 'اسم الكوديك',
 
       // Sessions Sidebar
@@ -393,15 +396,20 @@ export class TranslationService {
       'admin.students': 'الطلاب',
       'admin.superAdmin': 'مدير عام',
 
+      // Language
+      'lang.switchLanguage': 'English',
+      'lang.arabic': 'العربية',
+      'lang.english': 'English',
+
       // Errors & Messages
       'error.loadFailed': 'فشل تحميل البيانات. يرجى تحديث الصفحة',
       'error.loginFailed': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
       'error.submissionFailed': 'فشل الإرسال. يرجى المحاولة مرة أخرى',
       'error.sessionExpired': 'انتهت جلستك. يرجى تسجيل الدخول مرة أخرى',
-      'success.sessionAdded': 'تمت إضافة الجلسة بنجاح! 🎉',
-      'success.sessionUpdated': 'تم تحديث الجلسة بنجاح! ✏️',
-      'success.sessionDeleted': 'تم حذف الجلسة بنجاح! 🗑️',
-      'success.statusUpdated': 'تم تحديث الحالة بنجاح! ✅',
+      'success.sessionAdded': 'تمت إضافة المحاضره بنجاح! 🎉',
+      'success.sessionUpdated': 'تم تحديث المحاضره بنجاح! ✏️',
+      'success.sessionDeleted': 'تم حذف المحاضره بنجاح! 🗑️',
+      'success.statusUpdated': 'تم تحديث المحاضره بنجاح! ✅',
       'success.submissionSuccess': 'تم إرسال التكليف بنجاح! 🎉',
     },
     en: {
@@ -573,7 +581,6 @@ export class TranslationService {
       'sidebar.settings': 'Settings',
       'sidebar.assignments': 'Assignments',
       'sidebar.attendance': 'Attendance',
-      'sidebar.announcements': 'Announcements',
       'sidebar.profile': 'Profile',
       'sidebar.studentRole': 'The role',
       'sidebar.bootcampName': 'The name',
@@ -589,6 +596,11 @@ export class TranslationService {
       'admin.assignments': 'Assignments',
       'admin.students': 'Students',
       'admin.superAdmin': 'Super Admin',
+
+      // Language
+      'lang.switchLanguage': 'العربية',
+      'lang.arabic': 'العربية',
+      'lang.english': 'English',
 
       // Errors & Messages
       'error.loadFailed': 'Failed to load data. Please refresh the page',
@@ -628,6 +640,11 @@ export class TranslationService {
     this.currentLang.set(lang);
     localStorage.setItem('app-language', lang);
     this.applyLanguageToDocument();
+  }
+
+  toggleLanguage(): void {
+    const newLang: Language = this.currentLang() === 'ar' ? 'en' : 'ar';
+    this.setLanguage(newLang);
   }
 
   private applyLanguageToDocument(): void {
