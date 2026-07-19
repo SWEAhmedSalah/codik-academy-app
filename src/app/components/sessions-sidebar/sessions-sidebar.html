@@ -1,74 +1,99 @@
-<div class="p-6 h-full bg-white">
+<div class="flex flex-col gap-8 bg-slate-50 p-2">
+
   <!-- Header -->
-  <h2 class="text-xl font-bold text-gray-800 mb-1">{{ t.t('sidebar.sessions') }}</h2>
-  <p class="text-xs text-gray-500 mb-6 flex items-center">
-    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-    {{ t.t('sessions.bootcampBatch') }}
-  </p>
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">{{ t.t('sidebar.myCourse') }}</h1>
+    <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+      {{ t.t('sessions.bootcampBatch') }}
+    </p>
+  </div>
 
-  <!-- Sessions list -->
-  <div class="space-y-2">
-    @for (session of sessions; track session.id; let i = $index) {
-      <!-- Session item -->
-      <div (click)="onSessionSelect(session)"
-           [class.border-indigo-500]="stateService.selectedSession()?.id === session.id"
-           [class.bg-indigo-50]="stateService.selectedSession()?.id === session.id"
-           class="flex items-center justify-between p-3 rounded-xl border border-transparent transition-all cursor-pointer hover:bg-gray-50"
-           [class.bg-indigo-50]="session.student_status === 'In Progress'"
-           [class.border-indigo-100]="session.student_status === 'In Progress'">
+  <!-- Sessions Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    @for (session of sessions; track session.id) {
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-all flex flex-col justify-between">
 
-        <div class="flex items-center gap-4">
+        <!-- Top: Number + Status -->
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2"
+                   [class]="getSubmissionForSession(session.id)
+                     ? 'border-emerald-500 text-emerald-600 bg-emerald-50'
+                     : getSessionStatus(session) === 'Completed'
+                       ? 'border-emerald-500 text-emerald-600 bg-emerald-50'
+                       : getSessionStatus(session) === 'In Progress'
+                         ? 'border-indigo-500 text-white bg-indigo-500'
+                         : 'border-gray-300 text-gray-400 bg-gray-50'">
+                {{ session.order_index }}
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-gray-900">{{ session.title }}</h3>
+                @if (session.duration) {
+                  <p class="text-xs text-gray-400 mt-0.5">{{ session.duration }}</p>
+                }
+              </div>
+            </div>
 
-          <!-- Numbered circle -->
-          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border-2 text-sm font-semibold"
-               [class.border-green-500]="session.student_status === 'Completed'"
-               [class.text-green-600]="session.student_status === 'Completed'"
-               [class.border-indigo-500]="session.student_status === 'In Progress'"
-               [class.text-indigo-600]="session.student_status === 'In Progress'"
-               [class.bg-indigo-500]="session.student_status === 'In Progress'"
-               [class.!text-white]="session.student_status === 'In Progress'"
-               [class.border-gray-300]="!session.student_status || session.student_status === 'Upcoming'"
-               [class.text-gray-400]="!session.student_status || session.student_status === 'Upcoming'">
-            {{session.order_index}}
-          </div>
-
-          <!-- Session name and details -->
-          <div class="flex flex-col">
-            <h3 class="text-sm font-medium"
-                [class.text-gray-500]="session.student_status === 'Upcoming'"
-                [class.text-gray-800]="session.student_status !== 'Upcoming'">
-              {{session.title}}
-            </h3>
-            @if (session.recorded_date) {
-              <span class="text-xs text-gray-400">
-                {{ t.t('dashboard.recordedOn') }} {{ session.recorded_date | date:'d MMM yyyy' }}
-              </span>
-            }
-            <span class="text-xs text-gray-400">
-              {{session.duration}}
+            <!-- Status badge -->
+            <span class="text-[10px] px-2 py-1 rounded-md font-semibold"
+                  [class]="getSubmissionForSession(session.id)
+                    ? 'bg-emerald-50 text-emerald-700'
+                    : getSessionStatus(session) === 'Completed'
+                      ? 'bg-emerald-50 text-emerald-700'
+                      : getSessionStatus(session) === 'In Progress'
+                        ? 'bg-indigo-50 text-indigo-700'
+                        : 'bg-gray-50 text-gray-400'">
+              @if (getSubmissionForSession(session.id)) {
+                {{ t.t('admin.completed') }}
+              } @else if (getSessionStatus(session) === 'Completed') {
+                {{ t.t('admin.completed') }}
+              } @else if (getSessionStatus(session) === 'In Progress') {
+                {{ t.t('admin.inProgress') }}
+              } @else {
+                {{ t.t('admin.upcoming') }}
+              }
             </span>
           </div>
+
+          <!-- Info chips -->
+          <div class="flex flex-wrap gap-2 mb-4">
+            @if (hasRecording(session)) {
+              <span class="inline-flex items-center gap-1 text-[10px] font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                {{ t.t('course.recordingAvailable') }}
+              </span>
+            }
+            @if (getResourcesCount(session) > 0) {
+              <span class="inline-flex items-center gap-1 text-[10px] font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-md">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                {{ getResourcesCount(session) }} {{ t.t('course.resources') }}
+              </span>
+            }
+            @if (session.assignment_title) {
+              <span class="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-1 rounded-md"
+                    [class]="getSubmissionForSession(session.id)
+                      ? 'text-emerald-600 bg-emerald-50'
+                      : 'text-amber-600 bg-amber-50'">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                @if (getSubmissionForSession(session.id)) {
+                  {{ t.t('dashboard.submitted') }}
+                } @else {
+                  {{ t.t('dashboard.notSubmitted') }}
+                }
+              </span>
+            }
+          </div>
         </div>
 
-        <div class="flex items-center gap-3">
-          <!-- Status badge -->
-          <span class="text-[10px] px-2 py-1 rounded-md font-medium w-20 text-center"
-                [class.bg-green-100]="session.student_status === 'Completed'"
-                [class.text-green-700]="session.student_status === 'Completed'"
-                [class.bg-indigo-100]="session.student_status === 'In Progress'"
-                [class.text-indigo-700]="session.student_status === 'In Progress'"
-                [class.bg-gray-50]="!session.student_status || session.student_status === 'Upcoming'"
-                [class.text-gray-400]="!session.student_status || session.student_status === 'Upcoming'">
-            @if (session.student_status === 'Completed') {
-              {{ t.t('admin.completed') }}
-            } @else if (session.student_status === 'In Progress') {
-              {{ t.t('admin.inProgress') }}
-            } @else {
-              {{ t.t('admin.upcoming') }}
-            }
-          </span>
-        </div>
+        <!-- Open Button -->
+        <button (click)="onSessionSelect(session)"
+                class="w-full mt-2 px-4 py-2 text-sm font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors">
+          {{ t.t('course.openSession') }}
+        </button>
       </div>
     }
   </div>
+
 </div>

@@ -41,20 +41,15 @@ export class AdminSubmissions implements OnInit {
     }
   }
 
-  async changeStatus(id: string, status: SubmissionStatus, feedback?: string): Promise<void> {
+  async changeStatus(id: number, status: SubmissionStatus, feedback?: string): Promise<void> {
     try {
       this.isLoading = true;
       this.clearMessages();
 
       await this.supabaseService.updateSubmission(id, status, feedback || '');
 
-      // Update status locally for immediate UI update
-      const submission = this.submissions.find(s => s.id === id);
-      if (submission) {
-        submission.status = status;
-        submission.feedback = feedback;
-        submission.showFeedback = false;
-      }
+      // Reload from database to confirm the update persisted
+      await this.loadSubmissions();
 
       this.successMessage = this.t.t('success.statusUpdated');
     } catch (error) {

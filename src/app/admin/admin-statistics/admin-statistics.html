@@ -1,9 +1,9 @@
 <div class="h-full flex flex-col bg-slate-50 p-6 overflow-y-auto">
-  
+
   <!-- هيدر الترحيب -->
   <div class="mb-8">
-    <h1 class="text-2xl font-extrabold text-gray-900">Dashboard Overview</h1>
-    <p class="text-sm text-gray-500 mt-1 font-medium">Welcome back, Admin! Here is what's happening with your bootcamp today.</p>
+    <h1 class="text-2xl font-extrabold text-gray-900">{{ t.t('admin.dashboardOverview') }}</h1>
+    <p class="text-sm text-gray-500 mt-1 font-medium">{{ t.t('admin.welcomeMessage') }}</p>
   </div>
 
   @if (isLoading) {
@@ -14,13 +14,12 @@
       <div class="h-32 bg-white rounded-2xl shadow-sm border border-gray-100"></div>
     </div>
   } @else {
-    <!-- كروت الإحصائيات (Stats Cards) -->
+    <!-- كروت الإحصائيات -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      
-      <!-- الكارت الأول: المحاضرات -->
+
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-indigo-100 transition-colors">
         <div>
-          <p class="text-sm font-bold text-gray-500 mb-1">Total Sessions</p>
+          <p class="text-sm font-bold text-gray-500 mb-1">{{ t.t('admin.totalSessions') }}</p>
           <h3 class="text-3xl font-extrabold text-gray-900">{{ stats.totalSessions }}</h3>
         </div>
         <div class="w-14 h-14 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center">
@@ -28,10 +27,9 @@
         </div>
       </div>
 
-      <!-- الكارت الثاني: إجمالي التكليفات -->
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-emerald-100 transition-colors">
         <div>
-          <p class="text-sm font-bold text-gray-500 mb-1">Total Submissions</p>
+          <p class="text-sm font-bold text-gray-500 mb-1">{{ t.t('admin.totalSubmissions') }}</p>
           <h3 class="text-3xl font-extrabold text-gray-900">{{ stats.totalSubmissions }}</h3>
         </div>
         <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -39,12 +37,11 @@
         </div>
       </div>
 
-      <!-- الكارت الثالث: التكليفات المعلقة -->
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between transition-colors"
            [class.hover:border-amber-200]="stats.pendingReviews > 0"
            [class.hover:border-gray-200]="stats.pendingReviews === 0">
         <div>
-          <p class="text-sm font-bold text-gray-500 mb-1">Pending Reviews</p>
+          <p class="text-sm font-bold text-gray-500 mb-1">{{ t.t('admin.pendingReviews') }}</p>
           <h3 class="text-3xl font-extrabold" [class.text-amber-500]="stats.pendingReviews > 0" [class.text-gray-900]="stats.pendingReviews === 0">
             {{ stats.pendingReviews }}
           </h3>
@@ -58,18 +55,18 @@
 
     </div>
 
-    <!-- قسم إضافي للإجراءات السريعة (Quick Actions) -->
+    <!-- Quick Actions -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-      <h3 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+      <h3 class="text-lg font-bold text-gray-900 mb-4">{{ t.t('admin.quickActions') }}</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        
+
         <div class="p-4 border border-gray-100 rounded-xl flex items-start gap-4 hover:bg-slate-50 transition-colors cursor-pointer">
           <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
           </div>
           <div>
-            <h4 class="text-sm font-bold text-gray-900">Add New Session</h4>
-            <p class="text-xs text-gray-500 mt-1">Create a new lesson, set duration, and assign tasks.</p>
+            <h4 class="text-sm font-bold text-gray-900">{{ t.t('admin.addNewSession') }}</h4>
+            <p class="text-xs text-gray-500 mt-1">{{ t.t('admin.addNewSessionDesc') }}</p>
           </div>
         </div>
 
@@ -78,8 +75,8 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
           </div>
           <div>
-            <h4 class="text-sm font-bold text-gray-900">Review Submissions</h4>
-            <p class="text-xs text-gray-500 mt-1">Check student PRs and evaluate their code.</p>
+            <h4 class="text-sm font-bold text-gray-900">{{ t.t('admin.reviewSubmissions') }}</h4>
+            <p class="text-xs text-gray-500 mt-1">{{ t.t('admin.reviewSubmissionsDesc') }}</p>
           </div>
         </div>
 

@@ -5,11 +5,12 @@ import { TranslationService } from '../../core/services/translation.service';
 import { Session } from '../../core/models/session.model';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { SessionStatus, StudentSessionStatus, SUCCESS_MESSAGES } from '../../core/constants/app.constants';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-admin-sessions',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, QuillModule],
   templateUrl: './admin-sessions.html'
 })
 export class AdminSessions implements OnInit {
@@ -25,12 +26,32 @@ export class AdminSessions implements OnInit {
 
   isEditMode = false;
   editingSessionId: number | null = null;
+  isDrawerOpen = false;
 
   readonly SessionStatus = SessionStatus;
   readonly StudentSessionStatus = StudentSessionStatus;
 
   readonly hoursOptions = Array.from({ length: 13 }, (_, i) => i);
   readonly minutesOptions = Array.from({ length: 12 }, (_, i) => i * 5);
+
+  // Quill editor configuration
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ 'header': 1 }, { 'header': 2 }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }],
+      ['clean'],
+      ['link']
+    ]
+  };
 
   ngOnInit(): void {
     this.initForm();
@@ -69,6 +90,8 @@ export class AdminSessions implements OnInit {
       assignment_description: [''],
       assignment_due_date: ['', [this.noPastDateValidator]]
     });
+
+    // No auto-override: admin's manual student_status selection is always respected
   }
 
   noFutureDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -89,6 +112,14 @@ export class AdminSessions implements OnInit {
     today.setHours(0, 0, 0, 0);
 
     return selectedDate < today ? { pastDate: true } : null;
+  }
+
+  openDrawer(): void {
+    this.isDrawerOpen = true;
+  }
+
+  closeDrawer(): void {
+    this.isDrawerOpen = false;
   }
 
   editSession(session: Session): void {
@@ -121,6 +152,8 @@ export class AdminSessions implements OnInit {
       assignment_description: session.assignment_description || '',
       assignment_due_date: session.assignment_due_date || ''
     });
+
+    this.openDrawer();
   }
 
   async deleteSession(id: number): Promise<void> {
@@ -159,12 +192,15 @@ export class AdminSessions implements OnInit {
 
     try {
       const formValues = this.sessionForm.value;
+
+      const studentStatus = formValues.student_status;
+
       const sessionData = {
         title: formValues.title,
         description: formValues.description,
         order_index: formValues.order_index,
         status: formValues.status,
-        student_status: formValues.student_status,
+        student_status: studentStatus,
         recorded_date: formValues.recorded_date || null,
         duration: `${formValues.duration_hours}h ${formValues.duration_minutes}m`,
         recording_link: formValues.recording_link,
@@ -184,6 +220,7 @@ export class AdminSessions implements OnInit {
       }
 
       this.openAddMode();
+      this.closeDrawer();
       await this.loadSessions();
     } catch (error) {
       console.error('Error saving session:', error);
@@ -204,6 +241,8 @@ export class AdminSessions implements OnInit {
       duration_hours: 1,
       duration_minutes: 30
     });
+
+    this.openDrawer();
   }
 
   async loadSessions(): Promise<void> {

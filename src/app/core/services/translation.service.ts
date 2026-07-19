@@ -175,6 +175,50 @@ export interface TranslationKeys {
   'sidebar.studentRole': string;
   'sidebar.bootcampName': string;
 
+  // Sidebar - new
+  'sidebar.myCourse': string;
+
+  // Course page
+  'course.recordingAvailable': string;
+  'course.resources': string;
+  'course.openSession': string;
+  'course.watchRecording': string;
+  'course.openSlides': string;
+  'course.downloadResources': string;
+  'course.submitAssignment': string;
+
+  // Dashboard - new
+  'dashboard.currentAssignment': string;
+  'dashboard.waitingReview': string;
+  'dashboard.notSubmitted': string;
+  'dashboard.noAssignment': string;
+  'dashboard.upcomingSession': string;
+  'dashboard.noUpcoming': string;
+  'dashboard.allCompleted': string;
+  'dashboard.viewSession': string;
+  'dashboard.timeRemaining': string;
+  'dashboard.hours': string;
+  'dashboard.minutes': string;
+  'dashboard.seconds': string;
+  'dashboard.deadlinePassed': string;
+  'dashboard.lateSubmission': string;
+
+  // Submission
+  'submission.repoUrl': string;
+  'submission.prUrl': string;
+  'submission.optional': string;
+  'submission.status': string;
+  'submission.submissionDate': string;
+  'submission.lastUpdate': string;
+
+  // Profile
+  'profile.subtitle': string;
+
+  // Progress
+  'progress.subtitle': string;
+  'progress.tasksCompleted': string;
+  'progress.sessionBreakdown': string;
+
   // Sessions Sidebar
   'sessions.bootcampBatch': string;
 
@@ -191,6 +235,66 @@ export interface TranslationKeys {
   'lang.switchLanguage': string;
   'lang.arabic': string;
   'lang.english': string;
+
+  // Bug Report
+  'bugReport.title': string;
+  'bugReport.subtitle': string;
+  'bugReport.tooltip': string;
+  'bugReport.category': string;
+  'bugReport.bugTitle': string;
+  'bugReport.description': string;
+  'bugReport.titlePlaceholder': string;
+  'bugReport.descriptionPlaceholder': string;
+  'bugReport.categoryUi': string;
+  'bugReport.categoryFunctionality': string;
+  'bugReport.categoryPerformance': string;
+  'bugReport.categorySubmission': string;
+  'bugReport.categoryOther': string;
+  'bugReport.reportingAs': string;
+  'bugReport.submitReport': string;
+  'bugReport.submitting': string;
+  'bugReport.successTitle': string;
+  'bugReport.successMessage': string;
+  'bugReport.errorMessage': string;
+
+  // Admin Bug Reports
+  'adminBugs.title': string;
+  'adminBugs.subtitle': string;
+  'adminBugs.refresh': string;
+  'adminBugs.open': string;
+  'adminBugs.inProgress': string;
+  'adminBugs.resolved': string;
+  'adminBugs.closed': string;
+  'adminBugs.searchPlaceholder': string;
+  'adminBugs.allStatus': string;
+  'adminBugs.loading': string;
+  'adminBugs.noReports': string;
+  'adminBugs.noReportsDesc': string;
+  'adminBugs.bug': string;
+  'adminBugs.category': string;
+  'adminBugs.reporter': string;
+  'adminBugs.status': string;
+  'adminBugs.date': string;
+  'adminBugs.actions': string;
+  'adminBugs.markInProgress': string;
+  'adminBugs.markResolved': string;
+  'adminBugs.close': string;
+  'adminBugs.reopen': string;
+  'adminBugs.delete': string;
+  'adminBugs.deleteConfirm': string;
+  'adminBugs.details': string;
+  'adminBugs.description': string;
+  'adminBugs.reportedBy': string;
+  'adminBugs.reportedOn': string;
+  'adminBugs.updateStatus': string;
+  'adminBugs.deleteReport': string;
+  'adminBugs.sidebarLabel': string;
+  'adminBugs.loadError': string;
+  'adminBugs.categoryUi': string;
+  'adminBugs.categoryFunctionality': string;
+  'adminBugs.categoryPerformance': string;
+  'adminBugs.categorySubmission': string;
+  'adminBugs.categoryOther': string;
 
   // Errors & Messages
   'error.loadFailed': string;
@@ -384,6 +488,50 @@ export class TranslationService {
       'sidebar.studentRole': 'طالب',
       'sidebar.bootcampName': 'اسم الكوديك',
 
+      // Sidebar - new
+      'sidebar.myCourse': 'الدورة',
+
+      // Course page
+      'course.recordingAvailable': 'تسجيل متاح',
+      'course.resources': 'مصادر',
+      'course.openSession': 'فتح المحاضره',
+      'course.watchRecording': 'شاهد التسجيل',
+      'course.openSlides': 'افتح العرض',
+      'course.downloadResources': 'تنزيل المصادر',
+      'course.submitAssignment': 'إرسال التكليف',
+
+      // Dashboard - new
+      'dashboard.currentAssignment': 'التكليف الحالي',
+      'dashboard.waitingReview': 'بانتظار المراجعة',
+      'dashboard.notSubmitted': 'لم يتم الإرسال',
+      'dashboard.noAssignment': 'لا توجد تكليفات',
+      'dashboard.upcomingSession': 'المحاضره القادمة',
+      'dashboard.noUpcoming': 'لا توجد محاضرات قادمة',
+      'dashboard.allCompleted': 'أكملت جميع المحاضرات',
+      'dashboard.viewSession': 'عرض المحاضره',
+      'dashboard.timeRemaining': 'الوقت المتبقي',
+      'dashboard.hours': 'ساعات',
+      'dashboard.minutes': 'دقائق',
+      'dashboard.seconds': 'ثواني',
+      'dashboard.deadlinePassed': 'انتهى الموعد النهائي',
+      'dashboard.lateSubmission': 'يرجى التسليم في أقرب وقت ممكن',
+
+      // Submission
+      'submission.repoUrl': 'رابط المستودع',
+      'submission.prUrl': 'رابط الـ Pull Request',
+      'submission.optional': 'اختياري',
+      'submission.status': 'حالة التسليم',
+      'submission.submissionDate': 'تاريخ التسليم',
+      'submission.lastUpdate': 'آخر تحديث',
+
+      // Profile
+      'profile.subtitle': 'معلوماتك الشخصية وإحصائياتك',
+
+      // Progress
+      'progress.subtitle': 'تتبع تقدمك في الدورة',
+      'progress.tasksCompleted': 'تكليفات مكتملة',
+      'progress.sessionBreakdown': 'تفاصيل المحاضرات',
+
       // Sessions Sidebar
       'sessions.bootcampBatch': 'Java Spring Bootcamp - الدفعة 5',
 
@@ -400,6 +548,66 @@ export class TranslationService {
       'lang.switchLanguage': 'English',
       'lang.arabic': 'العربية',
       'lang.english': 'English',
+
+      // Bug Report
+      'bugReport.title': 'الإبلاغ عن مشكلة',
+      'bugReport.subtitle': 'ساعدنا في التحسين عبر الإبلاغ عن المشاكل',
+      'bugReport.tooltip': 'الإبلاغ عن مشكلة',
+      'bugReport.category': 'التصنيف',
+      'bugReport.bugTitle': 'عنوان المشكلة',
+      'bugReport.description': 'الوصف',
+      'bugReport.titlePlaceholder': 'وصف مختصر للمشكلة',
+      'bugReport.descriptionPlaceholder': 'يرجى وصف المشكلة بالتفصيل. ماذا كنت تتوقع أن يحدث؟ وماذا حدث فعلاً؟',
+      'bugReport.categoryUi': 'مشكلة في الواجهة',
+      'bugReport.categoryFunctionality': 'خلل في الوظائف',
+      'bugReport.categoryPerformance': 'مشكلة في الأداء',
+      'bugReport.categorySubmission': 'مشكلة في التسليم',
+      'bugReport.categoryOther': 'أخرى',
+      'bugReport.reportingAs': 'الإبلاغ بواسطة:',
+      'bugReport.submitReport': 'إرسال البلاغ',
+      'bugReport.submitting': 'جاري الإرسال...',
+      'bugReport.successTitle': 'تم إرسال البلاغ!',
+      'bugReport.successMessage': 'شكراً لمساعدتنا في التحسين.',
+      'bugReport.errorMessage': 'فشل إرسال البلاغ. يرجى المحاولة مرة أخرى.',
+
+      // Admin Bug Reports
+      'adminBugs.title': 'تقارير الأخطاء',
+      'adminBugs.subtitle': 'عرض وإدارة الأخطاء المُبلَّغ عنها',
+      'adminBugs.refresh': 'تحديث',
+      'adminBugs.open': 'مفتوح',
+      'adminBugs.inProgress': 'قيد المعالجة',
+      'adminBugs.resolved': 'تم الحل',
+      'adminBugs.closed': 'مغلق',
+      'adminBugs.searchPlaceholder': 'ابحث في تقارير الأخطاء...',
+      'adminBugs.allStatus': 'جميع الحالات',
+      'adminBugs.loading': 'جاري تحميل تقارير الأخطاء...',
+      'adminBugs.noReports': 'لا توجد تقارير أخطاء',
+      'adminBugs.noReportsDesc': 'كل شيء على ما يرام! لم يتم الإبلاغ عن أي أخطاء بعد.',
+      'adminBugs.bug': 'الخطأ',
+      'adminBugs.category': 'التصنيف',
+      'adminBugs.reporter': 'المُبلِّغ',
+      'adminBugs.status': 'الحالة',
+      'adminBugs.date': 'التاريخ',
+      'adminBugs.actions': 'الإجراءات',
+      'adminBugs.markInProgress': 'تحويل لقيد المعالجة',
+      'adminBugs.markResolved': 'تحديد كمحلول',
+      'adminBugs.close': 'إغلاق',
+      'adminBugs.reopen': 'إعادة فتح',
+      'adminBugs.delete': 'حذف',
+      'adminBugs.deleteConfirm': 'هل أنت متأكد من حذف هذا التقرير؟',
+      'adminBugs.details': 'تفاصيل تقرير الخطأ',
+      'adminBugs.description': 'الوصف',
+      'adminBugs.reportedBy': 'أبلغ بواسطة',
+      'adminBugs.reportedOn': 'تاريخ البلاغ',
+      'adminBugs.updateStatus': 'تحديث الحالة',
+      'adminBugs.deleteReport': 'حذف التقرير',
+      'adminBugs.sidebarLabel': 'تقارير الأخطاء',
+      'adminBugs.loadError': 'فشل تحميل تقارير الأخطاء.',
+      'adminBugs.categoryUi': 'واجهة المستخدم',
+      'adminBugs.categoryFunctionality': 'وظائف',
+      'adminBugs.categoryPerformance': 'أداء',
+      'adminBugs.categorySubmission': 'تسليم',
+      'adminBugs.categoryOther': 'أخرى',
 
       // Errors & Messages
       'error.loadFailed': 'فشل تحميل البيانات. يرجى تحديث الصفحة',
@@ -585,6 +793,50 @@ export class TranslationService {
       'sidebar.studentRole': 'The role',
       'sidebar.bootcampName': 'The name',
 
+      // Sidebar - new
+      'sidebar.myCourse': 'My Course',
+
+      // Course page
+      'course.recordingAvailable': 'Recording Available',
+      'course.resources': 'Resources',
+      'course.openSession': 'Open Session',
+      'course.watchRecording': 'Watch Recording',
+      'course.openSlides': 'Open Slides',
+      'course.downloadResources': 'Download Resources',
+      'course.submitAssignment': 'Submit Assignment',
+
+      // Dashboard - new
+      'dashboard.currentAssignment': 'Current Assignment',
+      'dashboard.waitingReview': 'Waiting Review',
+      'dashboard.notSubmitted': 'Not Submitted',
+      'dashboard.noAssignment': 'No assignments',
+      'dashboard.upcomingSession': 'Upcoming Session',
+      'dashboard.noUpcoming': 'No upcoming sessions',
+      'dashboard.allCompleted': 'You completed all sessions',
+      'dashboard.viewSession': 'View Session',
+      'dashboard.timeRemaining': 'Time Remaining',
+      'dashboard.hours': 'Hours',
+      'dashboard.minutes': 'Minutes',
+      'dashboard.seconds': 'Seconds',
+      'dashboard.deadlinePassed': 'Deadline has passed',
+      'dashboard.lateSubmission': 'Please submit as soon as possible',
+
+      // Submission
+      'submission.repoUrl': 'Repository URL',
+      'submission.prUrl': 'Pull Request URL',
+      'submission.optional': 'optional',
+      'submission.status': 'Submission Status',
+      'submission.submissionDate': 'Submission Date',
+      'submission.lastUpdate': 'Last Update',
+
+      // Profile
+      'profile.subtitle': 'Your personal info and stats',
+
+      // Progress
+      'progress.subtitle': 'Track your course progress',
+      'progress.tasksCompleted': 'tasks completed',
+      'progress.sessionBreakdown': 'Session Breakdown',
+
       // Sessions Sidebar
       'sessions.bootcampBatch': 'Java Spring Bootcamp - Batch 5',
 
@@ -601,6 +853,66 @@ export class TranslationService {
       'lang.switchLanguage': 'العربية',
       'lang.arabic': 'العربية',
       'lang.english': 'English',
+
+      // Bug Report
+      'bugReport.title': 'Report a Bug',
+      'bugReport.subtitle': 'Help us improve by reporting issues',
+      'bugReport.tooltip': 'Report a Bug',
+      'bugReport.category': 'Category',
+      'bugReport.bugTitle': 'Bug Title',
+      'bugReport.description': 'Description',
+      'bugReport.titlePlaceholder': 'Brief description of the issue',
+      'bugReport.descriptionPlaceholder': 'Please describe the bug in detail. What did you expect to happen? What actually happened?',
+      'bugReport.categoryUi': 'UI / Visual Issue',
+      'bugReport.categoryFunctionality': 'Functionality Bug',
+      'bugReport.categoryPerformance': 'Performance Issue',
+      'bugReport.categorySubmission': 'Submission Problem',
+      'bugReport.categoryOther': 'Other',
+      'bugReport.reportingAs': 'Reporting as:',
+      'bugReport.submitReport': 'Submit Report',
+      'bugReport.submitting': 'Submitting...',
+      'bugReport.successTitle': 'Bug report submitted!',
+      'bugReport.successMessage': 'Thank you for helping us improve.',
+      'bugReport.errorMessage': 'Failed to submit bug report. Please try again.',
+
+      // Admin Bug Reports
+      'adminBugs.title': 'Bug Reports',
+      'adminBugs.subtitle': 'View and manage reported bugs',
+      'adminBugs.refresh': 'Refresh',
+      'adminBugs.open': 'Open',
+      'adminBugs.inProgress': 'In Progress',
+      'adminBugs.resolved': 'Resolved',
+      'adminBugs.closed': 'Closed',
+      'adminBugs.searchPlaceholder': 'Search bug reports...',
+      'adminBugs.allStatus': 'All Status',
+      'adminBugs.loading': 'Loading bug reports...',
+      'adminBugs.noReports': 'No bug reports found',
+      'adminBugs.noReportsDesc': 'All clear! No bugs have been reported yet.',
+      'adminBugs.bug': 'Bug',
+      'adminBugs.category': 'Category',
+      'adminBugs.reporter': 'Reporter',
+      'adminBugs.status': 'Status',
+      'adminBugs.date': 'Date',
+      'adminBugs.actions': 'Actions',
+      'adminBugs.markInProgress': 'Mark In Progress',
+      'adminBugs.markResolved': 'Mark Resolved',
+      'adminBugs.close': 'Close',
+      'adminBugs.reopen': 'Reopen',
+      'adminBugs.delete': 'Delete',
+      'adminBugs.deleteConfirm': 'Are you sure you want to delete this bug report?',
+      'adminBugs.details': 'Bug Report Details',
+      'adminBugs.description': 'Description',
+      'adminBugs.reportedBy': 'Reported By',
+      'adminBugs.reportedOn': 'Reported On',
+      'adminBugs.updateStatus': 'Update Status',
+      'adminBugs.deleteReport': 'Delete Report',
+      'adminBugs.sidebarLabel': 'Bug Reports',
+      'adminBugs.loadError': 'Failed to load bug reports.',
+      'adminBugs.categoryUi': 'UI / Visual',
+      'adminBugs.categoryFunctionality': 'Functionality',
+      'adminBugs.categoryPerformance': 'Performance',
+      'adminBugs.categorySubmission': 'Submission',
+      'adminBugs.categoryOther': 'Other',
 
       // Errors & Messages
       'error.loadFailed': 'Failed to load data. Please refresh the page',

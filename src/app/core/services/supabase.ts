@@ -6,7 +6,8 @@ import {
   Submission,
   AdminStats,
   CreateSessionData,
-  CreateSubmissionData
+  CreateSubmissionData,
+  BugReportData
 } from '../models/session.model';
 import { UserRole, SubmissionStatus, SessionStatus } from '../constants/app.constants';
 
@@ -144,13 +145,13 @@ export class SupabaseService {
   }
 
   /**
-   * Get submissions for a specific student
+   * Get submissions for a specific student by name
    */
-  async getStudentSubmissions(studentId: string): Promise<Submission[]> {
+  async getStudentSubmissions(studentName: string): Promise<Submission[]> {
     const { data, error } = await this.supabase
       .from('submissions')
       .select('*, sessions(title, order_index)')
-      .eq('student_id', studentId)
+      .eq('student_name', studentName)
       .order('submitted_at', { ascending: false });
 
     if (error) {
@@ -162,19 +163,107 @@ export class SupabaseService {
 
   /**
    * Update submission status and feedback
+   * Uses RPC function to bypass RLS restrictions
    */
   async updateSubmission(
-    id: string,
+    id: number,
     status: SubmissionStatus,
     feedback: string
   ): Promise<void> {
-    const { error } = await this.supabase
-      .from('submissions')
-      .update({ status, feedback })
-      .eq('id', id);
+    const { error } = await this.supabase.rpc('update_submission_status', {
+      submission_id: id,
+      new_status: status,
+      new_feedback: feedback
+    });
 
     if (error) {
       console.error('Error updating submission:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Resubmit assignment (reset status to Pending and update PR link)
+   * Uses RPC to bypass RLS restrictions
+   */
+  async resubmitTask(id: number, prLink: string, sessionId: number, studentName: string): Promise<void> {
+    const { error } = await this.supabase.rpc('update_submission_status', {
+      submission_id: id,
+      new_status: SubmissionStatus.PENDING,
+      new_feedback: '',
+      new_pr_link: prLink
+    });
+
+    if (error) {
+      console.error('Error resubmitting task:', error);
+      throw error;
+    }
+  }
+
+  // ================= Bug Reports =================
+
+  /**
+   * Submit a bug report
+   */
+  async submitBugReport(report: {
+    title: string;
+    description: string;
+    category: string;
+    reported_by: string;
+    email: string;
+  }): Promise<void> {
+    const { error } = await this.supabase
+      .from('bug_reports')
+      .insert([report]);
+
+    if (error) {
+      console.error('Error submitting bug report:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get all bug reports (admin)
+   */
+  async getBugReports(): Promise<BugReportData[]> {
+    const { data, error } = await this.supabase
+      .from('bug_reports')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching bug reports:', error);
+      throw error;
+    }
+    return data || [];
+  }
+
+  /**
+   * Update bug report status
+   */
+  async updateBugReportStatus(id: number, status: string): Promise<void> {
+    const { error } = await this.supabase
+      .from('bug_reports')
+      .update({ status })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error updating bug report status:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a bug report
+   */
+  async deleteBugReport(id: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('bug_reports')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting bug report:', error);
       throw error;
     }
   }

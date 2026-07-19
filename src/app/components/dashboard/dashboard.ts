@@ -3,29 +3,25 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../core/services/supabase';
 import { TranslationService } from '../../core/services/translation.service';
+import { StudentStateService } from '../../core/services/student-state';
 import { Session, Submission } from '../../core/models/session.model';
-import { SubmissionStatus, ERROR_MESSAGES } from '../../core/constants/app.constants';
-
-interface Announcement {
-  title: string;
-  date: string;
-  message: string;
-  icon: string;
-}
+import { SubmissionStatus, StudentSessionStatus, ERROR_MESSAGES } from '../../core/constants/app.constants';
 
 interface CurrentSessionCard {
   number: number;
   title: string;
   recordedDate: string;
   duration: string;
+  session: Session;
 }
 
-interface LatestAssignmentCard {
+interface CurrentAssignmentCard {
   sessionId: number;
   title: string;
   description: string;
   dueDate: string;
-  daysLeft: number;
+  submitted: boolean;
+  submission?: Submission;
 }
 
 @Component({
@@ -37,6 +33,7 @@ interface LatestAssignmentCard {
 export class Dashboard implements OnInit {
   private readonly supabaseService = inject(SupabaseService);
   readonly t = inject(TranslationService);
+  readonly stateService = inject(StudentStateService);
 
   isLoading = true;
   errorMessage = '';
@@ -52,29 +49,11 @@ export class Dashboard implements OnInit {
   // Data from database
   sessions: Session[] = [];
   mySubmissions: Submission[] = [];
-  prLinks: Record<number, string> = {};
 
   // Dynamic cards
   currentSession: CurrentSessionCard | null = null;
-  latestAssignment: LatestAssignmentCard | null = null;
-  nextSessionTime = '';
-  nextSessionTitle = '';
-
-  // Static announcements (will be translated in template)
-  readonly recentAnnouncements: Announcement[] = [
-    {
-      title: 'تغيير موعد الجلسة',
-      date: '2 يوليو 2026',
-      message: 'ابتداءً من الأسبوع القادم، ستبدأ جميع الجلسات في الساعة 8:00 مساءً بدلاً من 7:00.',
-      icon: 'megaphone'
-    },
-    {
-      title: 'تكليف جديد',
-      date: '1 يوليو 2026',
-      message: 'المهمة 6 متاحة الآن. تحقق منها وحظاً سعيداً!',
-      icon: 'clipboard'
-    }
-  ];
+  currentAssignment: CurrentAssignmentCard | null = null;
+  upcomingSession: Session | null = null;
 
   async ngOnInit(): Promise<void> {
     await this.loadDashboardData();
@@ -96,7 +75,7 @@ export class Dashboard implements OnInit {
                          'Student';
 
       this.sessions = await this.supabaseService.getSessions();
-      this.mySubmissions = await this.supabaseService.getStudentSubmissions(user.id);
+      this.mySubmissions = await this.supabaseService.getStudentSubmissions(this.studentName);
 
       this.calculateMetrics();
       this.setCurrentSessionAndAssignment();
@@ -132,22 +111,42 @@ export class Dashboard implements OnInit {
         number: targetSession.order_index,
         title: targetSession.title,
         recordedDate: targetSession.recorded_date || 'N/A',
-        duration: targetSession.duration || 'N/A'
+        duration: targetSession.duration || 'N/A',
+        session: targetSession
       };
 
-      this.nextSessionTime = targetSession.duration || '';
-      this.nextSessionTitle = targetSession.title;
-
-      this.latestAssignment = {
+      this.currentAssignment = {
         sessionId: targetSession.id,
         title: `${this.t.t('dashboard.session')} ${targetSession.order_index}: ${targetSession.title}`,
-        description: targetSession.description || this.t.t('session.assignment'),
+        description: targetSession.assignment_description || targetSession.description || this.t.t('session.assignment'),
         dueDate: targetSession.assignment_due_date || this.t.t('dashboard.due'),
-        daysLeft: 0
+        submitted: false
       };
+
+      // Find upcoming session (next unsubmitted after current)
+      if (unsubmittedSessions.length > 1) {
+        this.upcomingSession = unsubmittedSessions[1];
+      } else {
+        this.upcomingSession = targetSession;
+      }
     } else {
       this.currentSession = null;
-      this.latestAssignment = null;
+      this.currentAssignment = null;
+
+      // If all submitted, show last session as current
+      if (this.sessions.length > 0) {
+        const lastSession = this.sessions[this.sessions.length - 1];
+        const lastSubmission = this.mySubmissions.find(s => s.session_id === lastSession.id);
+
+        this.currentAssignment = {
+          sessionId: lastSession.id,
+          title: `${this.t.t('dashboard.session')} ${lastSession.order_index}: ${lastSession.title}`,
+          description: lastSession.assignment_description || lastSession.description || '',
+          dueDate: lastSession.assignment_due_date || '',
+          submitted: true,
+          submission: lastSubmission
+        };
+      }
     }
   }
 
@@ -155,40 +154,18 @@ export class Dashboard implements OnInit {
     return this.mySubmissions.find(submission => submission.session_id === sessionId);
   }
 
-  async submitAssignment(sessionId: number): Promise<void> {
-    const prLink = this.prLinks[sessionId]?.trim();
-    if (!prLink) {
-      return;
-    }
+  openSession(session: Session): void {
+    this.stateService.openSession(session);
+  }
 
-    try {
-      this.isLoading = true;
-      this.errorMessage = '';
+  goToCourse(): void {
+    this.stateService.navigateTo('course');
+  }
 
-      const user = await this.supabaseService.getCurrentUser();
-      if (!user) {
-        this.errorMessage = this.t.t('error.sessionExpired');
-        return;
-      }
-
-      await this.supabaseService.submitTask({
-        session_id: sessionId,
-        student_id: user.id,
-        student_name: this.studentName,
-        pr_link: prLink,
-        status: SubmissionStatus.PENDING
-      });
-
-      // Clear the input
-      delete this.prLinks[sessionId];
-
-      // Reload dashboard data
-      await this.loadDashboardData();
-    } catch (error) {
-      console.error('Error submitting task:', error);
-      this.errorMessage = this.t.t('error.submissionFailed');
-    } finally {
-      this.isLoading = false;
-    }
+  /**
+   * Get the session status from the database value
+   */
+  getSessionStatus(session: Session): string {
+    return session.student_status || StudentSessionStatus.UPCOMING;
   }
 }

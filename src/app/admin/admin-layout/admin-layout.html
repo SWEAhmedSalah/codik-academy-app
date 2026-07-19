@@ -40,6 +40,15 @@
         {{ t.t('admin.submissions') }}
       </button>
 
+      <!-- زرار تقارير الأخطاء -->
+      <button type="button" (click)="activeTab = 'bugs'"
+              [class.bg-indigo-600]="activeTab === 'bugs'" [class.text-white]="activeTab === 'bugs'"
+              [class.text-slate-400]="activeTab !== 'bugs'" [class.hover:bg-slate-800]="activeTab !== 'bugs'"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors text-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path></svg>
+        {{ t.t('adminBugs.sidebarLabel') }}
+      </button>
+
     </nav>
 
     <!-- الجزء السفلي -->
@@ -67,7 +76,11 @@
       @case ('dashboard') { <app-admin-statistics></app-admin-statistics> }
       @case ('sessions') { <app-admin-sessions></app-admin-sessions> }
       @case ('submissions') { <app-admin-submissions></app-admin-submissions> }
+      @case ('bugs') { <app-admin-bug-reports></app-admin-bug-reports> }
     }
   </div>
+
+  <!-- Bug Report Button -->
+  <app-bug-report></app-bug-report>
 
 </div>

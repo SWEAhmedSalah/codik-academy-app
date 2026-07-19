@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslationService } from '../../core/services/translation.service';
 import { SupabaseService } from '../../core/services/supabase';
+import { StudentStateService, StudentView } from '../../core/services/student-state';
 import { APP_CONSTANTS } from '../../core/constants/app.constants';
 
 @Component({
@@ -15,8 +16,8 @@ export class Sidebar implements OnInit {
   readonly t = inject(TranslationService);
   private readonly supabaseService = inject(SupabaseService);
   private readonly router = inject(Router);
+  readonly stateService = inject(StudentStateService);
 
-  activeLink = 'Dashboard';
   isLoggingOut = false;
   userEmail = '';
   userName = '';
@@ -26,12 +27,19 @@ export class Sidebar implements OnInit {
       const user = await this.supabaseService.getCurrentUser();
       if (user?.email) {
         this.userEmail = user.email;
-        // Extract name from email (before @)
         this.userName = user.email.split('@')[0];
       }
     } catch (error) {
       console.error('Error loading user:', error);
     }
+  }
+
+  navigateTo(view: StudentView): void {
+    this.stateService.navigateTo(view);
+  }
+
+  isActive(view: StudentView): boolean {
+    return this.stateService.currentView() === view;
   }
 
   async onLogout(): Promise<void> {

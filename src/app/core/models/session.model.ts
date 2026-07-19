@@ -18,9 +18,8 @@ export interface Session {
 }
 
 export interface Submission {
-  id: string;
+  id: number;
   session_id: number;
-  student_id: string;
   student_name: string;
   pr_link: string;
   status: SubmissionStatus;
@@ -59,9 +58,18 @@ export interface CreateSessionData {
 
 export interface CreateSubmissionData {
   session_id: number;
-  student_id: string;
   student_name: string;
   pr_link: string;
   status: SubmissionStatus;
 }
 
+export interface BugReportData {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  reported_by: string;
+  email: string;
+  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  created_at: string;
+}
