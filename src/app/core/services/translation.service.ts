@@ -50,7 +50,7 @@ export interface TranslationKeys {
   'dashboard.continueLearning': string;
   'dashboard.recordedOn': string;
   'dashboard.watchSession': string;
-  'dashboard.viewMaterials': string;
+  'dashboard.viewAllMaterials': string;
   'dashboard.latestAssignment': string;
   'dashboard.dueIn': string;
   'dashboard.days': string;
@@ -354,7 +354,7 @@ export class TranslationService {
       'dashboard.subtitle': 'استمر في التعلم وابنِ أشياء رائعة',
       'dashboard.courseProgress': 'تقدم الدورة',
       'dashboard.keepGoing': 'استمر!',
-      'dashboard.sessionsAttended': 'المحاضرات المحضورة',
+      'dashboard.sessionsAttended': 'المحاضرات التى اتممت حضورها',
       'dashboard.goodJob': 'أحسنت!',
       'dashboard.assignmentsCompleted': 'التكليفات المكتملة',
       'dashboard.excellent': 'ممتاز!',
@@ -363,7 +363,7 @@ export class TranslationService {
       'dashboard.continueLearning': 'تابع التعلم',
       'dashboard.recordedOn': 'تم التسجيل في',
       'dashboard.watchSession': 'شاهد المحاضره',
-      'dashboard.viewMaterials': 'عرض المواد',
+      'dashboard.viewAllMaterials': 'عرض جميع المحاضرات',
       'dashboard.latestAssignment': 'أحدث تكليف',
       'dashboard.dueIn': 'متبقي',
       'dashboard.days': 'أيام',
@@ -668,7 +668,7 @@ export class TranslationService {
       'dashboard.continueLearning': 'Continue Learning',
       'dashboard.recordedOn': 'Recorded on',
       'dashboard.watchSession': 'Watch Session',
-      'dashboard.viewMaterials': 'View Materials',
+      'dashboard.viewAllMaterials': 'View All Sessions',
       'dashboard.latestAssignment': 'Latest Assignment',
       'dashboard.dueIn': 'Due in',
       'dashboard.days': 'days',

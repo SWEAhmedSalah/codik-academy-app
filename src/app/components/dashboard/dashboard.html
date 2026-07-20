@@ -108,7 +108,7 @@
               {{ t.t('dashboard.watchSession') }}
             </button>
             <button (click)="goToCourse()" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center gap-1">
-              {{ t.t('dashboard.viewMaterials') }}
+              {{ t.t('dashboard.viewAllMaterials') }}
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
             </button>
           </div>
@@ -125,10 +125,10 @@
   </div>
 
   <!-- 4. Current Assignment + Upcoming Session -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
     <!-- Current Assignment -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
       <div>
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center gap-2">
@@ -150,16 +150,18 @@
 
         @if (currentAssignment) {
           <h4 class="text-base font-bold text-gray-900 mb-2">{{ currentAssignment.title }}</h4>
-          <div class="prose prose-sm max-w-none text-sm text-gray-500 leading-relaxed mb-4"
-               [innerHTML]="currentAssignment.description">
-          </div>
 
           @if (currentAssignment.dueDate) {
-            <div class="flex items-center gap-2 text-xs text-gray-500 font-medium mb-6">
+            <div class="flex items-center gap-2 text-xs text-gray-500 font-medium mb-4">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
               {{ t.t('dashboard.due') }}: {{ currentAssignment.dueDate }}
             </div>
           }
+
+          <!-- Short description summary -->
+          <div class="bg-gray-50 p-4 rounded-lg text-sm text-gray-700 leading-relaxed mb-6">
+            <p class="line-clamp-3" [innerHTML]="currentAssignment.shortDescription"></p>
+          </div>
 
           @if (currentAssignment.submitted && currentAssignment.submission) {
             <div class="p-3 bg-amber-50 border border-amber-100 rounded-lg text-sm text-amber-700 font-medium">
@@ -176,7 +178,7 @@
       </div>
 
       @if (currentAssignment && !currentAssignment.submitted && currentSession) {
-        <div class="mt-4">
+        <div class="mt-auto flex justify-start">
           <button (click)="openSession(currentSession.session)" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold py-2 px-5 rounded-lg transition-colors">
             {{ t.t('dashboard.startAssignment') }}
           </button>
@@ -185,7 +187,7 @@
     </div>
 
     <!-- Upcoming Session -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
       <div>
         <div class="flex items-center gap-2 mb-6">
           <div class="w-1 h-4 bg-indigo-600 rounded-full"></div>
@@ -222,7 +224,7 @@
       </div>
 
       @if (upcomingSession) {
-        <div class="mt-4">
+        <div class="mt-auto flex justify-start pt-4">
           <button (click)="openSession(upcomingSession)" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold py-2 px-5 rounded-lg transition-colors">
             {{ t.t('dashboard.viewSession') }}
           </button>

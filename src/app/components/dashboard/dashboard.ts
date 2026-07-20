@@ -18,7 +18,7 @@ interface CurrentSessionCard {
 interface CurrentAssignmentCard {
   sessionId: number;
   title: string;
-  description: string;
+  shortDescription: string;
   dueDate: string;
   submitted: boolean;
   submission?: Submission;
@@ -74,7 +74,7 @@ export class Dashboard implements OnInit {
                          user.email?.split('@')[0] ||
                          'Student';
 
-      this.sessions = await this.supabaseService.getSessions();
+      this.sessions = await this.supabaseService.getPublishedSessions();
       this.mySubmissions = await this.supabaseService.getStudentSubmissions(this.studentName);
 
       this.calculateMetrics();
@@ -90,8 +90,10 @@ export class Dashboard implements OnInit {
 
   private calculateMetrics(): void {
     this.totalSessions = this.sessions.length;
-    this.totalAssignments = this.sessions.length;
-    this.assignmentsCompleted = this.mySubmissions.length;
+    this.totalAssignments = this.sessions.filter(s => !!s.assignment_title).length;
+    this.assignmentsCompleted = this.mySubmissions.filter(
+      sub => sub.status === SubmissionStatus.ACCEPTED
+    ).length;
     this.sessionsAttended = this.mySubmissions.length;
 
     if (this.totalAssignments > 0) {
@@ -115,37 +117,59 @@ export class Dashboard implements OnInit {
         session: targetSession
       };
 
-      this.currentAssignment = {
-        sessionId: targetSession.id,
-        title: `${this.t.t('dashboard.session')} ${targetSession.order_index}: ${targetSession.title}`,
-        description: targetSession.assignment_description || targetSession.description || this.t.t('session.assignment'),
-        dueDate: targetSession.assignment_due_date || this.t.t('dashboard.due'),
-        submitted: false
-      };
-
-      // Find upcoming session (next unsubmitted after current)
-      if (unsubmittedSessions.length > 1) {
-        this.upcomingSession = unsubmittedSessions[1];
+      // Only show current assignment if the session actually has one
+      if (targetSession.assignment_title) {
+        this.currentAssignment = {
+          sessionId: targetSession.id,
+          title: `${this.t.t('dashboard.session')} ${targetSession.order_index}: ${targetSession.title}`,
+          shortDescription: targetSession.assignment_description || targetSession.description || this.t.t('session.assignment'),
+          dueDate: targetSession.assignment_due_date || this.t.t('dashboard.due'),
+          submitted: false
+        };
       } else {
-        this.upcomingSession = targetSession;
+        this.currentAssignment = null;
+      }
+
+      // Find upcoming session: must have 'Upcoming' status AND no recorded_date (or future date)
+      const upcoming = this.sessions.find(
+        s => s.student_status === StudentSessionStatus.UPCOMING && !s.recorded_date
+      ) || this.sessions.find(
+        s => s.student_status === StudentSessionStatus.UPCOMING &&
+             s.recorded_date && new Date(s.recorded_date) > new Date()
+      );
+      if (upcoming) {
+        this.upcomingSession = upcoming;
+      } else {
+        this.upcomingSession = null;
       }
     } else {
       this.currentSession = null;
       this.currentAssignment = null;
+
+      // Find upcoming session even when all are submitted
+      const upcoming = this.sessions.find(
+        s => s.student_status === StudentSessionStatus.UPCOMING && !s.recorded_date
+      ) || this.sessions.find(
+        s => s.student_status === StudentSessionStatus.UPCOMING &&
+             s.recorded_date && new Date(s.recorded_date) > new Date()
+      );
+      this.upcomingSession = upcoming || null;
 
       // If all submitted, show last session as current
       if (this.sessions.length > 0) {
         const lastSession = this.sessions[this.sessions.length - 1];
         const lastSubmission = this.mySubmissions.find(s => s.session_id === lastSession.id);
 
-        this.currentAssignment = {
-          sessionId: lastSession.id,
-          title: `${this.t.t('dashboard.session')} ${lastSession.order_index}: ${lastSession.title}`,
-          description: lastSession.assignment_description || lastSession.description || '',
-          dueDate: lastSession.assignment_due_date || '',
-          submitted: true,
-          submission: lastSubmission
-        };
+        if (lastSession.assignment_title) {
+          this.currentAssignment = {
+            sessionId: lastSession.id,
+            title: `${this.t.t('dashboard.session')} ${lastSession.order_index}: ${lastSession.title}`,
+            shortDescription: lastSession.assignment_description || lastSession.description || '',
+            dueDate: lastSession.assignment_due_date || '',
+            submitted: true,
+            submission: lastSubmission
+          };
+        }
       }
     }
   }
@@ -167,5 +191,13 @@ export class Dashboard implements OnInit {
    */
   getSessionStatus(session: Session): string {
     return session.student_status || StudentSessionStatus.UPCOMING;
+  }
+
+  /**
+   * Strip HTML tags and return plain text (truncated for dashboard summary)
+   */
+  private stripHtml(html: string): string {
+    const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    return text.length > 200 ? text.substring(0, 200) + '...' : text;
   }
 }

@@ -59,11 +59,21 @@ export class AdminSessions implements OnInit {
   }
 
   get maxAllowedDate(): string {
-    return new Date().toISOString().split('T')[0];
+    // No max restriction - allow future dates for scheduled sessions
+    return '';
   }
 
   get minAllowedDate(): string {
     return new Date().toISOString().split('T')[0];
+  }
+
+  get isFutureRecordedDate(): boolean {
+    const dateValue = this.sessionForm?.get('recorded_date')?.value;
+    if (!dateValue) return false;
+    const selected = new Date(dateValue);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selected > today;
   }
 
   get totalDurationMinutes(): number {
@@ -80,7 +90,7 @@ export class AdminSessions implements OnInit {
       order_index: ['', [Validators.required, Validators.min(1)]],
       status: [SessionStatus.DRAFT],
       student_status: [StudentSessionStatus.UPCOMING],
-      recorded_date: ['', [this.noFutureDateValidator]],
+      recorded_date: [''],
       duration_hours: [1],
       duration_minutes: [30],
       recording_link: [''],
@@ -91,7 +101,17 @@ export class AdminSessions implements OnInit {
       assignment_due_date: ['', [this.noPastDateValidator]]
     });
 
-    // No auto-override: admin's manual student_status selection is always respected
+    // When recorded_date changes, if it's a future date, force student_status to Upcoming
+    this.sessionForm.get('recorded_date')?.valueChanges.subscribe(value => {
+      if (value) {
+        const selected = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (selected > today) {
+          this.sessionForm.get('student_status')?.setValue(StudentSessionStatus.UPCOMING);
+        }
+      }
+    });
   }
 
   noFutureDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -196,18 +216,18 @@ export class AdminSessions implements OnInit {
       const studentStatus = formValues.student_status;
 
       const sessionData = {
-        title: formValues.title,
-        description: formValues.description,
-        order_index: formValues.order_index,
+        title: formValues.title?.trim(),
+        description: formValues.description || null,
+        order_index: Number(formValues.order_index),
         status: formValues.status,
         student_status: studentStatus,
         recorded_date: formValues.recorded_date || null,
         duration: `${formValues.duration_hours}h ${formValues.duration_minutes}m`,
-        recording_link: formValues.recording_link,
-        slide_link: formValues.slide_link,
-        assets_link: formValues.assets_link,
-        assignment_title: formValues.assignment_title,
-        assignment_description: formValues.assignment_description,
+        recording_link: formValues.recording_link?.trim() || null,
+        slide_link: formValues.slide_link?.trim() || null,
+        assets_link: formValues.assets_link?.trim() || null,
+        assignment_title: formValues.assignment_title?.trim() || null,
+        assignment_description: formValues.assignment_description || null,
         assignment_due_date: formValues.assignment_due_date || null
       };
 
