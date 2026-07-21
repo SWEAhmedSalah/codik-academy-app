@@ -12,7 +12,9 @@
   <!-- Sessions Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
     @for (session of sessions; track session.id) {
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-all flex flex-col justify-between">
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 transition-all flex flex-col justify-between"
+           [class.hover:border-indigo-100]="!isSessionLocked(session)"
+           [class.opacity-60]="isSessionLocked(session)">
 
         <!-- Top: Number + Status -->
         <div>
@@ -29,7 +31,12 @@
                 {{ session.order_index }}
               </div>
               <div>
-                <h3 class="text-sm font-bold text-gray-900">{{ session.title }}</h3>
+                <div class="flex items-center gap-1.5">
+                  <h3 class="text-sm font-bold text-gray-900">{{ session.title }}</h3>
+                  @if (isSessionLocked(session)) {
+                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                  }
+                </div>
                 @if (session.duration) {
                   <p class="text-xs text-gray-400 mt-0.5">{{ session.duration }}</p>
                 }
@@ -87,10 +94,21 @@
           </div>
         </div>
 
-        <!-- Open Button -->
-        <button (click)="onSessionSelect(session)"
-                class="w-full mt-2 px-4 py-2 text-sm font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors">
-          {{ t.t('course.openSession') }}
+        <!-- Open Button (locked/unlocked based on sequence) -->
+        <button (click)="!isSessionLocked(session) && onSessionSelect(session)"
+                [disabled]="isSessionLocked(session)"
+                [ngClass]="isSessionLocked(session)
+                  ? 'opacity-50 cursor-not-allowed bg-gray-200 text-gray-400'
+                  : 'text-indigo-600 bg-indigo-50 hover:bg-indigo-100'"
+                class="w-full mt-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors">
+          @if (isSessionLocked(session)) {
+            <span class="flex items-center justify-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+              {{ t.t('course.openSession') }}
+            </span>
+          } @else {
+            {{ t.t('course.openSession') }}
+          }
         </button>
       </div>
     }

@@ -15,6 +15,7 @@ export interface Session {
   assignment_title?: string;
   assignment_description?: string;
   assignment_due_date?: string | null;
+  is_locked?: boolean;
 }
 
 export interface Submission {
@@ -54,6 +55,7 @@ export interface CreateSessionData {
   assignment_title?: string;
   assignment_description?: string;
   assignment_due_date?: string | null;
+  is_locked?: boolean;
 }
 
 export interface CreateSubmissionData {

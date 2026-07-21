@@ -90,6 +90,8 @@ export interface TranslationKeys {
   'admin.assignmentTitle': string;
   'admin.assignmentDescription': string;
   'admin.assignmentDueDate': string;
+  'admin.lockSession': string;
+  'admin.lockSessionHint': string;
   'admin.draft': string;
   'admin.published': string;
   'admin.upcoming': string;
@@ -403,6 +405,8 @@ export class TranslationService {
       'admin.assignmentTitle': 'عنوان التكليف',
       'admin.assignmentDescription': 'وصف التكليف',
       'admin.assignmentDueDate': 'موعد التسليم',
+      'admin.lockSession': 'قفل المحاضرة',
+      'admin.lockSessionHint': 'منع الطلاب من الوصول إلى هذه المحاضرة',
       'admin.draft': 'مسودة',
       'admin.published': 'منشور',
       'admin.upcoming': 'قادم',
@@ -708,6 +712,8 @@ export class TranslationService {
       'admin.assignmentTitle': 'Assignment Title',
       'admin.assignmentDescription': 'Assignment Description',
       'admin.assignmentDueDate': 'Due Date',
+      'admin.lockSession': 'Lock Session',
+      'admin.lockSessionHint': 'Prevent students from accessing this session',
       'admin.draft': 'Draft',
       'admin.published': 'Published',
       'admin.upcoming': 'Upcoming',

@@ -22,6 +22,10 @@ export class AdminLayout {
 
   activeTab: 'dashboard' | 'sessions' | 'submissions' | 'bugs' = 'dashboard';
 
+  onNavigate(tab: string): void {
+    this.activeTab = tab as 'dashboard' | 'sessions' | 'submissions' | 'bugs';
+  }
+
   async logout(): Promise<void> {
     await this.supabaseService.signOut();
     this.router.navigate(['/login']);

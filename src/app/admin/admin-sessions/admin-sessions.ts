@@ -98,7 +98,8 @@ export class AdminSessions implements OnInit {
       assets_link: [''],
       assignment_title: [''],
       assignment_description: [''],
-      assignment_due_date: ['', [this.noPastDateValidator]]
+      assignment_due_date: ['', [this.noPastDateValidator]],
+      is_locked: [false]
     });
 
     // When recorded_date changes, if it's a future date, force student_status to Upcoming
@@ -170,7 +171,8 @@ export class AdminSessions implements OnInit {
       assets_link: session.assets_link,
       assignment_title: session.assignment_title || '',
       assignment_description: session.assignment_description || '',
-      assignment_due_date: session.assignment_due_date || ''
+      assignment_due_date: session.assignment_due_date || '',
+      is_locked: session.is_locked || false
     });
 
     this.openDrawer();
@@ -228,7 +230,8 @@ export class AdminSessions implements OnInit {
         assets_link: formValues.assets_link?.trim() || null,
         assignment_title: formValues.assignment_title?.trim() || null,
         assignment_description: formValues.assignment_description || null,
-        assignment_due_date: formValues.assignment_due_date || null
+        assignment_due_date: formValues.assignment_due_date || null,
+        is_locked: !!formValues.is_locked
       };
 
       if (this.isEditMode && this.editingSessionId) {
@@ -255,11 +258,17 @@ export class AdminSessions implements OnInit {
     this.editingSessionId = null;
     this.clearMessages();
 
+    const nextOrder = this.sessions.length > 0
+      ? Math.max(...this.sessions.map(s => s.order_index)) + 1
+      : 1;
+
     this.sessionForm.reset({
       status: SessionStatus.DRAFT,
       student_status: StudentSessionStatus.UPCOMING,
       duration_hours: 1,
-      duration_minutes: 30
+      duration_minutes: 30,
+      is_locked: false,
+      order_index: nextOrder
     });
 
     this.openDrawer();

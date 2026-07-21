@@ -73,7 +73,7 @@
   <!-- الجزء اللي على اليمين -->
   <div class="flex-1 overflow-y-auto">
     @switch (activeTab) {
-      @case ('dashboard') { <app-admin-statistics></app-admin-statistics> }
+      @case ('dashboard') { <app-admin-statistics (navigateTo)="onNavigate($event)"></app-admin-statistics> }
       @case ('sessions') { <app-admin-sessions></app-admin-sessions> }
       @case ('submissions') { <app-admin-submissions></app-admin-submissions> }
       @case ('bugs') { <app-admin-bug-reports></app-admin-bug-reports> }

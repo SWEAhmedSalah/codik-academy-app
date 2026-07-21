@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../core/services/supabase';
 import { TranslationService } from '../../core/services/translation.service';
@@ -14,6 +14,8 @@ import { ERROR_MESSAGES } from '../../core/constants/app.constants';
 export class AdminStatistics implements OnInit {
   private readonly supabaseService = inject(SupabaseService);
   readonly t = inject(TranslationService);
+
+  @Output() navigateTo = new EventEmitter<string>();
 
   stats: AdminStats = {
     totalSessions: 0,
@@ -38,5 +40,13 @@ export class AdminStatistics implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  goToSessions(): void {
+    this.navigateTo.emit('sessions');
+  }
+
+  goToSubmissions(): void {
+    this.navigateTo.emit('submissions');
   }
 }

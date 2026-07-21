@@ -60,4 +60,34 @@ export class SessionsSidebar implements OnInit {
   getSessionStatus(session: Session): string {
     return session.student_status || StudentSessionStatus.UPCOMING;
   }
+
+  /**
+   * Sequence-based locking for upcoming sessions.
+   * If the admin has explicitly set is_locked on the session, respect that.
+   * Otherwise: Completed/In Progress/submitted sessions are unlocked,
+   * and only the first upcoming session is unlocked.
+   */
+  isSessionLocked(session: Session): boolean {
+    // If admin explicitly locked it, it's locked
+    if (session.is_locked) return true;
+
+    const status = this.getSessionStatus(session);
+
+    // Completed or In Progress sessions are always accessible
+    if (status === 'Completed' || status === 'In Progress') return false;
+
+    // Sessions with a submission are always accessible
+    if (this.getSubmissionForSession(session.id)) return false;
+
+    // For Upcoming sessions: only the first one (by order_index) is unlocked
+    const upcomingSessions = this.sessions.filter(s => {
+      const st = this.getSessionStatus(s);
+      return st === 'Upcoming' && !this.getSubmissionForSession(s.id) && !s.is_locked;
+    });
+
+    if (upcomingSessions.length === 0) return true;
+
+    // The first upcoming unlocked session is accessible
+    return session.id !== upcomingSessions[0].id;
+  }
 }
