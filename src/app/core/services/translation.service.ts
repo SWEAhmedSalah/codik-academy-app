@@ -825,7 +825,7 @@ export class TranslationService {
       'dashboard.minutes': 'Minutes',
       'dashboard.seconds': 'Seconds',
       'dashboard.deadlinePassed': 'Deadline has passed',
-      'dashboard.lateSubmission': 'Please submit as soon as possible',
+      'dashboard.lateSubmission': 'Task Deadline Passed',
 
       // Submission
       'submission.repoUrl': 'Repository URL',

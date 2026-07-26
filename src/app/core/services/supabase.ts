@@ -135,7 +135,8 @@ export class SupabaseService {
         *,
         sessions ( title, order_index )
       `)
-      .order('submitted_at', { ascending: false });
+      .order('submitted_at', { ascending: false })
+      .range(0, 9999);
 
     if (error) {
       console.error('Error fetching all submissions:', error);
