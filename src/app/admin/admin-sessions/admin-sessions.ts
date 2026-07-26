@@ -63,8 +63,9 @@ export class AdminSessions implements OnInit {
     return '';
   }
 
-  get minAllowedDate(): string {
-    return new Date().toISOString().split('T')[0];
+  get minAllowedDateTime(): string {
+    // Return current Egypt time in datetime-local format
+    return this.toEgyptDatetimeLocal(new Date().toISOString());
   }
 
   get isFutureRecordedDate(): boolean {
@@ -98,7 +99,7 @@ export class AdminSessions implements OnInit {
       assets_link: [''],
       assignment_title: [''],
       assignment_description: [''],
-      assignment_due_date: ['', [this.noPastDateValidator]],
+      assignment_due_date: ['', [this.noPastDateValidator.bind(this)]],
       is_locked: [false]
     });
 
@@ -128,11 +129,59 @@ export class AdminSessions implements OnInit {
   noPastDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
     if (!control.value) return null;
 
-    const selectedDate = new Date(control.value);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Interpret the datetime-local value as Egypt time and compare to now
+    const selectedUTC = this.egyptDatetimeToUTC(control.value);
+    return selectedUTC < Date.now() ? { pastDate: true } : null;
+  }
 
-    return selectedDate < today ? { pastDate: true } : null;
+  /**
+   * Get Egypt's UTC offset in minutes for a given date.
+   */
+  private getEgyptOffsetMinutes(date: Date): number {
+    const utcStr = date.toLocaleString('en-US', { timeZone: 'UTC' });
+    const egyptStr = date.toLocaleString('en-US', { timeZone: 'Africa/Cairo' });
+    return (new Date(egyptStr).getTime() - new Date(utcStr).getTime()) / 60000;
+  }
+
+  /**
+   * Convert a datetime-local value (e.g. "2026-07-26T12:30") to UTC timestamp (ms),
+   * interpreting the input as Egypt time (Africa/Cairo).
+   */
+  private egyptDatetimeToUTC(datetimeLocal: string): number {
+    const [datePart, timePart] = datetimeLocal.split('T');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hours, minutes] = timePart.split(':').map(Number);
+
+    // Create a UTC date with the same numbers, then subtract Egypt's offset
+    const asUTC = Date.UTC(year, month - 1, day, hours, minutes, 0);
+    const egyptOffset = this.getEgyptOffsetMinutes(new Date(asUTC));
+    return asUTC - (egyptOffset * 60000);
+  }
+
+  /**
+   * Convert a datetime-local value to a UTC ISO string, interpreting as Egypt time.
+   */
+  private toEgyptUTC(datetimeLocal: string): string {
+    return new Date(this.egyptDatetimeToUTC(datetimeLocal)).toISOString();
+  }
+
+  /**
+   * Convert a UTC date string from DB to datetime-local format in Egypt timezone.
+   */
+  private toEgyptDatetimeLocal(utcDateStr: string): string {
+    const date = new Date(utcDateStr);
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Africa/Cairo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).formatToParts(date);
+
+    const get = (type: string) => parts.find(p => p.type === type)?.value || '00';
+    return `${get('year')}-${get('month')}-${get('day')}T${get('hour')}:${get('minute')}`;
   }
 
   openDrawer(): void {
@@ -171,7 +220,9 @@ export class AdminSessions implements OnInit {
       assets_link: session.assets_link,
       assignment_title: session.assignment_title || '',
       assignment_description: session.assignment_description || '',
-      assignment_due_date: session.assignment_due_date || '',
+      assignment_due_date: session.assignment_due_date
+        ? this.toEgyptDatetimeLocal(session.assignment_due_date)
+        : '',
       is_locked: session.is_locked || false
     });
 
@@ -230,7 +281,9 @@ export class AdminSessions implements OnInit {
         assets_link: formValues.assets_link?.trim() || null,
         assignment_title: formValues.assignment_title?.trim() || null,
         assignment_description: formValues.assignment_description || null,
-        assignment_due_date: formValues.assignment_due_date || null,
+        assignment_due_date: formValues.assignment_due_date
+          ? this.toEgyptUTC(formValues.assignment_due_date)
+          : null,
         is_locked: !!formValues.is_locked
       };
 

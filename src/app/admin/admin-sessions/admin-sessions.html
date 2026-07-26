@@ -292,7 +292,7 @@
               </div>
               <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1">{{ t.t('admin.assignmentDueDate') }}</label>
-                <input formControlName="assignment_due_date" type="date" [min]="minAllowedDate" dir="ltr" class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-left focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all">
+                <input formControlName="assignment_due_date" type="datetime-local" [min]="minAllowedDateTime" dir="ltr" class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-left focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all">
                 @if (sessionForm.get('assignment_due_date')?.errors?.['pastDate'] && sessionForm.get('assignment_due_date')?.touched) {
                   <p class="text-[10px] text-red-500 mt-1 font-medium">{{ t.t('admin.dueDateError') }}</p>
                 }
