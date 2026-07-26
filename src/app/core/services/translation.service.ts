@@ -518,7 +518,7 @@ export class TranslationService {
       'dashboard.minutes': 'دقائق',
       'dashboard.seconds': 'ثواني',
       'dashboard.deadlinePassed': 'انتهى الموعد النهائي',
-      'dashboard.lateSubmission': 'يرجى التسليم في أقرب وقت ممكن',
+      'dashboard.lateSubmission': 'برجاء التواصل مع الانستركتور الخاص بالدوره',
 
       // Submission
       'submission.repoUrl': 'رابط المستودع',
@@ -825,7 +825,7 @@ export class TranslationService {
       'dashboard.minutes': 'Minutes',
       'dashboard.seconds': 'Seconds',
       'dashboard.deadlinePassed': 'Deadline has passed',
-      'dashboard.lateSubmission': 'Task Deadline Passed',
+      'dashboard.lateSubmission': 'Task Deadline Passed , Please Contact Your Instructor',
 
       // Submission
       'submission.repoUrl': 'Repository URL',
