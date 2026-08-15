@@ -34,6 +34,12 @@ export class SessionDetails implements OnInit, OnDestroy {
   existingSubmission: Submission | null = null;
   isLoadingSubmission = true;
 
+  // Revert submission
+  isReverting = false;
+  revertSuccess = false;
+  revertError = '';
+  showRevertConfirm = false;
+
   // Countdown timer properties
   timeRemaining: TimeRemaining | null = null;
   private countdownInterval: any = null;
@@ -80,6 +86,12 @@ export class SessionDetails implements OnInit, OnDestroy {
   async submitPR(): Promise<void> {
     if (this.prLinkControl.invalid) {
       this.prLinkControl.markAsTouched();
+      return;
+    }
+
+    // Check if deadline has passed
+    if (this.timeRemaining?.isExpired) {
+      this.submitError = this.t.t('session.cannotSubmitAfterDeadline');
       return;
     }
 
@@ -137,6 +149,71 @@ export class SessionDetails implements OnInit, OnDestroy {
     } finally {
       this.isSubmitting = false;
     }
+  }
+
+  async revertSubmission(): Promise<void> {
+    if (!this.existingSubmission) {
+      return;
+    }
+
+    // Check if deadline has passed
+    if (this.timeRemaining?.isExpired) {
+      this.revertError = this.t.t('session.cannotRevertAfterDeadline');
+      setTimeout(() => this.revertError = '', 3000);
+      return;
+    }
+
+    console.log('🔄 Reverting submission:', this.existingSubmission.id);
+
+    this.isReverting = true;
+    this.revertError = '';
+    this.revertSuccess = false;
+
+    try {
+      await this.supabaseService.deleteSubmission(this.existingSubmission.id);
+
+      console.log('✅ Submission reverted successfully');
+      this.revertSuccess = true;
+      this.submitSuccess = false; // Reset submit success message
+      this.existingSubmission = null;
+      this.showRevertConfirm = false;
+
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        this.revertSuccess = false;
+      }, 3000);
+
+    } catch (error: any) {
+      console.error('❌ Error reverting submission:', error);
+
+      // Show detailed error message
+      let errorMessage = this.t.t('error.revertFailed');
+
+      if (error?.message) {
+        console.error('Error details:', error.message);
+
+        // Check for specific error types
+        if (error.message.includes('permission') || error.message.includes('policy')) {
+          errorMessage = 'Permission denied. Please ensure RLS policies are configured correctly.';
+        } else if (error.message.includes('not have permission')) {
+          errorMessage = error.message;
+        }
+      }
+
+      this.revertError = errorMessage;
+
+      // Keep error visible longer for debugging
+      setTimeout(() => {
+        this.revertError = '';
+      }, 5000);
+    } finally {
+      this.isReverting = false;
+    }
+  }
+
+  cancelRevert(): void {
+    this.showRevertConfirm = false;
+    this.revertError = '';
   }
 
   private startCountdown(): void {

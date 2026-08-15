@@ -2,8 +2,106 @@
 
   <!-- ================= Header ================= -->
   <div class="mb-6">
-    <h1 class="text-2xl font-extrabold text-gray-900">{{ t.t('admin.studentSubmissions') }}</h1>
-    <p class="text-sm text-gray-500 mt-1">{{ t.t('admin.studentSubmissionsDesc') }}</p>
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-extrabold text-gray-900">{{ t.t('admin.studentSubmissions') }}</h1>
+        <p class="text-sm text-gray-500 mt-1">{{ t.t('admin.studentSubmissionsDesc') }}</p>
+      </div>
+      <div class="flex items-center gap-2">
+        @if (isAutoRefreshing) {
+          <div class="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg animate-pulse">
+            <svg class="w-4 h-4 text-blue-600 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="text-xs font-semibold text-blue-700">Updating...</span>
+          </div>
+        }
+        <button
+          (click)="manualRefresh()"
+          [disabled]="isLoading"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Refresh submissions list">
+          <svg class="w-4 h-4" [class.animate-spin]="isLoading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= Filter Section ================= -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
+    <div class="flex items-center gap-2 mb-4">
+      <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+      </svg>
+      <h2 class="text-sm font-bold text-gray-700">{{ t.t('common.filters') }}</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Search by Student Name -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-2">{{ t.t('admin.searchStudent') }}</label>
+        <div class="relative">
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            (ngModelChange)="onSearchChange()"
+            [placeholder]="t.t('admin.searchByName')"
+            class="w-full px-3 py-2 pr-8 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all">
+          <svg class="absolute right-2.5 top-2.5 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Filter by Status -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-2">{{ t.t('admin.filterByStatus') }}</label>
+        <select
+          [(ngModel)]="selectedStatus"
+          (ngModelChange)="onStatusChange()"
+          class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all">
+          <option value="all">{{ t.t('common.all') }}</option>
+          <option [value]="SubmissionStatus.PENDING">{{ SubmissionStatus.PENDING }}</option>
+          <option [value]="SubmissionStatus.ACCEPTED">{{ SubmissionStatus.ACCEPTED }}</option>
+          <option [value]="SubmissionStatus.NEEDS_REWORK">{{ SubmissionStatus.NEEDS_REWORK }}</option>
+        </select>
+      </div>
+
+      <!-- Filter by Session -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-2">{{ t.t('admin.filterBySession') }}</label>
+        <select
+          [(ngModel)]="selectedSession"
+          (ngModelChange)="onSessionChange()"
+          class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all">
+          <option [ngValue]="null">{{ t.t('common.allSessions') }}</option>
+          @for (session of uniqueSessions; track session.order_index) {
+            <option [ngValue]="session.order_index">{{ t.t('dashboard.session') }} {{ session.order_index }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- Results Count and Reset Button -->
+    <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+      <span class="text-xs text-gray-500">
+        {{ t.t('common.showing') }} <span class="font-bold text-gray-700">{{ filteredSubmissions.length }}</span> {{ t.t('common.of') }} <span class="font-bold text-gray-700">{{ submissions.length }}</span> {{ t.t('admin.submissions') }}
+      </span>
+      @if (searchText || selectedStatus !== 'all' || selectedSession !== null) {
+        <button
+          (click)="resetFilters()"
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-700 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-all">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+          {{ t.t('common.resetFilters') }}
+        </button>
+      }
+    </div>
   </div>
 
   <!-- ================= Success / Error Messages ================= -->
@@ -33,10 +131,16 @@
           <span class="font-semibold text-sm">{{ t.t('admin.loadingSubmissions') }}...</span>
         </div>
       </div>
-    } @else if (submissions.length === 0) {
+    } @else if (filteredSubmissions.length === 0) {
       <div class="flex flex-col items-center justify-center h-64 text-gray-400">
         <svg class="w-14 h-14 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-        <p class="text-sm font-medium">{{ t.t('admin.noSubmissionsWaiting') }}</p>
+        <p class="text-sm font-medium">
+          @if (submissions.length === 0) {
+            {{ t.t('admin.noSubmissionsWaiting') }}
+          } @else {
+            {{ t.t('admin.noMatchingSubmissions') }}
+          }
+        </p>
       </div>
     } @else {
       <div class="overflow-x-auto">
@@ -52,7 +156,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (sub of submissions; track sub.id) {
+            @for (sub of filteredSubmissions; track sub.id) {
               <!-- Main Row -->
               <tr class="border-b border-gray-100 transition-colors"
                   [class.hover:bg-gray-50/50]="!sub.showFeedback"

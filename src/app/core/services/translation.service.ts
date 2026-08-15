@@ -22,6 +22,12 @@ export interface TranslationKeys {
   'common.clear': string;
   'common.saving': string;
   'common.update': string;
+  'common.filters': string;
+  'common.all': string;
+  'common.showing': string;
+  'common.of': string;
+  'common.resetFilters': string;
+  'common.allSessions': string;
 
   // Auth
   'auth.welcomeBack': string;
@@ -139,6 +145,11 @@ export interface TranslationKeys {
   'admin.orderError': string;
   'admin.dateError': string;
   'admin.dueDateError': string;
+  'admin.searchStudent': string;
+  'admin.searchByName': string;
+  'admin.filterByStatus': string;
+  'admin.filterBySession': string;
+  'admin.noMatchingSubmissions': string;
 
   // Session Details
   'session.details': string;
@@ -162,6 +173,15 @@ export interface TranslationKeys {
   'session.pastePRLink': string;
   'session.updateBeforeDeadline': string;
   'session.breadcrumbSessions': string;
+  'session.revertSubmission': string;
+  'session.revertConfirmTitle': string;
+  'session.revertConfirmMessage': string;
+  'session.revertSuccess': string;
+  'session.cannotRevertAfterDeadline': string;
+  'session.cannotRevertAccepted': string;
+  'session.cannotSubmitAfterDeadline': string;
+  'session.deadlinePassed': string;
+  'session.cannotResubmitAfterDeadline': string;
 
   // Sidebar
   'sidebar.dashboard': string;
@@ -303,6 +323,7 @@ export interface TranslationKeys {
   'error.loginFailed': string;
   'error.submissionFailed': string;
   'error.sessionExpired': string;
+  'error.revertFailed': string;
   'success.sessionAdded': string;
   'success.sessionUpdated': string;
   'success.sessionDeleted': string;
@@ -337,6 +358,12 @@ export class TranslationService {
       'common.clear': 'مسح',
       'common.saving': 'جاري الحفظ',
       'common.update': 'تحديث',
+      'common.filters': 'تصفية',
+      'common.all': 'الكل',
+      'common.showing': 'عرض',
+      'common.of': 'من',
+      'common.resetFilters': 'إعادة تعيين التصفية',
+      'common.allSessions': 'كل الجلسات',
 
       // Auth
       'auth.welcomeBack': 'أكاديمية كوديك',
@@ -454,6 +481,11 @@ export class TranslationService {
       'admin.orderError': 'خطأ في الترتيب',
       'admin.dateError': 'خطأ في التاريخ',
       'admin.dueDateError': 'خطأ في تاريخ التسليم',
+      'admin.searchStudent': 'بحث عن طالب',
+      'admin.searchByName': 'البحث بالاسم...',
+      'admin.filterByStatus': 'تصفية حسب الحالة',
+      'admin.filterBySession': 'تصفية حسب الجلسة',
+      'admin.noMatchingSubmissions': 'لا توجد تسليمات مطابقة للتصفية',
 
       // Session Details
       'session.details': 'تفاصيل المحاضره',
@@ -477,6 +509,15 @@ export class TranslationService {
       'session.pastePRLink': 'الصق رابط الـ Pull Request من GitHub',
       'session.updateBeforeDeadline': 'يمكنك تحديث الحل الخاص بك قبل الموعد النهائي.',
       'session.breadcrumbSessions': 'المسارات',
+      'session.revertSubmission': 'التراجع عن التسليم',
+      'session.revertConfirmTitle': 'هل أنت متأكد؟',
+      'session.revertConfirmMessage': 'سيتم حذف تسليمك بشكل نهائي. ستحتاج لإرسال رابط جديد.',
+      'session.revertSuccess': 'تم التراجع عن التسليم بنجاح',
+      'session.cannotRevertAfterDeadline': 'لا يمكن التراجع بعد انتهاء الموعد النهائي',
+      'session.cannotRevertAccepted': 'لا يمكن التراجع عن التسليمات المقبولة',
+      'session.cannotSubmitAfterDeadline': 'لا يمكن الإرسال بعد انتهاء الموعد النهائي',
+      'session.deadlinePassed': 'انتهى الموعد النهائي',
+      'session.cannotResubmitAfterDeadline': 'لا يمكن إعادة الإرسال بعد انتهاء الموعد النهائي',
 
       // Sidebar
       'sidebar.dashboard': 'لوحة التحكم',
@@ -618,6 +659,7 @@ export class TranslationService {
       'error.loginFailed': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
       'error.submissionFailed': 'فشل الإرسال. يرجى المحاولة مرة أخرى',
       'error.sessionExpired': 'انتهت جلستك. يرجى تسجيل الدخول مرة أخرى',
+      'error.revertFailed': 'فشل التراجع عن التسليم. حاول مرة أخرى',
       'success.sessionAdded': 'تمت إضافة المحاضره بنجاح! 🎉',
       'success.sessionUpdated': 'تم تحديث المحاضره بنجاح! ✏️',
       'success.sessionDeleted': 'تم حذف المحاضره بنجاح! 🗑️',
@@ -644,6 +686,12 @@ export class TranslationService {
       'common.clear': 'Clear',
       'common.saving': 'Saving',
       'common.update': 'Update',
+      'common.filters': 'Filters',
+      'common.all': 'All',
+      'common.showing': 'Showing',
+      'common.of': 'of',
+      'common.resetFilters': 'Reset Filters',
+      'common.allSessions': 'All Sessions',
 
       // Auth
       'auth.welcomeBack': 'Codik Academy',
@@ -761,6 +809,11 @@ export class TranslationService {
       'admin.orderError': 'Order error',
       'admin.dateError': 'Date error',
       'admin.dueDateError': 'Due date error',
+      'admin.searchStudent': 'Search Student',
+      'admin.searchByName': 'Search by name...',
+      'admin.filterByStatus': 'Filter by Status',
+      'admin.filterBySession': 'Filter by Session',
+      'admin.noMatchingSubmissions': 'No submissions match your filters',
 
       // Session Details
       'session.details': 'Session Details',
@@ -784,6 +837,15 @@ export class TranslationService {
       'session.pastePRLink': 'Paste your Pull Request link from GitHub',
       'session.updateBeforeDeadline': 'You can update your solution before the deadline.',
       'session.breadcrumbSessions': 'Sessions',
+      'session.revertSubmission': 'Revert Submission',
+      'session.revertConfirmTitle': 'Are you sure?',
+      'session.revertConfirmMessage': 'Your submission will be permanently deleted. You will need to submit a new PR link.',
+      'session.revertSuccess': 'Submission reverted successfully',
+      'session.cannotRevertAfterDeadline': 'Cannot revert after deadline has passed',
+      'session.cannotRevertAccepted': 'Cannot revert accepted submissions',
+      'session.cannotSubmitAfterDeadline': 'Cannot submit after deadline has passed',
+      'session.deadlinePassed': 'Deadline has passed',
+      'session.cannotResubmitAfterDeadline': 'Cannot resubmit after deadline has passed',
 
       // Sidebar
       'sidebar.dashboard': 'Dashboard',
@@ -925,6 +987,7 @@ export class TranslationService {
       'error.loginFailed': 'Invalid email or password',
       'error.submissionFailed': 'Failed to submit. Please try again',
       'error.sessionExpired': 'Your session has expired. Please login again',
+      'error.revertFailed': 'Failed to revert submission. Please try again',
       'success.sessionAdded': 'Session added successfully! 🎉',
       'success.sessionUpdated': 'Session updated successfully! ✏️',
       'success.sessionDeleted': 'Session deleted successfully! 🗑️',

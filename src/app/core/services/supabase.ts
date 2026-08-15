@@ -21,6 +21,13 @@ export class SupabaseService {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
 
+  /**
+   * Get Supabase client for realtime subscriptions
+   */
+  getClient(): SupabaseClient {
+    return this.supabase;
+  }
+
   // ================= Session Management =================
 
   /**
@@ -199,6 +206,38 @@ export class SupabaseService {
       console.error('Error resubmitting task:', error);
       throw error;
     }
+  }
+
+  /**
+   * Delete a submission (revert)
+   * Students can only delete their own pending submissions before the deadline
+   */
+  async deleteSubmission(id: number): Promise<void> {
+    console.log('🗑️ Attempting to delete submission with ID:', id);
+
+    const { data, error } = await this.supabase
+      .from('submissions')
+      .delete()
+      .eq('id', id)
+      .select(); // Get deleted row to confirm
+
+    if (error) {
+      console.error('❌ Error deleting submission:', error);
+      console.error('Error details:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      });
+      throw error;
+    }
+
+    if (!data || data.length === 0) {
+      console.warn('⚠️ No rows deleted. Possible RLS policy issue.');
+      throw new Error('Failed to delete submission. You may not have permission or the submission does not exist.');
+    }
+
+    console.log('✅ Submission deleted successfully:', data);
   }
 
   // ================= Bug Reports =================
