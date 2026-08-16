@@ -123,7 +123,7 @@
     <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]" (click)="closeDrawer()"></div>
 
     <!-- Drawer Panel -->
-    <div class="relative w-full max-w-xl bg-white shadow-2xl flex flex-col h-full animate-in"
+    <div class="relative w-full max-w-xl bg-white shadow-2xl flex flex-col h-full animate-in sm:max-w-xl"
          [class.rounded-l-2xl]="!t.isRTL" [class.rounded-r-2xl]="t.isRTL">
 
       <!-- Drawer Header -->
@@ -169,7 +169,7 @@
           </div>
 
           <!-- Order + Admin Status + Student Status -->
-          <div class="grid grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ t.t('admin.sessionOrder') }} *</label>
               <input formControlName="order_index" type="number" min="1" dir="ltr" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white focus:border-transparent transition-all">
@@ -219,7 +219,7 @@
 
           <!-- Duration & Recorded Date -->
           <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-4">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Duration -->
               <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-2">{{ t.t('admin.sessionDuration') }}</label>
@@ -287,7 +287,7 @@
               <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
               {{ t.t('admin.assignmentDetails') }}
             </h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1">{{ t.t('admin.assignmentTitle') }}</label>
                 <input formControlName="assignment_title" type="text" class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all">
