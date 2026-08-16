@@ -18,9 +18,9 @@
 
         <!-- Top: Number + Status -->
         <div>
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2"
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 flex-shrink-0"
                    [class]="getSubmissionForSession(session.id)
                      ? 'border-emerald-500 text-emerald-600 bg-emerald-50'
                      : getSessionStatus(session) === 'Completed'
@@ -44,7 +44,7 @@
             </div>
 
             <!-- Status badge -->
-            <span class="text-[10px] px-2 py-1 rounded-md font-semibold"
+            <span class="text-[10px] px-2 py-1 rounded-md font-semibold flex-shrink-0"
                   [class]="getSubmissionForSession(session.id)
                     ? 'bg-emerald-50 text-emerald-700'
                     : getSessionStatus(session) === 'Completed'
