@@ -154,6 +154,7 @@ export interface TranslationKeys {
   // Session Details
   'session.details': string;
   'session.materials': string;
+  'session.content':string;
   'session.recording': string;
   'session.slides': string;
   'session.assets': string;
@@ -517,6 +518,7 @@ export class TranslationService {
       'session.cannotRevertAccepted': 'لا يمكن التراجع عن التسليمات المقبولة',
       'session.cannotSubmitAfterDeadline': 'لا يمكن الإرسال بعد انتهاء الموعد النهائي',
       'session.deadlinePassed': 'انتهى الموعد النهائي',
+      'session.content': 'محتوى الجلسه',
       'session.cannotResubmitAfterDeadline': 'لا يمكن إعادة الإرسال بعد انتهاء الموعد النهائي',
 
       // Sidebar
@@ -832,6 +834,7 @@ export class TranslationService {
       'session.downloadFiles': 'Download Files',
       'session.openSlides': 'Open Slides',
       'session.requiredTask': 'The required task',
+      'session.content': 'Session Content',
       'session.viewTask': 'View the task',
       'session.noAssignment': 'No assignments for this session 🎉',
       'session.pastePRLink': 'Paste your Pull Request link from GitHub',
