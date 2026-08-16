@@ -75,13 +75,16 @@
   }
 
   /* RTL Transform for Mobile Sidebars */
+  /* In RTL, sidebar is on RIGHT side (right-0)
+     - When hidden: translate-x-full (100%) moves it RIGHT off-screen ✓
+     - When visible: translate-x-0 keeps it in place ✓
+     So we DON'T reverse translate-x-full in RTL! */
+
+  /* Only reverse -translate-x-full for LTR compatibility */
   [dir="rtl"] .-translate-x-full {
     transform: translateX(100%);
   }
 
-  [dir="rtl"] .translate-x-full {
-    transform: translateX(-100%);
-  }
 
   @media (min-width: 1024px) {
     [dir="rtl"] .lg\:translate-x-0 {
@@ -142,6 +145,31 @@
     [dir="rtl"] .flex-col.sm\:flex-row {
       flex-direction: row-reverse;
     }
+  }
+
+  /* Mobile Header Consistency */
+  /* Ensure mobile header maintains same size in both LTR and RTL */
+  .fixed.top-0.left-0.right-0.z-50 {
+    min-height: 64px; /* Consistent height */
+  }
+
+  .fixed.top-0.left-0.right-0.z-50 > div {
+    min-height: 64px; /* Inner container height */
+  }
+
+  /* Prevent flex items from shrinking in RTL */
+  [dir="rtl"] .flex-shrink-0 {
+    flex-shrink: 0 !important;
+  }
+
+  /* Ensure text doesn't wrap or shrink */
+  [dir="rtl"] .whitespace-nowrap {
+    white-space: nowrap !important;
+  }
+
+  /* Maintain gap spacing in RTL */
+  [dir="rtl"] .gap-3 {
+    gap: 0.75rem !important;
   }
 }
 

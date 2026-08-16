@@ -1,18 +1,27 @@
 <div class="h-screen w-full flex overflow-hidden bg-gray-50 text-gray-800 font-sans">
 
   <!-- Mobile Header -->
-  <div class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 lg:hidden">
-    <div class="flex items-center justify-between p-4" [class.flex-row-reverse]="t.isRTL">
-      <button (click)="toggleSidebar()" class="text-gray-600 p-2 hover:bg-gray-100 rounded-lg">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-sm">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+  <div class="fixed top-0 left-0 w-screen z-50 bg-white border-b border-gray-100 lg:hidden">
+    <div class="flex items-center p-4 min-h-[64px]">
+      <!-- Wrapper to control spacing -->
+      <div class="w-full flex items-center justify-between"
+           [class.flex-row]="!t.isRTL"
+           [class.flex-row-reverse]="t.isRTL">
+        <!-- Brand Section - Left in LTR, Right in RTL -->
+        <div class="flex items-center gap-3 flex-shrink-0">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+          </div>
+          <span class="text-xl font-bold text-gray-900 tracking-tight whitespace-nowrap">Codik Academy</span>
         </div>
-        <span class="text-xl font-bold text-gray-900 tracking-tight">Codik Academy</span>
+
+        <!-- Hamburger Button - Right in LTR, Left in RTL -->
+        <button (click)="toggleSidebar()"
+                class="text-gray-600 p-2 hover:bg-gray-100 rounded-lg flex-shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
