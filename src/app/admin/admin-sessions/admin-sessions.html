@@ -1,21 +1,23 @@
 <div class="h-full flex flex-col bg-slate-50 p-6 overflow-y-auto">
 
   <!-- ================= Header ================= -->
-  <div class="flex items-center justify-between mb-6">
-    <div>
-      <h1 class="text-2xl font-extrabold text-gray-900">{{ t.t('admin.sessions') }}</h1>
-    </div>
-    <div class="flex items-center gap-3">
-      <!-- Search -->
-      <div class="relative">
-        <svg class="w-4 h-4 text-gray-400 absolute top-1/2 -translate-y-1/2" [class.left-3]="!t.isRTL" [class.right-3]="t.isRTL" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        <input type="text" [placeholder]="t.t('admin.searchSessions')" class="py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-64 shadow-sm" [class]="t.isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'">
+  <div class="mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-extrabold text-gray-900">{{ t.t('admin.sessions') }}</h1>
       </div>
-      <!-- Add Session Button -->
-      <button (click)="openAddMode()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        {{ t.t('admin.addSession') }}
-      </button>
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <!-- Search -->
+        <div class="relative">
+          <svg class="w-4 h-4 text-gray-400 absolute top-1/2 -translate-y-1/2" [class.left-3]="!t.isRTL" [class.right-3]="t.isRTL" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <input type="text" [placeholder]="t.t('admin.searchSessions')" class="py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-full sm:w-64 shadow-sm" [class]="t.isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'">
+        </div>
+        <!-- Add Session Button -->
+        <button (click)="openAddMode()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          {{ t.t('admin.addSession') }}
+        </button>
+      </div>
     </div>
   </div>
 

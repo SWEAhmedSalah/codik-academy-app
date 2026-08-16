@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslationService } from '../../core/services/translation.service';
@@ -18,6 +18,8 @@ export class Sidebar implements OnInit {
   private readonly router = inject(Router);
   readonly stateService = inject(StudentStateService);
 
+  @Output() sidebarClose = new EventEmitter<void>();
+
   isLoggingOut = false;
   userEmail = '';
   userName = '';
@@ -36,6 +38,7 @@ export class Sidebar implements OnInit {
 
   navigateTo(view: StudentView): void {
     this.stateService.navigateTo(view);
+    this.sidebarClose.emit();
   }
 
   isActive(view: StudentView): boolean {

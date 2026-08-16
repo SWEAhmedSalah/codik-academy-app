@@ -18,4 +18,13 @@ import { BugReport } from '../bug-report/bug-report';
 export class StudentLayout {
   readonly t = inject(TranslationService);
   readonly stateService = inject(StudentStateService);
+  sidebarOpen = false;
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  closeSidebar(): void {
+    this.sidebarOpen = false;
+  }
 }

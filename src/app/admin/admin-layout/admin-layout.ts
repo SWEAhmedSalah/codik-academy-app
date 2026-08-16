@@ -21,9 +21,16 @@ export class AdminLayout {
   readonly t = inject(TranslationService);
 
   activeTab: 'dashboard' | 'sessions' | 'submissions' | 'bugs' = 'dashboard';
+  sidebarOpen = false;
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
 
   onNavigate(tab: string): void {
     this.activeTab = tab as 'dashboard' | 'sessions' | 'submissions' | 'bugs';
+    // Close sidebar on mobile when navigating
+    this.sidebarOpen = false;
   }
 
   async logout(): Promise<void> {

@@ -1,13 +1,44 @@
 <div class="flex h-screen bg-gray-50 overflow-hidden">
 
-  <!-- السايد بار للآدمن -->
-  <div class="w-64 bg-slate-900 flex flex-col transition-all duration-300">
-    <div class="p-6">
+  <!-- Mobile Header -->
+  <div class="fixed top-0 left-0 right-0 z-50 bg-slate-900 lg:hidden">
+    <div class="flex items-center justify-between p-4">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center font-bold text-white shadow-lg">
           C
         </div>
         <span class="text-white font-extrabold text-xl tracking-tight">{{ t.t('admin.brandName') }}</span>
+      </div>
+      <button (click)="toggleSidebar()" class="text-white p-2 hover:bg-slate-800 rounded-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sidebar Backdrop for Mobile -->
+  @if (sidebarOpen) {
+    <div class="fixed inset-0 bg-black/50 z-40 lg:hidden" (click)="toggleSidebar()"></div>
+  }
+
+  <!-- السايد بار للآدمن -->
+  <div class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-slate-900 flex flex-col transition-transform duration-300 lg:translate-x-0"
+       [class.-translate-x-full]="!sidebarOpen"
+       [class.translate-x-0]="sidebarOpen">
+    <div class="p-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center font-bold text-white shadow-lg">
+            C
+          </div>
+          <span class="text-white font-extrabold text-xl tracking-tight">{{ t.t('admin.brandName') }}</span>
+        </div>
+        <button (click)="toggleSidebar()" class="lg:hidden text-white p-1 hover:bg-slate-800 rounded">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -71,7 +102,7 @@
   </div>
 
   <!-- الجزء اللي على اليمين -->
-  <div class="flex-1 overflow-y-auto">
+  <div class="flex-1 overflow-y-auto pt-16 lg:pt-0">
     @switch (activeTab) {
       @case ('dashboard') { <app-admin-statistics (navigateTo)="onNavigate($event)"></app-admin-statistics> }
       @case ('sessions') { <app-admin-sessions></app-admin-sessions> }

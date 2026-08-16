@@ -1,21 +1,21 @@
-<div class="h-full flex flex-col bg-slate-50 p-6 overflow-y-auto">
+<div class="h-full flex flex-col bg-slate-50 p-4 sm:p-6 overflow-y-auto">
 
   <!-- هيدر الترحيب -->
-  <div class="mb-8">
-    <h1 class="text-2xl font-extrabold text-gray-900">{{ t.t('admin.dashboardOverview') }}</h1>
+  <div class="mb-6 sm:mb-8">
+    <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900">{{ t.t('admin.dashboardOverview') }}</h1>
     <p class="text-sm text-gray-500 mt-1 font-medium">{{ t.t('admin.welcomeMessage') }}</p>
   </div>
 
   @if (isLoading) {
     <!-- حالة التحميل -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 animate-pulse">
       <div class="h-32 bg-white rounded-2xl shadow-sm border border-gray-100"></div>
       <div class="h-32 bg-white rounded-2xl shadow-sm border border-gray-100"></div>
       <div class="h-32 bg-white rounded-2xl shadow-sm border border-gray-100"></div>
     </div>
   } @else {
     <!-- كروت الإحصائيات -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
 
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-indigo-100 transition-colors">
         <div>
@@ -56,8 +56,8 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-      <h3 class="text-lg font-bold text-gray-900 mb-4">{{ t.t('admin.quickActions') }}</h3>
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
+      <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">{{ t.t('admin.quickActions') }}</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
         <div (click)="goToSessions()" class="p-4 border border-gray-100 rounded-xl flex items-start gap-4 hover:bg-slate-50 transition-colors cursor-pointer">
