@@ -14,6 +14,16 @@ export const routes: Routes = [
     loadComponent: () => import('./admin/admin-layout/admin-layout').then(c => c.AdminLayout),
   },
   {
+    path: 'admin/course-sections/:courseId',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./admin/admin-course-sections/admin-course-sections').then(c => c.AdminCourseSectionsComponent),
+  },
+  {
+    path: 'admin/curriculum-builder/:courseId',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./admin/admin-curriculum-builder/admin-curriculum-builder').then(c => c.AdminCurriculumBuilderComponent),
+  },
+  {
     path: 'student',
     canActivate: [authGuard],
     loadComponent: () => import('./components/student-layout/student-layout').then(c => c.StudentLayout),

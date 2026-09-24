@@ -17,6 +17,21 @@
     <!-- كروت الإحصائيات -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
 
+      <!-- Total Courses -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-purple-100 transition-colors cursor-pointer"
+           (click)="goToCourses()">
+        <div>
+          <p class="text-sm font-bold text-gray-500 mb-1">{{ t.t('admin.totalCourses') }}</p>
+          <h3 class="text-3xl font-extrabold text-gray-900">{{ stats.totalCourses }}</h3>
+          <p class="text-xs text-gray-400 mt-1">
+            {{ stats.publishedCourses }} {{ t.t('admin.published') }} · {{ stats.draftCourses }} {{ t.t('admin.drafts') }}
+          </p>
+        </div>
+        <div class="w-14 h-14 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        </div>
+      </div>
+
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-indigo-100 transition-colors">
         <div>
           <p class="text-sm font-bold text-gray-500 mb-1">{{ t.t('admin.totalSessions') }}</p>
@@ -53,12 +68,33 @@
         </div>
       </div>
 
+      <!-- Total Enrollments -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-blue-100 transition-colors">
+        <div>
+          <p class="text-sm font-bold text-gray-500 mb-1">{{ t.t('admin.totalEnrollments') }}</p>
+          <h3 class="text-3xl font-extrabold text-gray-900">{{ stats.totalEnrollments }}</h3>
+        </div>
+        <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        </div>
+      </div>
+
     </div>
 
     <!-- Quick Actions -->
     <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
       <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">{{ t.t('admin.quickActions') }}</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <div (click)="goToCourses()" class="p-4 border border-gray-100 rounded-xl flex items-start gap-4 hover:bg-slate-50 transition-colors cursor-pointer">
+          <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-gray-900">{{ t.t('admin.addNewCourse') }}</h4>
+            <p class="text-xs text-gray-500 mt-1">{{ t.t('admin.addNewCourseDesc') }}</p>
+          </div>
+        </div>
 
         <div (click)="goToSessions()" class="p-4 border border-gray-100 rounded-xl flex items-start gap-4 hover:bg-slate-50 transition-colors cursor-pointer">
           <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">

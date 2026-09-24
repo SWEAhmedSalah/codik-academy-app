@@ -8,11 +8,13 @@ import { MyProgress } from '../my-progress/my-progress';
 import { TranslationService } from '../../core/services/translation.service';
 import { StudentStateService } from '../../core/services/student-state';
 import { BugReport } from '../bug-report/bug-report';
+import { PublicCourses } from '../public-courses/public-courses';
+import { CourseDetails } from '../course-details/course-details';
 
 @Component({
   selector: 'app-student-layout',
   standalone: true,
-  imports: [SessionsSidebar, SessionDetails, Dashboard, Sidebar, Profile, MyProgress, BugReport],
+  imports: [SessionsSidebar, SessionDetails, Dashboard, Sidebar, Profile, MyProgress, BugReport, PublicCourses, CourseDetails],
   templateUrl: './student-layout.html'
 })
 export class StudentLayout {

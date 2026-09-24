@@ -1,0 +1,326 @@
+<div class="max-w-7xl mx-auto">
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="animate-pulse">
+      <div class="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+      <div class="h-64 bg-gray-200 rounded mb-8"></div>
+      <div class="h-32 bg-gray-200 rounded mb-4"></div>
+      <div class="h-32 bg-gray-200 rounded mb-4"></div>
+    </div>
+  }
+
+  <!-- Course Content -->
+  @else if (course()) {
+    <!-- Breadcrumbs -->
+    <nav class="mb-6 flex items-center gap-2 text-sm"
+         [class.flex-row]="!t.isRTL"
+         [class.flex-row-reverse]="t.isRTL">
+      <button (click)="goBack()" class="text-gray-600 hover:text-gray-900">
+        {{ t.t('sidebar.dashboard') }}
+      </button>
+      <svg class="w-4 h-4 text-gray-400"
+           [class.rotate-180]="t.isRTL"
+           fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+      </svg>
+      <span class="text-gray-600">{{ t.t('courses.catalog') }}</span>
+      <svg class="w-4 h-4 text-gray-400"
+           [class.rotate-180]="t.isRTL"
+           fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+      </svg>
+      <span class="text-gray-900 font-medium">{{ course()!.title }}</span>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl p-8 mb-8 text-white shadow-lg">
+      <div class="max-w-4xl">
+        <h1 class="text-4xl font-bold mb-4" [class.text-right]="t.isRTL">
+          {{ course()!.title }}
+        </h1>
+
+        @if (course()!.description) {
+          <p class="text-lg text-emerald-50 mb-6 leading-relaxed" [class.text-right]="t.isRTL">
+            {{ course()!.description }}
+          </p>
+        }
+
+        <!-- Course Stats -->
+        <div class="flex flex-wrap gap-6 mb-6 text-sm"
+             [class.flex-row]="!t.isRTL"
+             [class.flex-row-reverse]="t.isRTL">
+          @if (course()!.rating) {
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+              <span class="font-semibold">{{ course()!.rating }}</span>
+            </div>
+          }
+
+          @if (course()!.total_lessons) {
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+              </svg>
+              <span>{{ course()!.total_lessons }} {{ t.t('courses.lessons') }}</span>
+            </div>
+          }
+
+          @if (course()!.total_students) {
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+              </svg>
+              <span>{{ course()!.total_students }} {{ t.t('courses.students') }}</span>
+            </div>
+          }
+
+          @if (course()!.updated_at) {
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+              </svg>
+              <span>{{ t.t('courses.updated') }} {{ getRelativeTime(course()!.updated_at) }}</span>
+            </div>
+          }
+
+          @if (course()!.course_duration_hours) {
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+              </svg>
+              <span>{{ course()!.course_duration_hours }} {{ t.t('courses.hours') }}</span>
+            </div>
+          }
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 flex-wrap"
+             [class.flex-row]="!t.isRTL"
+             [class.flex-row-reverse]="t.isRTL">
+          @if (isEnrolled()) {
+            <button
+              (click)="startLearning()"
+              class="px-8 py-3 bg-white text-emerald-600 rounded-lg font-bold hover:bg-emerald-50 transition-colors shadow-lg"
+            >
+              {{ t.t('courses.startLearning') }}
+            </button>
+          } @else {
+            <button
+              (click)="enrollInCourse()"
+              [disabled]="enrolling()"
+              class="px-8 py-3 bg-white text-emerald-600 rounded-lg font-bold hover:bg-emerald-50 transition-colors shadow-lg disabled:opacity-50"
+            >
+              @if (enrolling()) {
+                <span>{{ t.t('common.loading') }}</span>
+              } @else {
+                <span>{{ course()!.is_free ? t.t('courses.enrollFree') : t.t('courses.enrollNow') }}</span>
+              }
+            </button>
+          }
+
+          <button
+            (click)="scrollToCurriculum()"
+            class="px-8 py-3 bg-white/10 border-2 border-white text-white rounded-lg font-bold hover:bg-white/20 transition-colors"
+          >
+            {{ t.t('courses.courseContent') }} ↓
+          </button>
+        </div>
+
+        <!-- Progress (if enrolled) -->
+        @if (isEnrolled() && userProgress().percentage > 0) {
+          <div class="mt-6 bg-white/10 rounded-lg p-4">
+            <div class="flex justify-between text-sm mb-2"
+                 [class.flex-row]="!t.isRTL"
+                 [class.flex-row-reverse]="t.isRTL">
+              <span>{{ t.t('courses.progress') }}</span>
+              <span class="font-semibold">{{ userProgress().percentage }}%</span>
+            </div>
+            <div class="w-full h-3 bg-white/20 rounded-full overflow-hidden">
+              <div
+                class="h-full bg-white transition-all duration-300"
+                [style.width.%]="userProgress().percentage"
+              ></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Learning Objectives -->
+    @if (course()!.learning_objectives && course()!.learning_objectives!.length > 0) {
+      <div class="bg-white rounded-xl shadow-sm p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6" [class.text-right]="t.isRTL">
+          {{ t.t('courses.whatYouWillLearn') }}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          @for (objective of course()!.learning_objectives!; track objective) {
+            <div class="flex gap-3"
+                 [class.flex-row]="!t.isRTL"
+                 [class.flex-row-reverse]="t.isRTL">
+              <svg class="w-6 h-6 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-gray-700" [class.text-right]="t.isRTL">{{ objective }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Learning Roadmap / Curriculum -->
+    <div id="curriculum-section" class="bg-white rounded-xl shadow-sm p-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-3"
+            [class.flex-row]="!t.isRTL"
+            [class.flex-row-reverse]="t.isRTL">
+          {{ t.t('courses.learningRoadmap') }}
+          @if (sections().length > 0) {
+            <span class="text-gray-500 text-lg font-normal">
+              | {{ sections().length }} {{ t.t('courses.sections') }} · {{ lessons().length }} {{ t.t('courses.lessons') }}
+            </span>
+          }
+        </h2>
+
+        <div class="flex gap-2">
+          <button
+            (click)="expandAll()"
+            class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50"
+          >
+            {{ t.t('courses.expandAll') }}
+          </button>
+          <button
+            (click)="collapseAll()"
+            class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50"
+          >
+            {{ t.t('courses.collapseAll') }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Lessons -->
+      <div class="mb-6">
+        <div class="relative">
+          <input
+            type="text"
+            [value]="searchQuery()"
+            (input)="onSearchLessons($any($event.target).value)"
+            [placeholder]="t.t('courses.searchLessons')"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            [class.pr-10]="!t.isRTL"
+            [class.pl-10]="t.isRTL"
+          />
+          <svg
+            class="absolute top-3.5 w-5 h-5 text-gray-400"
+            [class.left-3]="!t.isRTL"
+            [class.right-3]="t.isRTL"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Sections with Lessons (Learning Roadmap) -->
+      @if (filteredSections().length > 0) {
+        <div class="space-y-4">
+          @for (section of filteredSections(); track section.id) {
+            <div class="border border-gray-200 rounded-lg overflow-hidden">
+              <!-- Section Header -->
+              <button
+                (click)="toggleSection(section.id)"
+                class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors bg-white"
+                [class.flex-row]="!t.isRTL"
+                [class.flex-row-reverse]="t.isRTL"
+              >
+                <div class="flex items-center gap-3"
+                     [class.flex-row]="!t.isRTL"
+                     [class.flex-row-reverse]="t.isRTL">
+                  <span class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-blue-600 text-white font-bold text-sm">
+                    📂
+                  </span>
+                  <div [class.text-right]="t.isRTL">
+                    <h3 class="font-semibold text-gray-900">
+                      {{ section.title }}
+                    </h3>
+                    @if (section.lessons && section.lessons.length > 0) {
+                      <p class="text-sm text-gray-500 mt-1">
+                        {{ section.lessons.length }} {{ t.t('courses.lessons') }}
+                      </p>
+                    }
+                  </div>
+                </div>
+
+                <svg
+                  class="w-5 h-5 text-gray-500 transition-transform"
+                  [class.rotate-180]="isSectionExpanded(section.id)"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+
+              <!-- Lessons in Section (Expandable) -->
+              @if (isSectionExpanded(section.id) && section.lessons && section.lessons.length > 0) {
+                <div class="bg-gray-50 border-t border-gray-200">
+                  @for (lesson of section.lessons; track lesson.id; let i = $index) {
+                    <div class="px-6 py-4 border-b border-gray-200 last:border-b-0 hover:bg-white transition-colors">
+                      <div class="flex items-start gap-3"
+                           [class.flex-row]="!t.isRTL"
+                           [class.flex-row-reverse]="t.isRTL">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white border-2 border-emerald-500 text-emerald-700 font-semibold text-sm flex-shrink-0">
+                          {{ i + 1 }}
+                        </span>
+                        <div class="flex-1" [class.text-right]="t.isRTL">
+                          <h4 class="font-medium text-gray-900 mb-1">
+                            {{ lesson.title }}
+                          </h4>
+                          @if (lesson.description) {
+                            <p class="text-gray-600 text-sm mb-2">
+                              {{ lesson.description }}
+                            </p>
+                          }
+                          <div class="flex gap-4 text-sm text-gray-500 flex-wrap"
+                               [class.flex-row]="!t.isRTL"
+                               [class.flex-row-reverse]="t.isRTL">
+                            @if (lesson.duration) {
+                              <span class="flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                </svg>
+                                {{ lesson.duration }}
+                              </span>
+                            }
+                            @if (lesson.content_type) {
+                              <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                                {{ lesson.content_type }}
+                              </span>
+                            }
+                            @if (lesson.is_preview) {
+                              <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                                🔓 {{ t.t('courses.freePreview') }}
+                              </span>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="text-center py-12 text-gray-500">
+          {{ t.t('courses.noResults') }}
+        </div>
+      }
+    </div>
+  }
+</div>
+

@@ -20,7 +20,12 @@ export class AdminStatistics implements OnInit {
   stats: AdminStats = {
     totalSessions: 0,
     totalSubmissions: 0,
-    pendingReviews: 0
+    pendingReviews: 0,
+    totalCourses: 0,
+    publishedCourses: 0,
+    draftCourses: 0,
+    totalEnrollments: 0,
+    totalSections: 0
   };
   isLoading = true;
   errorMessage = '';
@@ -48,5 +53,9 @@ export class AdminStatistics implements OnInit {
 
   goToSubmissions(): void {
     this.navigateTo.emit('submissions');
+  }
+
+  goToCourses(): void {
+    this.navigateTo.emit('courses');
   }
 }

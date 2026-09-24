@@ -151,6 +151,138 @@ export interface TranslationKeys {
   'admin.filterBySession': string;
   'admin.noMatchingSubmissions': string;
 
+  // Admin Courses
+  'admin.courses': string;
+  'admin.coursesSubtitle': string;
+  'admin.addCourse': string;
+  'admin.editCourse': string;
+  'admin.deleteCourse': string;
+  'admin.deleteCourseConfirm': string;
+  'admin.courseTitle': string;
+  'admin.courseTitlePlaceholder': string;
+  'admin.courseSlug': string;
+  'admin.courseSlugPlaceholder': string;
+  'admin.generateSlug': string;
+  'admin.descriptionPlaceholder': string;
+  'admin.thumbnailUrl': string;
+  'admin.thumbnailUrlPlaceholder': string;
+  'admin.category': string;
+  'admin.selectCategory': string;
+  'admin.difficulty': string;
+  'admin.courseType': string;
+  'admin.type': string;
+  'admin.price': string;
+  'admin.pricePlaceholder': string;
+  'admin.isFree': string;
+  'admin.markAsFree': string;
+  'admin.instructorName': string;
+  'admin.instructorNamePlaceholder': string;
+  'admin.noInstructor': string;
+  'admin.durationHours': string;
+  'admin.durationPlaceholder': string;
+  'admin.learningObjectives': string;
+  'admin.addObjective': string;
+  'admin.objectivePlaceholder': string;
+  'admin.objectivesHint': string;
+  'admin.moveUp': string;
+  'admin.moveDown': string;
+  'admin.remove': string;
+  'admin.createCourse': string;
+  'admin.updateCourse': string;
+  'admin.noCoursesYet': string;
+  'admin.getStartedCourse': string;
+  'admin.totalCourses': string;
+  'admin.drafts': string;
+  'admin.totalEnrollments': string;
+  'admin.currency': string;
+  'admin.addNewCourse': string;
+  'admin.addNewCourseDesc': string;
+  'admin.students': string;
+  'admin.content': string;
+  'admin.lessons': string;
+
+  // Admin Course Sections
+  'admin.sections': string;
+  'admin.manageSections': string;
+  'admin.addSection': string;
+  'admin.addFirstSection': string;
+  'admin.editSection': string;
+  'admin.deleteSection': string;
+  'admin.deleteSectionConfirm': string;
+  'admin.sectionTitle': string;
+  'admin.sectionDescription': string;
+  'admin.sectionOrder': string;
+  'admin.sectionsCount': string;
+  'admin.lessonsInSection': string;
+  'admin.noSections': string;
+
+  // Curriculum Builder
+  'admin.curriculumBuilder': string;
+  'admin.buildCurriculum': string;
+  'admin.addNewSection': string;
+  'admin.moveLesson': string;
+  'admin.dragToReorder': string;
+  'admin.previewCurriculum': string;
+  'admin.editMode': string;
+  'admin.expandAll': string;
+  'admin.collapseAll': string;
+  'admin.searchCurriculum': string;
+  'admin.preview': string;
+  'admin.editLesson': string;
+
+  // Enhanced Sessions
+  'admin.selectCourse': string;
+  'admin.selectSection': string;
+  'admin.contentType': string;
+  'admin.allowPreview': string;
+  'admin.previewDescription': string;
+  'admin.filterByCourse': string;
+  'admin.filterBySection': string;
+  'admin.allCourses': string;
+  'admin.allSections': string;
+  'admin.unassignedLessons': string;
+
+  // Course Actions
+  'admin.duplicate': string;
+  'admin.duplicateCourse': string;
+  'admin.duplicateCourseConfirm': string;
+  'admin.quickPublish': string;
+  'admin.quickUnpublish': string;
+  'admin.markAsDraft': string;
+  'admin.publish': string;
+
+  // Enhanced Statistics
+  'admin.totalSections': string;
+  'admin.averageLessons': string;
+  'admin.averageSections': string;
+  'admin.topCourses': string;
+  'admin.enrollmentCount': string;
+  'admin.completionRate': string;
+
+  // Success Messages
+  'success.sectionCreated': string;
+  'success.sectionUpdated': string;
+  'success.sectionDeleted': string;
+  'success.sectionReordered': string;
+  'success.courseDuplicated': string;
+  'success.statusToggled': string;
+  'success.lessonMoved': string;
+  'success.courseCreated': string;
+  'success.courseUpdated': string;
+  'success.courseDeleted': string;
+
+  // Error Messages
+  'error.sectionNotFound': string;
+  'error.cannotDeleteSection': string;
+  'error.invalidSectionOrder': string;
+  'error.duplicateFailed': string;
+  'error.statusToggleFailed': string;
+  'error.loadFailed': string;
+
+  // Validation
+  'validation.required': string;
+  'validation.maxLength': string;
+
   // Session Details
   'session.details': string;
   'session.materials': string;
@@ -251,8 +383,9 @@ export interface TranslationKeys {
   'admin.dashboard': string;
   'admin.bootcamps': string;
   'admin.assignments': string;
-  'admin.students': string;
   'admin.superAdmin': string;
+  'admin.edit': string;
+  'admin.delete': string;
 
   // Language
   'lang.switchLanguage': string;
@@ -320,7 +453,6 @@ export interface TranslationKeys {
   'adminBugs.categoryOther': string;
 
   // Errors & Messages
-  'error.loadFailed': string;
   'error.loginFailed': string;
   'error.submissionFailed': string;
   'error.sessionExpired': string;
@@ -330,6 +462,71 @@ export interface TranslationKeys {
   'success.sessionDeleted': string;
   'success.statusUpdated': string;
   'success.submissionSuccess': string;
+
+  // Course Catalog
+  'courses.catalog': string;
+  'courses.allCourses': string;
+  'courses.searchPlaceholder': string;
+  'courses.searchCourses': string;
+  'courses.filterBy': string;
+  'courses.sortBy': string;
+  'courses.category': string;
+  'courses.difficulty': string;
+  'courses.priceType': string;
+  'courses.courseType': string;
+  'courses.allCategories': string;
+  'courses.allDifficulties': string;
+  'courses.allPrices': string;
+  'courses.allTypes': string;
+  'courses.freeCourses': string;
+  'courses.paidCourses': string;
+  'courses.newest': string;
+  'courses.popular': string;
+  'courses.priceAsc': string;
+  'courses.priceDesc': string;
+  'courses.noCourses': string;
+  'courses.noResults': string;
+  'courses.students': string;
+  'courses.student': string;
+  'courses.lessons': string;
+  'courses.sections': string;
+  'courses.freePreview': string;
+  'courses.free': string;
+  'courses.paid': string;
+  'courses.live': string;
+  'courses.recorded': string;
+  'courses.article': string;
+  'courses.startLearning': string;
+  'courses.continueLearning': string;
+  'courses.enrollNow': string;
+  'courses.freeEnrollment': string;
+  'courses.enrollFree': string;
+  'courses.progress': string;
+  'courses.courseDetails': string;
+  'courses.courseContent': string;
+  'courses.scrollToContent': string;
+  'courses.learningObjectives': string;
+  'courses.learningRoadmap': string;
+  'courses.curriculum': string;
+  'courses.searchLessons': string;
+  'courses.expandAll': string;
+  'courses.collapseAll': string;
+  'courses.rating': string;
+  'courses.mockInterviews': string;
+  'courses.updated': string;
+  'courses.updatedYesterday': string;
+  'courses.updatedToday': string;
+  'courses.duration': string;
+  'courses.hours': string;
+  'courses.quizzes': string;
+  'courses.instructor': string;
+  'courses.aboutCourse': string;
+  'courses.whatYouWillLearn': string;
+  'courses.requirements': string;
+  'courses.notEnrolled': string;
+  'courses.enrollToAccess': string;
+  'courses.enrollmentSuccess': string;
+  'courses.enrollmentError': string;
 }
 
 @Injectable({
@@ -472,7 +669,7 @@ export class TranslationService {
       'admin.evaluate': 'تقييم',
       'admin.sessionOrder': 'الترتيب',
       'admin.adminStatus': 'حالة الإدارة',
-      'admin.studentState': 'حالة الطالب',
+      'admin.studentState': 'حال�� الطالب',
       'admin.sessionDuration': 'المدة',
       'admin.recordingLinkLabel': 'رابط التسجيل',
       'admin.resourcesLinks': 'الموارد',
@@ -488,9 +685,142 @@ export class TranslationService {
       'admin.filterBySession': 'تصفية حسب الجلسة',
       'admin.noMatchingSubmissions': 'لا توجد تسليمات مطابقة للتصفية',
 
+      // Admin Courses
+      'admin.courses': 'الدورات',
+      'admin.coursesSubtitle': 'إدارة جميع الدورات التعليمية',
+      'admin.addCourse': 'إضافة دورة',
+      'admin.editCourse': 'تعديل الدورة',
+      'admin.deleteCourse': 'حذف الدورة',
+      'admin.deleteCourseConfirm': 'هل أنت متأكد من حذف هذه الدورة؟',
+      'admin.courseTitle': 'عنوان الدورة',
+      'admin.courseTitlePlaceholder': 'أدخل عنوان الدورة',
+      'admin.courseSlug': 'الرابط المختصر',
+      'admin.courseSlugPlaceholder': 'course-slug',
+      'admin.generateSlug': 'إنشاء تلقائي',
+      'admin.descriptionPlaceholder': 'أدخل وصف الدورة',
+      'admin.thumbnailUrl': 'رابط الصورة المصغرة',
+      'admin.thumbnailUrlPlaceholder': 'https://example.com/image.jpg',
+      'admin.category': 'الفئة',
+      'admin.selectCategory': 'اختر الفئة',
+      'admin.difficulty': 'المستوى',
+      'admin.courseType': 'نوع الدورة',
+      'admin.type': 'النوع',
+      'admin.price': 'السعر',
+      'admin.pricePlaceholder': '0',
+      'admin.isFree': 'دورة مجانية',
+      'admin.markAsFree': 'وضع علامة كمجاني',
+      'admin.instructorName': 'اسم المدرب',
+      'admin.instructorNamePlaceholder': 'أدخل اسم المدرب',
+      'admin.noInstructor': 'لا يوجد مدرب',
+      'admin.durationHours': 'المدة (بالساعات)',
+      'admin.durationPlaceholder': '0',
+      'admin.learningObjectives': 'أهداف التعلم',
+      'admin.addObjective': 'إضافة هدف',
+      'admin.objectivePlaceholder': 'الهدف',
+      'admin.objectivesHint': 'أضف 3-10 أهداف تعليمية واضحة (حتى 150 حرف لكل هدف)',
+      'admin.moveUp': 'تحريك للأعلى',
+      'admin.moveDown': 'تحريك للأسفل',
+      'admin.remove': 'إزالة',
+      'admin.createCourse': 'إنشاء الدورة',
+      'admin.updateCourse': 'تحديث الدورة',
+      'admin.noCoursesYet': 'لا توجد دورات حتى الآن',
+      'admin.getStartedCourse': 'ابدأ بإضافة دورة جديدة',
+      'admin.totalCourses': 'إجمالي الدورات',
+      'admin.drafts': 'مسودات',
+      'admin.totalEnrollments': 'إجمالي التسجيلات',
+      'admin.currency': 'ج.م',
+      'admin.addNewCourse': 'إضافة دورة جديدة',
+      'admin.addNewCourseDesc': 'قم بإنشاء دورة تدريبية جديدة',
+      'admin.students': 'الطلاب',
+      'admin.content': 'المحتوى',
+      'admin.lessons': 'محاضرات',
+
+      // Admin Course Sections
+      'admin.sections': 'الأقسام',
+      'admin.manageSections': 'إدارة الأقسام',
+      'admin.addSection': 'إضافة قسم',
+      'admin.addFirstSection': 'أضف قسمك الأول',
+      'admin.editSection': 'تعديل القسم',
+      'admin.deleteSection': 'حذف القسم',
+      'admin.deleteSectionConfirm': 'هل أنت متأكد من حذف هذا القسم؟ سيتم إلغاء ربط جميع المحاضرات به.',
+      'admin.sectionTitle': 'عنوان القسم',
+      'admin.sectionDescription': 'وصف القسم',
+      'admin.sectionOrder': 'الترتيب',
+      'admin.sectionsCount': 'عدد الأقسام',
+      'admin.lessonsInSection': 'محاضرة',
+      'admin.noSections': 'لا توجد أقسام لهذه الدورة',
+
+      // Curriculum Builder
+      'admin.curriculumBuilder': 'بناء المنهج',
+      'admin.buildCurriculum': 'تنظيم المنهج',
+      'admin.addNewSection': 'إضافة قسم جديد',
+      'admin.moveLesson': 'نقل المحاضرة',
+      'admin.dragToReorder': 'اسحب لإعادة الترتيب',
+      'admin.previewCurriculum': 'معاينة المنهج',
+      'admin.editMode': 'وضع التحرير',
+      'admin.expandAll': 'توسيع الكل',
+      'admin.collapseAll': 'طي الكل',
+      'admin.searchCurriculum': 'البحث في المنهج',
+      'admin.preview': 'معاينة',
+      'admin.editLesson': 'تعديل المحاضرة',
+
+      // Enhanced Sessions
+      'admin.selectCourse': 'اختر الدورة',
+      'admin.selectSection': 'اختر القسم (اختياري)',
+      'admin.contentType': 'نوع المحتوى',
+      'admin.allowPreview': 'السماح بالمعاينة',
+      'admin.previewDescription': 'السماح للطلاب غير المسجلين بمعاينة هذه المحاضرة',
+      'admin.filterByCourse': 'تصفية حسب الدورة',
+      'admin.filterBySection': 'تصفية حسب القسم',
+      'admin.allCourses': 'جميع الدورات',
+      'admin.allSections': 'جميع الأقسام',
+      'admin.unassignedLessons': 'محاضرات غير مخصصة',
+
+      // Course Actions
+      'admin.duplicate': 'تكرار',
+      'admin.duplicateCourse': 'تكرار الدورة',
+      'admin.duplicateCourseConfirm': 'هل تريد تكرار هذه الدورة مع جميع الأقسام والمحاضرات؟',
+      'admin.quickPublish': 'نشر',
+      'admin.quickUnpublish': 'إلغاء النشر',
+      'admin.markAsDraft': 'تحويل إلى مسودة',
+      'admin.publish': 'نشر الدورة',
+
+      // Enhanced Statistics
+      'admin.totalSections': 'إجمالي الأقسام',
+      'admin.averageLessons': 'متوسط المحاضرات',
+      'admin.averageSections': 'متوسط الأقسام',
+      'admin.topCourses': 'أفضل الدورات',
+      'admin.enrollmentCount': 'عدد المسجلين',
+      'admin.completionRate': 'معدل الإكمال',
+
+      // Success Messages
+      'success.sectionCreated': 'تم إنشاء القسم بنجاح',
+      'success.sectionUpdated': 'تم تحديث القسم بنجاح',
+      'success.sectionDeleted': 'تم حذف القسم بنجاح',
+      'success.sectionReordered': 'تم إعادة ترتيب الأقسام بنجاح',
+      'success.courseDuplicated': 'تم تكرار الدورة بنجاح',
+      'success.statusToggled': 'تم تغيير حالة الدورة إلى',
+      'success.lessonMoved': 'تم نقل المحاضرة بنجاح',
+      'success.courseCreated': 'تم إنشاء الدورة بنجاح',
+      'success.courseUpdated': 'تم تحديث الدورة بنجاح',
+      'success.courseDeleted': 'تم حذف الدورة بنجاح',
+
+      // Error Messages
+      'error.sectionNotFound': 'القسم غير موجود',
+      'error.cannotDeleteSection': 'لا يمكن حذف القسم الذي يحتوي على محاضرات',
+      'error.invalidSectionOrder': 'ترتيب القسم غير صالح',
+      'error.duplicateFailed': 'فشل تكرار الدورة',
+      'error.statusToggleFailed': 'فشل تغيير حالة الدورة',
+      'error.loadFailed': 'فشل تحميل البيانات',
+
+      // Validation
+      'validation.required': 'هذا الحقل مطلوب',
+      'validation.maxLength': 'الحد الأقصى للأحرف هو',
+
       // Session Details
       'session.details': 'تفاصيل المحاضره',
       'session.materials': 'المواد',
+      'session.content': 'المحتوى',
       'session.recording': 'التسجيل',
       'session.slides': 'العرض التقديمي',
       'session.assets': 'المصادر',
@@ -518,7 +848,6 @@ export class TranslationService {
       'session.cannotRevertAccepted': 'لا يمكن التراجع عن التسليمات المقبولة',
       'session.cannotSubmitAfterDeadline': 'لا يمكن الإرسال بعد انتهاء الموعد النهائي',
       'session.deadlinePassed': 'انتهى الموعد النهائي',
-      'session.content': 'محتوى الجلسه',
       'session.cannotResubmitAfterDeadline': 'لا يمكن إعادة الإرسال بعد انتهاء الموعد النهائي',
 
       // Sidebar
@@ -588,11 +917,12 @@ export class TranslationService {
       'admin.dashboard': 'لوحة التحكم',
       'admin.bootcamps': 'البوتكامبات',
       'admin.assignments': 'التكليفات',
-      'admin.students': 'الطلاب',
       'admin.superAdmin': 'مدير عام',
+      'admin.edit': 'تعديل',
+      'admin.delete': 'حذف',
 
       // Language
-      'lang.switchLanguage': 'English',
+      'lang.switchLanguage': 'العربية',
       'lang.arabic': 'العربية',
       'lang.english': 'English',
 
@@ -615,7 +945,7 @@ export class TranslationService {
       'bugReport.submitting': 'جاري الإرسال...',
       'bugReport.successTitle': 'تم إرسال البلاغ!',
       'bugReport.successMessage': 'شكراً لمساعدتنا في التحسين.',
-      'bugReport.errorMessage': 'فشل إرسال البلاغ. يرجى المحاولة مرة أخرى.',
+      'bugReport.errorMessage': 'فشل إرسال البلا��. يرجى المحاولة مرة أخرى.',
 
       // Admin Bug Reports
       'adminBugs.title': 'تقارير الأخطاء',
@@ -657,7 +987,6 @@ export class TranslationService {
       'adminBugs.categoryOther': 'أخرى',
 
       // Errors & Messages
-      'error.loadFailed': 'فشل تحميل البيانات. يرجى تحديث الصفحة',
       'error.loginFailed': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
       'error.submissionFailed': 'فشل الإرسال. يرجى المحاولة مرة أخرى',
       'error.sessionExpired': 'انتهت جلستك. يرجى تسجيل الدخول مرة أخرى',
@@ -667,6 +996,71 @@ export class TranslationService {
       'success.sessionDeleted': 'تم حذف المحاضره بنجاح! 🗑️',
       'success.statusUpdated': 'تم تحديث المحاضره بنجاح! ✅',
       'success.submissionSuccess': 'تم إرسال التكليف بنجاح! 🎉',
+
+      // Course Catalog
+      'courses.catalog': 'الدورات',
+      'courses.allCourses': 'جميع الدورات',
+      'courses.searchPlaceholder': 'ابحث عن دورة...',
+      'courses.searchCourses': 'البحث في الدورات',
+      'courses.filterBy': 'تصفية حسب',
+      'courses.sortBy': 'ترتيب حسب',
+      'courses.category': 'الفئة',
+      'courses.difficulty': 'المستوى',
+      'courses.priceType': 'السعر',
+      'courses.courseType': 'النوع',
+      'courses.allCategories': 'جميع الفئات',
+      'courses.allDifficulties': 'جميع المستويات',
+      'courses.allPrices': 'الكل',
+      'courses.allTypes': 'جميع الأنواع',
+      'courses.freeCourses': 'دورات مجانية',
+      'courses.paidCourses': 'دورات مدفوعة',
+      'courses.newest': 'الأحدث',
+      'courses.popular': 'الأكثر شعبية',
+      'courses.priceAsc': 'السعر: من الأقل للأعلى',
+      'courses.priceDesc': 'السعر: من الأعلى للأقل',
+      'courses.noCourses': 'لا توجد دورات متاحة',
+      'courses.noResults': 'لم يتم العثور على نتائج',
+      'courses.students': 'طالب',
+      'courses.student': 'طالب',
+      'courses.lessons': 'محاضرة',
+      'courses.sections': 'الأقسام',
+      'courses.freePreview': 'العرض المجاني',
+      'courses.free': 'مجاني',
+      'courses.paid': 'مدفوع',
+      'courses.live': 'لايف',
+      'courses.recorded': 'مسجل',
+      'courses.article': 'مقالات نصية',
+      'courses.startLearning': 'ابدأ التعلم',
+      'courses.continueLearning': 'استكمال التعلم',
+      'courses.enrollNow': 'الاشتراك الآن',
+      'courses.freeEnrollment': 'تسجيل مجاني',
+      'courses.enrollFree': 'مجاني',
+      'courses.progress': 'التقدم',
+      'courses.courseDetails': 'تفاصيل الدورة',
+      'courses.courseContent': 'محتوى الدورة',
+      'courses.scrollToContent': 'انتقل للمحتوى',
+      'courses.learningObjectives': 'أهداف التعلم',
+      'courses.learningRoadmap': 'خريطة التعلم',
+      'courses.curriculum': 'المنهج الدراسي',
+      'courses.searchLessons': 'ابحث في المحاضرات',
+      'courses.expandAll': 'توسيع الكل',
+      'courses.collapseAll': 'طي الكل',
+      'courses.rating': 'التقييم',
+      'courses.mockInterviews': 'مقابلات وهمية',
+      'courses.updated': 'آخر تحديث',
+      'courses.updatedYesterday': 'آخر تحديث أمس',
+      'courses.updatedToday': 'آخر تحديث اليوم',
+      'courses.duration': 'المدة',
+      'courses.hours': 'ساعة',
+      'courses.quizzes': 'اختبار',
+      'courses.instructor': 'المدرب',
+      'courses.aboutCourse': 'عن الدورة',
+      'courses.whatYouWillLearn': 'ما ستتعلمه',
+      'courses.requirements': 'المتطلبات',
+      'courses.notEnrolled': 'غير مسجل',
+      'courses.enrollToAccess': 'سجل للوصول إلى المحتوى',
+      'courses.enrollmentSuccess': 'تم التسجيل بنجاح!',
+      'courses.enrollmentError': 'حدث خطأ في التسجيل',
     },
     en: {
       // Common
@@ -817,6 +1211,138 @@ export class TranslationService {
       'admin.filterBySession': 'Filter by Session',
       'admin.noMatchingSubmissions': 'No submissions match your filters',
 
+      // Admin Courses
+      'admin.courses': 'Courses',
+      'admin.coursesSubtitle': 'Manage all training courses',
+      'admin.addCourse': 'Add Course',
+      'admin.editCourse': 'Edit Course',
+      'admin.deleteCourse': 'Delete Course',
+      'admin.deleteCourseConfirm': 'Are you sure you want to delete this course?',
+      'admin.courseTitle': 'Course Title',
+      'admin.courseTitlePlaceholder': 'Enter course title',
+      'admin.courseSlug': 'Slug',
+      'admin.courseSlugPlaceholder': 'course-slug',
+      'admin.generateSlug': 'Generate',
+      'admin.descriptionPlaceholder': 'Enter course description',
+      'admin.thumbnailUrl': 'Thumbnail URL',
+      'admin.thumbnailUrlPlaceholder': 'https://example.com/image.jpg',
+      'admin.category': 'Category',
+      'admin.selectCategory': 'Select category',
+      'admin.difficulty': 'Difficulty',
+      'admin.courseType': 'Course Type',
+      'admin.type': 'Type',
+      'admin.price': 'Price',
+      'admin.pricePlaceholder': '0',
+      'admin.isFree': 'Free Course',
+      'admin.markAsFree': 'Mark as free',
+      'admin.instructorName': 'Instructor Name',
+      'admin.instructorNamePlaceholder': 'Enter instructor name',
+      'admin.noInstructor': 'No instructor',
+      'admin.durationHours': 'Duration (Hours)',
+      'admin.durationPlaceholder': '0',
+      'admin.learningObjectives': 'Learning Objectives',
+      'admin.addObjective': 'Add Objective',
+      'admin.objectivePlaceholder': 'Objective',
+      'admin.objectivesHint': 'Add 3-10 clear learning objectives (max 150 characters each)',
+      'admin.moveUp': 'Move Up',
+      'admin.moveDown': 'Move Down',
+      'admin.remove': 'Remove',
+      'admin.createCourse': 'Create Course',
+      'admin.updateCourse': 'Update Course',
+      'admin.noCoursesYet': 'No courses yet',
+      'admin.getStartedCourse': 'Get started by adding a new course',
+      'admin.totalCourses': 'Total Courses',
+      'admin.drafts': 'Drafts',
+      'admin.totalEnrollments': 'Total Enrollments',
+      'admin.currency': 'EGP',
+      'admin.addNewCourse': 'Add New Course',
+      'admin.addNewCourseDesc': 'Create a new training course',
+      'admin.students': 'Students',
+      'admin.content': 'Content',
+      'admin.lessons': 'Lessons',
+
+      // Admin Course Sections
+      'admin.sections': 'Sections',
+      'admin.manageSections': 'Manage Sections',
+      'admin.addSection': 'Add Section',
+      'admin.addFirstSection': 'Add your first section',
+      'admin.editSection': 'Edit Section',
+      'admin.deleteSection': 'Delete Section',
+      'admin.deleteSectionConfirm': 'Are you sure you want to delete this section? All lessons will be unlinked from it.',
+      'admin.sectionTitle': 'Section Title',
+      'admin.sectionDescription': 'Section Description',
+      'admin.sectionOrder': 'Order',
+      'admin.sectionsCount': 'Sections Count',
+      'admin.lessonsInSection': 'lessons',
+      'admin.noSections': 'No sections for this course',
+
+      // Curriculum Builder
+      'admin.curriculumBuilder': 'Curriculum Builder',
+      'admin.buildCurriculum': 'Organize Curriculum',
+      'admin.addNewSection': 'Add New Section',
+      'admin.moveLesson': 'Move Lesson',
+      'admin.dragToReorder': 'Drag to reorder',
+      'admin.previewCurriculum': 'Preview Curriculum',
+      'admin.editMode': 'Edit Mode',
+      'admin.expandAll': 'Expand All',
+      'admin.collapseAll': 'Collapse All',
+      'admin.searchCurriculum': 'Search curriculum',
+      'admin.preview': 'Preview',
+      'admin.editLesson': 'Edit Lesson',
+
+      // Enhanced Sessions
+      'admin.selectCourse': 'Select Course',
+      'admin.selectSection': 'Select Section (Optional)',
+      'admin.contentType': 'Content Type',
+      'admin.allowPreview': 'Allow Preview',
+      'admin.previewDescription': 'Allow non-enrolled students to preview this lesson',
+      'admin.filterByCourse': 'Filter by Course',
+      'admin.filterBySection': 'Filter by Section',
+      'admin.allCourses': 'All Courses',
+      'admin.allSections': 'All Sections',
+      'admin.unassignedLessons': 'Unassigned Lessons',
+
+      // Course Actions
+      'admin.duplicate': 'Duplicate',
+      'admin.duplicateCourse': 'Duplicate Course',
+      'admin.duplicateCourseConfirm': 'Do you want to duplicate this course with all sections and lessons?',
+      'admin.quickPublish': 'Publish',
+      'admin.quickUnpublish': 'Unpublish',
+      'admin.markAsDraft': 'Mark as Draft',
+      'admin.publish': 'Publish Course',
+
+      // Enhanced Statistics
+      'admin.totalSections': 'Total Sections',
+      'admin.averageLessons': 'Avg Lessons',
+      'admin.averageSections': 'Avg Sections',
+      'admin.topCourses': 'Top Courses',
+      'admin.enrollmentCount': 'Enrollments',
+      'admin.completionRate': 'Completion Rate',
+
+      // Success Messages
+      'success.sectionCreated': 'Section created successfully',
+      'success.sectionUpdated': 'Section updated successfully',
+      'success.sectionDeleted': 'Section deleted successfully',
+      'success.sectionReordered': 'Sections reordered successfully',
+      'success.courseDuplicated': 'Course duplicated successfully',
+      'success.statusToggled': 'Course status changed to',
+      'success.lessonMoved': 'Lesson moved successfully',
+      'success.courseCreated': 'Course created successfully',
+      'success.courseUpdated': 'Course updated successfully',
+      'success.courseDeleted': 'Course deleted successfully',
+
+      // Error Messages
+      'error.sectionNotFound': 'Section not found',
+      'error.cannotDeleteSection': 'Cannot delete section with lessons',
+      'error.invalidSectionOrder': 'Invalid section order',
+      'error.duplicateFailed': 'Failed to duplicate course',
+      'error.statusToggleFailed': 'Failed to toggle course status',
+      'error.loadFailed': 'Failed to load data',
+
+      // Validation
+      'validation.required': 'This field is required',
+      'validation.maxLength': 'Maximum length is',
+
       // Session Details
       'session.details': 'Session Details',
       'session.materials': 'Materials',
@@ -917,8 +1443,9 @@ export class TranslationService {
       'admin.dashboard': 'Dashboard',
       'admin.bootcamps': 'Bootcamps',
       'admin.assignments': 'Assignments',
-      'admin.students': 'Students',
       'admin.superAdmin': 'Super Admin',
+      'admin.edit': 'Edit',
+      'admin.delete': 'Delete',
 
       // Language
       'lang.switchLanguage': 'العربية',
@@ -986,7 +1513,6 @@ export class TranslationService {
       'adminBugs.categoryOther': 'Other',
 
       // Errors & Messages
-      'error.loadFailed': 'Failed to load data. Please refresh the page',
       'error.loginFailed': 'Invalid email or password',
       'error.submissionFailed': 'Failed to submit. Please try again',
       'error.sessionExpired': 'Your session has expired. Please login again',
@@ -996,6 +1522,71 @@ export class TranslationService {
       'success.sessionDeleted': 'Session deleted successfully! 🗑️',
       'success.statusUpdated': 'Status updated successfully! ✅',
       'success.submissionSuccess': 'Assignment submitted successfully! 🎉',
+
+      // Course Catalog
+      'courses.catalog': 'Courses',
+      'courses.allCourses': 'All Courses',
+      'courses.searchPlaceholder': 'Search for a course...',
+      'courses.searchCourses': 'Search Courses',
+      'courses.filterBy': 'Filter By',
+      'courses.sortBy': 'Sort By',
+      'courses.category': 'Category',
+      'courses.difficulty': 'Difficulty',
+      'courses.priceType': 'Price',
+      'courses.courseType': 'Type',
+      'courses.allCategories': 'All Categories',
+      'courses.allDifficulties': 'All Levels',
+      'courses.allPrices': 'All',
+      'courses.allTypes': 'All Types',
+      'courses.freeCourses': 'Free Courses',
+      'courses.paidCourses': 'Paid Courses',
+      'courses.newest': 'Newest',
+      'courses.popular': 'Most Popular',
+      'courses.priceAsc': 'Price: Low to High',
+      'courses.priceDesc': 'Price: High to Low',
+      'courses.noCourses': 'No courses available',
+      'courses.noResults': 'No results found',
+      'courses.students': 'students',
+      'courses.student': 'student',
+      'courses.lessons': 'lessons',
+      'courses.sections': 'Sections',
+      'courses.freePreview': 'Free Preview',
+      'courses.free': 'Free',
+      'courses.paid': 'Paid',
+      'courses.live': 'Live',
+      'courses.recorded': 'Recorded',
+      'courses.article': 'Articles',
+      'courses.startLearning': 'Start Learning',
+      'courses.continueLearning': 'Continue Learning',
+      'courses.enrollNow': 'Enroll Now',
+      'courses.freeEnrollment': 'Free Enrollment',
+      'courses.enrollFree': 'Enroll Free',
+      'courses.progress': 'Progress',
+      'courses.courseDetails': 'Course Details',
+      'courses.courseContent': 'Course Content',
+      'courses.scrollToContent': 'Scroll to Content',
+      'courses.learningObjectives': 'Learning Objectives',
+      'courses.learningRoadmap': 'Learning Roadmap',
+      'courses.curriculum': 'Curriculum',
+      'courses.searchLessons': 'Search Lessons',
+      'courses.expandAll': 'Expand All',
+      'courses.collapseAll': 'Collapse All',
+      'courses.rating': 'Rating',
+      'courses.mockInterviews': 'Mock Interviews',
+      'courses.updated': 'Updated',
+      'courses.updatedYesterday': 'Updated yesterday',
+      'courses.updatedToday': 'Updated today',
+      'courses.duration': 'Duration',
+      'courses.hours': 'hours',
+      'courses.quizzes': 'quizzes',
+      'courses.instructor': 'Instructor',
+      'courses.aboutCourse': 'About Course',
+      'courses.whatYouWillLearn': 'What You Will Learn',
+      'courses.requirements': 'Requirements',
+      'courses.notEnrolled': 'Not Enrolled',
+      'courses.enrollToAccess': 'Enroll to access content',
+      'courses.enrollmentSuccess': 'Enrollment successful!',
+      'courses.enrollmentError': 'Enrollment error occurred',
     }
   };
 
@@ -1018,6 +1609,11 @@ export class TranslationService {
 
   t(key: keyof TranslationKeys): string {
     return this.translations[this.currentLang()][key];
+  }
+
+  // Alias for t() method - for convenience
+  get(key: keyof TranslationKeys): string {
+    return this.t(key);
   }
 
   setLanguage(lang: Language): void {

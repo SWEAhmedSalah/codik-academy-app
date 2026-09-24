@@ -7,7 +7,12 @@ import {
   AdminStats,
   CreateSessionData,
   CreateSubmissionData,
-  BugReportData
+  BugReportData,
+  Course,
+  CourseSection,
+  CourseWithProgress,
+  CourseFilters,
+  UserCourseProgress
 } from '../models/session.model';
 import { UserRole, SubmissionStatus, SessionStatus } from '../constants/app.constants';
 
@@ -327,15 +332,38 @@ export class SupabaseService {
       .select('*', { count: 'exact', head: true })
       .eq('status', SubmissionStatus.PENDING);
 
-    if (err1 || err2 || err3) {
-      console.error('Error fetching stats:', err1 || err2 || err3);
+    const { count: coursesCount, error: err4 } = await this.supabase
+      .from('courses')
+      .select('*', { count: 'exact', head: true });
+
+    const { count: publishedCount, error: err5 } = await this.supabase
+      .from('courses')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'Published');
+
+    const { count: draftCount, error: err6 } = await this.supabase
+      .from('courses')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'Draft');
+
+    const { count: enrollmentsCount, error: err7 } = await this.supabase
+      .from('user_course_enrollments')
+      .select('*', { count: 'exact', head: true });
+
+    if (err1 || err2 || err3 || err4 || err5 || err6 || err7) {
+      console.error('Error fetching stats:', err1 || err2 || err3 || err4 || err5 || err6 || err7);
       throw new Error('Error fetching stats');
     }
 
     return {
       totalSessions: sessionsCount || 0,
       totalSubmissions: submissionsCount || 0,
-      pendingReviews: pendingCount || 0
+      pendingReviews: pendingCount || 0,
+      totalCourses: coursesCount || 0,
+      publishedCourses: publishedCount || 0,
+      draftCourses: draftCount || 0,
+      totalEnrollments: enrollmentsCount || 0,
+      totalSections: 0  // This will be populated in getExtendedAdminStats if needed
     };
   }
 
@@ -392,6 +420,605 @@ export class SupabaseService {
       return UserRole.STUDENT;
     }
     return data.role as UserRole;
+  }
+
+  // ================= Course Management (Admin) =================
+
+  /**
+   * Get all courses (admin view - includes drafts)
+   */
+  async getAllCourses(): Promise<Course[]> {
+    const { data, error } = await this.supabase
+      .from('courses')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching all courses:', error);
+      throw error;
+    }
+    return data as Course[] || [];
+  }
+
+  /**
+   * Create a new course
+   */
+  async createCourse(courseData: Partial<Course>): Promise<Course> {
+    const { data, error } = await this.supabase
+      .from('courses')
+      .insert([{
+        ...courseData,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating course:', error);
+      throw error;
+    }
+    return data as Course;
+  }
+
+  /**
+   * Update an existing course
+   */
+  async updateCourse(courseId: number, courseData: Partial<Course>): Promise<Course> {
+    const { data, error } = await this.supabase
+      .from('courses')
+      .update({
+        ...courseData,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', courseId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating course:', error);
+      throw error;
+    }
+    return data as Course;
+  }
+
+  /**
+   * Delete a course by ID
+   */
+  async deleteCourse(courseId: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('courses')
+      .delete()
+      .eq('id', courseId);
+
+    if (error) {
+      console.error('Error deleting course:', error);
+      throw error;
+    }
+  }
+
+  // ================= Course Catalog =================
+
+  /**
+   * Get all published courses with optional filters
+   */
+  async getPublicCourses(filters?: CourseFilters): Promise<Course[]> {
+    let query = this.supabase
+      .from('courses')
+      .select('*')
+      .eq('status', 'Published');
+
+    // Apply filters
+    if (filters?.search) {
+      query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+    }
+    if (filters?.category && filters.category !== 'all') {
+      query = query.eq('category', filters.category);
+    }
+    if (filters?.difficulty && filters.difficulty !== 'all') {
+      query = query.eq('difficulty_level', filters.difficulty);
+    }
+    if (filters?.priceType === 'free') {
+      query = query.eq('is_free', true);
+    } else if (filters?.priceType === 'paid') {
+      query = query.eq('is_free', false);
+    }
+    if (filters?.courseType && filters.courseType !== 'all') {
+      query = query.eq('course_type', filters.courseType);
+    }
+
+    // Apply sorting
+    switch (filters?.sortBy) {
+      case 'newest':
+        query = query.order('created_at', { ascending: false });
+        break;
+      case 'popular':
+        query = query.order('total_students', { ascending: false });
+        break;
+      case 'price_asc':
+        query = query.order('price', { ascending: true });
+        break;
+      case 'price_desc':
+        query = query.order('price', { ascending: false });
+        break;
+      default:
+        query = query.order('created_at', { ascending: false });
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      console.error('Error fetching public courses:', error);
+      throw error;
+    }
+    return data as Course[] || [];
+  }
+
+  /**
+   * Get single course details
+   */
+  async getCourseDetails(courseId: number): Promise<Course | null> {
+    const { data, error } = await this.supabase
+      .from('courses')
+      .select('*')
+      .eq('id', courseId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching course details:', error);
+      throw error;
+    }
+    return data as Course;
+  }
+
+  /**
+   * Get course lessons/sessions
+   */
+  async getCourseLessons(courseId: number): Promise<Session[]> {
+    const { data, error } = await this.supabase
+      .from('sessions')
+      .select('*')
+      .eq('course_id', courseId)
+      .eq('status', SessionStatus.PUBLISHED)
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching course lessons:', error);
+      throw error;
+    }
+    return data as Session[] || [];
+  }
+
+  /**
+   * Check if user is enrolled in course
+   */
+  async isUserEnrolled(userId: string, courseId: number): Promise<boolean> {
+    const { data, error } = await this.supabase
+      .from('user_course_enrollments')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('course_id', courseId)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error checking enrollment:', error);
+      return false;
+    }
+    return !!data;
+  }
+
+  /**
+   * Get user progress for a course
+   */
+  async getUserCourseProgress(userId: string, courseId: number): Promise<UserCourseProgress> {
+    // Get total published lessons for course
+    const { data: lessons } = await this.supabase
+      .from('sessions')
+      .select('id')
+      .eq('course_id', courseId)
+      .eq('status', SessionStatus.PUBLISHED);
+
+    const totalLessons = lessons?.length || 0;
+
+    // Get completed lessons
+    const { data: progress } = await this.supabase
+      .from('user_progress')
+      .select('lesson_id')
+      .eq('user_id', userId)
+      .eq('course_id', courseId)
+      .eq('is_completed', true);
+
+    const completedLessons = progress?.length || 0;
+    const percentage = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+    return { completedLessons, totalLessons, percentage };
+  }
+
+  /**
+   * Enroll user in course (free courses only)
+   */
+  async enrollUserInCourse(userId: string, courseId: number): Promise<void> {
+    // Check if course is free
+    const { data: course } = await this.supabase
+      .from('courses')
+      .select('is_free')
+      .eq('id', courseId)
+      .single();
+
+    if (!course?.is_free) {
+      throw new Error('This course requires payment');
+    }
+
+    // Enroll user
+    const { error } = await this.supabase
+      .from('user_course_enrollments')
+      .insert({
+        user_id: userId,
+        course_id: courseId,
+        enrolled_at: new Date().toISOString(),
+        last_accessed_at: new Date().toISOString()
+      });
+
+    if (error) {
+      console.error('Error enrolling user:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get enrolled courses for user with progress
+   */
+  async getEnrolledCoursesWithProgress(userId: string): Promise<CourseWithProgress[]> {
+    const { data: enrollments, error } = await this.supabase
+      .from('user_course_enrollments')
+      .select(`
+        course_id,
+        enrolled_at,
+        courses (*)
+      `)
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error('Error fetching enrolled courses:', error);
+      throw error;
+    }
+
+    // Get progress for each course
+    const coursesWithProgress = await Promise.all(
+      (enrollments || []).map(async (enrollment: any) => {
+        const progress = await this.getUserCourseProgress(userId, enrollment.course_id);
+        return {
+          ...enrollment.courses,
+          enrollment_date: enrollment.enrolled_at,
+          progress
+        };
+      })
+    );
+
+    return coursesWithProgress as CourseWithProgress[];
+  }
+
+  // ================= Course Sections Management =================
+
+  /**
+   * Get all sections for a course
+   */
+  async getCourseSections(courseId: number): Promise<CourseSection[]> {
+    const { data, error } = await this.supabase
+      .from('course_sections')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching course sections:', error);
+      throw error;
+    }
+    return data as CourseSection[] || [];
+  }
+
+  /**
+   * Get single course section by ID
+   */
+  async getCourseSection(sectionId: number): Promise<CourseSection | null> {
+    const { data, error } = await this.supabase
+      .from('course_sections')
+      .select('*')
+      .eq('id', sectionId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching course section:', error);
+      return null;
+    }
+    return data as CourseSection;
+  }
+
+  /**
+   * Create a new course section
+   */
+  async createCourseSection(sectionData: {
+    course_id: number;
+    title: string;
+    description?: string;
+    order_index: number;
+  }): Promise<CourseSection> {
+    const { data, error } = await this.supabase
+      .from('course_sections')
+      .insert([{
+        ...sectionData,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating course section:', error);
+      throw error;
+    }
+    return data as CourseSection;
+  }
+
+  /**
+   * Update an existing course section
+   */
+  async updateCourseSection(sectionId: number, updates: Partial<CourseSection>): Promise<void> {
+    const { error } = await this.supabase
+      .from('course_sections')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', sectionId);
+
+    if (error) {
+      console.error('Error updating course section:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a course section
+   */
+  async deleteCourseSection(sectionId: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('course_sections')
+      .delete()
+      .eq('id', sectionId);
+
+    if (error) {
+      console.error('Error deleting course section:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Reorder course section
+   */
+  async reorderCourseSection(sectionId: number, newOrderIndex: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('course_sections')
+      .update({ order_index: newOrderIndex, updated_at: new Date().toISOString() })
+      .eq('id', sectionId);
+
+    if (error) {
+      console.error('Error reordering course section:', error);
+      throw error;
+    }
+  }
+
+  // ================= Enhanced Sessions Management =================
+
+  /**
+   * Get all sessions for a specific course
+   */
+  async getSessionsByCourse(courseId: number): Promise<Session[]> {
+    const { data, error } = await this.supabase
+      .from('sessions')
+      .select(`
+        *,
+        course_sections(id, title)
+      `)
+      .eq('course_id', courseId)
+      .order('section_id', { ascending: true, nullsFirst: true })
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching sessions by course:', error);
+      throw error;
+    }
+    return data as Session[] || [];
+  }
+
+  /**
+   * Get all sessions for a specific section
+   */
+  async getSessionsBySection(sectionId: number): Promise<Session[]> {
+    const { data, error } = await this.supabase
+      .from('sessions')
+      .select('*')
+      .eq('section_id', sectionId)
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching sessions by section:', error);
+      throw error;
+    }
+    return data as Session[] || [];
+  }
+
+  /**
+   * Assign session to a section
+   */
+  async assignSessionToSection(sessionId: number, sectionId: number | null): Promise<void> {
+    const { error } = await this.supabase
+      .from('sessions')
+      .update({ section_id: sectionId })
+      .eq('id', sessionId);
+
+    if (error) {
+      console.error('Error assigning session to section:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Bulk assign sessions to section
+   */
+  async bulkAssignSessionsToSection(sessionIds: number[], sectionId: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('sessions')
+      .update({ section_id: sectionId })
+      .in('id', sessionIds);
+
+    if (error) {
+      console.error('Error bulk assigning sessions to section:', error);
+      throw error;
+    }
+  }
+
+  // ================= Curriculum Builder =================
+
+  /**
+   * Get complete curriculum for a course (course + sections + lessons)
+   */
+  async getCourseCurriculum(courseId: number): Promise<{
+    course: Course;
+    sections: CourseSection[];
+    lessons: Session[];
+  }> {
+    // Get course
+    const course = await this.getCourseDetails(courseId);
+    if (!course) {
+      throw new Error('Course not found');
+    }
+
+    // Get sections
+    const sections = await this.getCourseSections(courseId);
+
+    // Get lessons
+    const lessons = await this.getSessionsByCourse(courseId);
+
+    return {
+      course,
+      sections,
+      lessons
+    };
+  }
+
+  // ================= Enhanced Course Management =================
+
+  /**
+   * Duplicate a course with all sections and lessons
+   */
+  async duplicateCourse(courseId: number): Promise<Course> {
+    // Get original course
+    const original = await this.getCourseDetails(courseId);
+    if (!original) {
+      throw new Error('Course not found');
+    }
+
+    // Create duplicate course
+    const duplicateData: Partial<Course> = {
+      ...original,
+      title: `${original.title} (Copy)`,
+      slug: original.slug ? `${original.slug}-copy` : undefined,
+      status: 'Draft',
+      total_students: 0,
+      total_lessons: 0,
+      total_sections: 0
+    };
+
+    delete (duplicateData as any).id;
+    delete (duplicateData as any).created_at;
+    delete (duplicateData as any).updated_at;
+
+    const newCourse = await this.createCourse(duplicateData);
+
+    // Duplicate sections
+    const sections = await this.getCourseSections(courseId);
+    for (const section of sections) {
+      const newSection = await this.createCourseSection({
+        course_id: newCourse.id,
+        title: section.title,
+        description: section.description,
+        order_index: section.order_index
+      });
+
+      // Duplicate lessons in section
+      const lessons = await this.getSessionsBySection(section.id);
+      for (const lesson of lessons) {
+        const lessonData: any = { ...lesson };
+        delete lessonData.id;
+        delete lessonData.created_at;
+        delete lessonData.updated_at;
+        lessonData.course_id = newCourse.id;
+        lessonData.section_id = newSection.id;
+        await this.addSession(lessonData);
+      }
+    }
+
+    return newCourse;
+  }
+
+  /**
+   * Quick toggle course status (Published <-> Draft)
+   */
+  async quickToggleCourseStatus(courseId: number): Promise<void> {
+    const course = await this.getCourseDetails(courseId);
+    if (!course) {
+      throw new Error('Course not found');
+    }
+
+    const newStatus = course.status === 'Published' ? 'Draft' : 'Published';
+    await this.updateCourse(courseId, { status: newStatus });
+  }
+
+  // ================= Enhanced Statistics =================
+
+  /**
+   * Get enhanced admin dashboard statistics
+   */
+  async getEnhancedAdminStats(): Promise<AdminStats> {
+    // Get basic stats
+    const basicStats = await this.getAdminDashboardStats();
+
+    // Total sections
+    const { count: sectionsCount } = await this.supabase
+      .from('course_sections')
+      .select('*', { count: 'exact', head: true });
+
+    const totalSections = sectionsCount || 0;
+
+    // Get all courses to calculate averages
+    const { data: courses } = await this.supabase
+      .from('courses')
+      .select('id, title, total_lessons, total_students, total_sections');
+
+    const avgLessons = courses && courses.length > 0
+      ? courses.reduce((sum, c) => sum + (c.total_lessons || 0), 0) / courses.length
+      : 0;
+
+    const avgSections = courses && courses.length > 0
+      ? totalSections / courses.length
+      : 0;
+
+    // Top courses by enrollment
+    const topCourses = courses
+      ? courses
+          .sort((a, b) => (b.total_students || 0) - (a.total_students || 0))
+          .slice(0, 5)
+          .map(c => ({
+            id: c.id,
+            title: c.title,
+            total_students: c.total_students || 0
+          }))
+      : [];
+
+    return {
+      ...basicStats,
+      totalSections,
+      averageLessonsPerCourse: Math.round(avgLessons * 10) / 10,
+      averageSectionsPerCourse: Math.round(avgSections * 10) / 10,
+      topCoursesByEnrollment: topCourses
+    };
   }
 
 }

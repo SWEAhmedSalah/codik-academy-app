@@ -16,6 +16,11 @@ export interface Session {
   assignment_description?: string;
   assignment_due_date?: string | null;
   is_locked?: boolean;
+  // Admin course management fields
+  course_id?: number;
+  section_id?: number | null;
+  is_preview?: boolean;
+  content_type?: 'video' | 'live' | 'article' | 'quiz' | 'assignment';
 }
 
 export interface Submission {
@@ -34,6 +39,18 @@ export interface AdminStats {
   totalSessions: number;
   totalSubmissions: number;
   pendingReviews: number;
+  totalCourses: number;
+  publishedCourses: number;
+  draftCourses: number;
+  totalEnrollments: number;
+  totalSections: number;
+  averageLessonsPerCourse?: number;
+  averageSectionsPerCourse?: number;
+  topCoursesByEnrollment?: Array<{
+    id: number;
+    title: string;
+    total_students: number;
+  }>;
 }
 
 export interface UserRoleData {
@@ -75,3 +92,76 @@ export interface BugReportData {
   status: 'open' | 'in_progress' | 'resolved' | 'closed';
   created_at: string;
 }
+
+// ============================================================
+// Course Catalog Models
+// ============================================================
+
+export interface Course {
+  id: number;
+  title: string;
+  slug?: string;
+  description?: string;
+  thumbnail_url?: string;
+  category?: string;
+  difficulty_level?: 'Beginner' | 'Intermediate' | 'Advanced';
+  course_type?: 'Live' | 'Recorded' | 'Article';
+  price?: number;
+  is_free: boolean;
+  instructor_name?: string;
+  status: 'Draft' | 'Published';
+  rating?: number;
+  total_students?: number;
+  total_lessons?: number;
+  total_sections?: number;
+  learning_objectives?: string[];
+  course_duration_hours?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CourseWithProgress extends Course {
+  enrollment_date?: string;
+  progress?: {
+    completedLessons: number;
+    totalLessons: number;
+    percentage: number;
+  };
+}
+
+export interface CourseSection {
+  id: number;
+  course_id: number;
+  title: string;
+  description?: string;
+  order_index: number;
+  total_lessons?: number;
+  created_at?: string;
+  updated_at?: string;
+  lessons?: Session[];
+}
+
+export interface CourseFilters {
+  search?: string;
+  category?: string;
+  difficulty?: string;
+  priceType?: 'all' | 'free' | 'paid';
+  courseType?: string;
+  sortBy?: 'newest' | 'popular' | 'price_asc' | 'price_desc';
+}
+
+export interface UserCourseProgress {
+  completedLessons: number;
+  totalLessons: number;
+  percentage: number;
+}
+
+// Curriculum Builder Interface
+export interface CurriculumNode {
+  type: 'section' | 'lesson';
+  data: CourseSection | Session;
+  children?: CurriculumNode[];
+  expanded?: boolean;
+  visible?: boolean;
+}
+
