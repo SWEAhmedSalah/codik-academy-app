@@ -5,6 +5,10 @@ export interface Session {
   title: string;
   description?: string;
   order_index: number;
+  course_id?: number | null;
+  section_id?: number | null;
+  is_preview?: boolean | null;
+  content_type?: 'video' | 'live' | 'article' | 'quiz' | 'assignment' | null;
   status: SessionStatus;
   student_status?: StudentSessionStatus;
   recorded_date?: string | null;
@@ -36,6 +40,48 @@ export interface AdminStats {
   pendingReviews: number;
 }
 
+export interface Course {
+  id: number;
+  title: string;
+  slug?: string | null;
+  description?: string | null;
+  thumbnail_url?: string | null;
+  category?: string | null;
+  difficulty_level?: string | null;
+  course_type?: string | null;
+  price?: number | null;
+  is_free?: boolean | null;
+  instructor_name?: string | null;
+  status: string;
+  rating?: number | null;
+  total_students?: number | null;
+  total_lessons?: number | null;
+  total_sections?: number | null;
+  course_duration_hours?: number | null;
+  learning_objectives?: string[] | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface CourseSection {
+  id: number;
+  course_id: number;
+  title: string;
+  description?: string | null;
+  order_index: number;
+  total_lessons?: number | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface CurriculumNode {
+  type: 'section' | 'lesson';
+  data: CourseSection | Session;
+  children?: CurriculumNode[];
+  expanded?: boolean;
+  visible: boolean;
+}
+
 export interface UserRoleData {
   email: string;
   role: UserRole;
@@ -45,6 +91,10 @@ export interface CreateSessionData {
   title: string;
   description?: string;
   order_index: number;
+  course_id?: number | null;
+  section_id?: number | null;
+  is_preview?: boolean | null;
+  content_type?: 'video' | 'live' | 'article' | 'quiz' | 'assignment' | null;
   status: SessionStatus;
   student_status?: StudentSessionStatus;
   recorded_date?: string | null;
