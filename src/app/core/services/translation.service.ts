@@ -78,6 +78,11 @@ export interface TranslationKeys {
   'dashboard.viewSchedule': string;
   'dashboard.progressOverview': string;
 
+  // Attendance (shared between admin and student views)
+  'attendance.present': string;
+  'attendance.absent': string;
+  'attendance.notMarked': string;
+
   // Admin
   'admin.sessions': string;
   'admin.searchSessions': string;
@@ -120,6 +125,14 @@ export interface TranslationKeys {
   'admin.reject': string;
   'admin.writeFeedback': string;
   'admin.noSubmissions': string;
+  'admin.attendance': string;
+  'admin.manageAttendance': string;
+  'admin.selectSessionToMark': string;
+  'admin.searchStudents': string;
+  'admin.noStudentsFound': string;
+  'admin.markPresent': string;
+  'admin.markAbsent': string;
+  'admin.attendanceSummary': string;
   'admin.statistics': string;
   'admin.overview': string;
   'admin.dashboardOverview': string;
@@ -152,11 +165,6 @@ export interface TranslationKeys {
   'admin.filterByStatus': string;
   'admin.filterBySession': string;
   'admin.noMatchingSubmissions': string;
-  'admin.attendance': string;
-  'admin.manageAttendance': string;
-  'admin.selectSessionToMark': string;
-  'admin.searchStudents': string;
-  'admin.noStudentsFound': string;
   'admin.courses': string;
   'admin.coursesSubtitle': string;
   'admin.addCourse': string;
@@ -203,27 +211,27 @@ export interface TranslationKeys {
   'admin.addFirstSection': string;
   'admin.noSections': string;
   'admin.lessonsInSection': string;
+  'admin.markAsDraft': string;
+  'admin.publish': string;
+  'admin.duplicate': string;
+  'admin.edit': string;
+  'admin.delete': string;
+  'admin.deleteCourseConfirm': string;
+  'admin.duplicateCourseConfirm': string;
+  'admin.searchCurriculum': string;
+  'admin.expandAll': string;
+  'admin.collapseAll': string;
+  'admin.editMode': string;
+  'admin.previewCurriculum': string;
   'admin.editSection': string;
   'admin.deleteSection': string;
   'admin.deleteSectionConfirm': string;
   'admin.sectionTitle': string;
   'admin.sectionDescription': string;
   'admin.sectionOrder': string;
-  'admin.searchCurriculum': string;
-  'admin.expandAll': string;
-  'admin.collapseAll': string;
-  'admin.editMode': string;
-  'admin.previewCurriculum': string;
   'admin.preview': string;
   'admin.editLesson': string;
   'admin.dragToReorder': string;
-  'admin.publish': string;
-  'admin.markAsDraft': string;
-  'admin.duplicate': string;
-  'admin.deleteCourseConfirm': string;
-  'admin.duplicateCourseConfirm': string;
-  'admin.delete': string;
-  'admin.edit': string;
 
   // Session Details
   'session.details': string;
@@ -315,11 +323,9 @@ export interface TranslationKeys {
   'progress.subtitle': string;
   'progress.tasksCompleted': string;
   'progress.sessionBreakdown': string;
+  'progress.rejectionReason': string;
 
   // Attendance
-  'attendance.present': string;
-  'attendance.absent': string;
-  'attendance.notMarked': string;
 
   // Courses
   'courses.free': string;
@@ -401,6 +407,12 @@ export interface TranslationKeys {
   'adminBugs.categorySubmission': string;
   'adminBugs.categoryOther': string;
 
+  // Validation
+  'validation.required': string;
+  'validation.maxLength': string;
+
+  // Courses
+
   // Errors & Messages
   'error.loadFailed': string;
   'error.loginFailed': string;
@@ -410,8 +422,6 @@ export interface TranslationKeys {
   'error.attendanceFailed': string;
   'error.duplicateFailed': string;
   'error.statusToggleFailed': string;
-  'validation.required': string;
-  'validation.maxLength': string;
   'success.sessionAdded': string;
   'success.sessionUpdated': string;
   'success.sessionDeleted': string;
@@ -510,6 +520,11 @@ export class TranslationService {
       'dashboard.viewSchedule': 'عرض الجدول',
       'dashboard.progressOverview': 'نظرة عامة على التقدم',
 
+      // Attendance
+      'attendance.present': 'حاضر',
+      'attendance.absent': 'غائب',
+      'attendance.notMarked': 'لم يسجل بعد',
+
       // Admin
       'admin.sessions': 'الجلسات',
       'admin.searchSessions': 'ابحث عن جلسة...',
@@ -552,6 +567,14 @@ export class TranslationService {
       'admin.reject': 'رفض',
       'admin.writeFeedback': 'اكتب ملاحظاتك هنا...',
       'admin.noSubmissions': 'لا توجد تسليمات حتى الآن',
+      'admin.attendance': 'الحضور',
+      'admin.manageAttendance': 'إدارة الحضور',
+      'admin.selectSessionToMark': 'اختر جلسة لتسجيل الحضور',
+      'admin.searchStudents': 'ابحث عن طالب...',
+      'admin.noStudentsFound': 'لا يوجد طلاب',
+      'admin.markPresent': 'حاضر',
+      'admin.markAbsent': 'غائب',
+      'admin.attendanceSummary': 'حاضر {present} من {total}',
       'admin.statistics': 'الإحصائيات',
       'admin.overview': 'نظرة عامة',
       'admin.dashboardOverview': 'نظرة عامة على لوحة التحكم',
@@ -584,11 +607,6 @@ export class TranslationService {
       'admin.filterByStatus': 'تصفية حسب الحالة',
       'admin.filterBySession': 'تصفية حسب الجلسة',
       'admin.noMatchingSubmissions': 'لا توجد تسليمات مطابقة للتصفية',
-      'admin.attendance': 'الحضور',
-      'admin.manageAttendance': 'إدارة الحضور',
-      'admin.selectSessionToMark': 'اختر الجلسة وحدّث حضور الطلاب مباشرة من الجدول',
-      'admin.searchStudents': 'ابحث عن طالب...',
-      'admin.noStudentsFound': 'لا يوجد طلاب مطابقون لنتيجة البحث',
       'admin.courses': 'الدورات',
       'admin.coursesSubtitle': 'إدارة كتالوج الدورات ومحتواها',
       'admin.addCourse': 'إضافة دورة',
@@ -635,27 +653,27 @@ export class TranslationService {
       'admin.addFirstSection': 'أضف أول قسم لبدء تنظيم محتوى الدورة.',
       'admin.noSections': 'لا توجد أقسام في هذه الدورة',
       'admin.lessonsInSection': 'دروس في القسم',
+      'admin.markAsDraft': 'تحويل إلى مسودة',
+      'admin.publish': 'نشر',
+      'admin.duplicate': 'نسخ',
+      'admin.edit': 'تعديل',
+      'admin.delete': 'حذف',
+      'admin.deleteCourseConfirm': 'هل أنت متأكد من حذف هذه الدورة؟ سيتم حذف الأقسام والدروس المرتبطة بها أيضاً.',
+      'admin.duplicateCourseConfirm': 'هل تريد نسخ هذه الدورة بكل أقسامها ودروسها؟',
+      'admin.searchCurriculum': 'ابحث في المنهج...',
+      'admin.expandAll': 'توسيع الكل',
+      'admin.collapseAll': 'طي الكل',
+      'admin.editMode': 'وضع التعديل',
+      'admin.previewCurriculum': 'معاينة المنهج',
       'admin.editSection': 'تعديل القسم',
       'admin.deleteSection': 'حذف القسم',
       'admin.deleteSectionConfirm': 'هل أنت متأكد من حذف هذا القسم؟',
       'admin.sectionTitle': 'عنوان القسم',
       'admin.sectionDescription': 'وصف القسم',
       'admin.sectionOrder': 'ترتيب القسم',
-      'admin.searchCurriculum': 'ابحث داخل المنهج...',
-      'admin.expandAll': 'توسيع الكل',
-      'admin.collapseAll': 'طي الكل',
-      'admin.editMode': 'وضع التعديل',
-      'admin.previewCurriculum': 'معاينة المنهج',
       'admin.preview': 'معاينة',
       'admin.editLesson': 'تعديل الدرس',
       'admin.dragToReorder': 'اسحب الأقسام لإعادة ترتيبها.',
-      'admin.publish': 'نشر',
-      'admin.markAsDraft': 'تحويل إلى مسودة',
-      'admin.duplicate': 'نسخ',
-      'admin.deleteCourseConfirm': 'هل أنت متأكد من حذف هذه الدورة؟',
-      'admin.duplicateCourseConfirm': 'هل تريد إنشاء نسخة من هذه الدورة؟',
-      'admin.delete': 'حذف',
-      'admin.edit': 'تعديل',
 
       // Session Details
       'session.details': 'تفاصيل المحاضره',
@@ -747,11 +765,9 @@ export class TranslationService {
       'progress.subtitle': 'تتبع تقدمك في الدورة',
       'progress.tasksCompleted': 'تكليفات مكتملة',
       'progress.sessionBreakdown': 'تفاصيل المحاضرات',
+      'progress.rejectionReason': 'سبب الرفض من الإدارة',
 
       // Attendance
-      'attendance.present': 'حاضر',
-      'attendance.absent': 'غائب',
-      'attendance.notMarked': 'غير محدد',
 
       // Courses
       'courses.free': 'مجاني',
@@ -833,6 +849,12 @@ export class TranslationService {
       'adminBugs.categorySubmission': 'تسليم',
       'adminBugs.categoryOther': 'أخرى',
 
+      // Validation
+      'validation.required': 'هذا الحقل مطلوب',
+      'validation.maxLength': 'الحد الأقصى لعدد الأحرف هو',
+
+      // Courses
+
       // Errors & Messages
       'error.loadFailed': 'فشل تحميل البيانات. يرجى تحديث الصفحة',
       'error.loginFailed': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
@@ -842,8 +864,6 @@ export class TranslationService {
       'error.attendanceFailed': 'تعذر تحديث الحضور. حاول مرة أخرى.',
       'error.duplicateFailed': 'تعذر إنشاء نسخة من الدورة.',
       'error.statusToggleFailed': 'تعذر تحديث حالة الدورة.',
-      'validation.required': 'هذا الحقل مطلوب',
-      'validation.maxLength': 'الحد الأقصى لعدد الأحرف هو',
       'success.sessionAdded': 'تمت إضافة المحاضره بنجاح! 🎉',
       'success.sessionUpdated': 'تم تحديث المحاضره بنجاح! ✏️',
       'success.sessionDeleted': 'تم حذف المحاضره بنجاح! 🗑️',
@@ -934,6 +954,11 @@ export class TranslationService {
       'dashboard.viewSchedule': 'View Schedule',
       'dashboard.progressOverview': 'Progress Overview',
 
+      // Attendance
+      'attendance.present': 'Present',
+      'attendance.absent': 'Absent',
+      'attendance.notMarked': 'Not Marked',
+
       // Admin
       'admin.sessions': 'Sessions',
       'admin.searchSessions': 'Search sessions...',
@@ -976,6 +1001,14 @@ export class TranslationService {
       'admin.reject': 'Reject',
       'admin.writeFeedback': 'Write your feedback here...',
       'admin.noSubmissions': 'No submissions yet',
+      'admin.attendance': 'Attendance',
+      'admin.manageAttendance': 'Manage Attendance',
+      'admin.selectSessionToMark': 'Select a session to mark attendance',
+      'admin.searchStudents': 'Search students...',
+      'admin.noStudentsFound': 'No students found',
+      'admin.markPresent': 'Present',
+      'admin.markAbsent': 'Absent',
+      'admin.attendanceSummary': '{present} of {total} present',
       'admin.statistics': 'Statistics',
       'admin.overview': 'Overview',
       'admin.dashboardOverview': 'Overview',
@@ -1008,11 +1041,6 @@ export class TranslationService {
       'admin.filterByStatus': 'Filter by Status',
       'admin.filterBySession': 'Filter by Session',
       'admin.noMatchingSubmissions': 'No submissions match your filters',
-      'admin.attendance': 'Attendance',
-      'admin.manageAttendance': 'Manage Attendance',
-      'admin.selectSessionToMark': 'Select a session and update student attendance from the sheet',
-      'admin.searchStudents': 'Search students...',
-      'admin.noStudentsFound': 'No students found',
       'admin.courses': 'Courses',
       'admin.coursesSubtitle': 'Manage the course catalog and its content',
       'admin.addCourse': 'Add Course',
@@ -1059,27 +1087,27 @@ export class TranslationService {
       'admin.addFirstSection': 'Add your first section to organize this course.',
       'admin.noSections': 'No sections found for this course',
       'admin.lessonsInSection': 'lessons in section',
+      'admin.markAsDraft': 'Mark as Draft',
+      'admin.publish': 'Publish',
+      'admin.duplicate': 'Duplicate',
+      'admin.edit': 'Edit',
+      'admin.delete': 'Delete',
+      'admin.deleteCourseConfirm': 'Are you sure you want to delete this course? Its sections and lessons will also be removed.',
+      'admin.duplicateCourseConfirm': 'Duplicate this course with all sections and lessons?',
+      'admin.searchCurriculum': 'Search curriculum...',
+      'admin.expandAll': 'Expand All',
+      'admin.collapseAll': 'Collapse All',
+      'admin.editMode': 'Edit Mode',
+      'admin.previewCurriculum': 'Preview Curriculum',
       'admin.editSection': 'Edit Section',
       'admin.deleteSection': 'Delete Section',
       'admin.deleteSectionConfirm': 'Are you sure you want to delete this section?',
       'admin.sectionTitle': 'Section Title',
       'admin.sectionDescription': 'Section Description',
       'admin.sectionOrder': 'Section Order',
-      'admin.searchCurriculum': 'Search curriculum...',
-      'admin.expandAll': 'Expand All',
-      'admin.collapseAll': 'Collapse All',
-      'admin.editMode': 'Edit Mode',
-      'admin.previewCurriculum': 'Preview Curriculum',
       'admin.preview': 'Preview',
       'admin.editLesson': 'Edit Lesson',
       'admin.dragToReorder': 'Drag sections to reorder them.',
-      'admin.publish': 'Publish',
-      'admin.markAsDraft': 'Mark as Draft',
-      'admin.duplicate': 'Duplicate',
-      'admin.deleteCourseConfirm': 'Are you sure you want to delete this course?',
-      'admin.duplicateCourseConfirm': 'Do you want to duplicate this course?',
-      'admin.delete': 'Delete',
-      'admin.edit': 'Edit',
 
       // Session Details
       'session.details': 'Session Details',
@@ -1171,11 +1199,9 @@ export class TranslationService {
       'progress.subtitle': 'Track your course progress',
       'progress.tasksCompleted': 'tasks completed',
       'progress.sessionBreakdown': 'Session Breakdown',
+      'progress.rejectionReason': 'Reason for rejection from admin',
 
       // Attendance
-      'attendance.present': 'Present',
-      'attendance.absent': 'Absent',
-      'attendance.notMarked': 'Not Marked',
 
       // Courses
       'courses.free': 'Free',
@@ -1257,6 +1283,12 @@ export class TranslationService {
       'adminBugs.categorySubmission': 'Submission',
       'adminBugs.categoryOther': 'Other',
 
+      // Validation
+      'validation.required': 'This field is required',
+      'validation.maxLength': 'Maximum length is',
+
+      // Courses
+
       // Errors & Messages
       'error.loadFailed': 'Failed to load data. Please refresh the page',
       'error.loginFailed': 'Invalid email or password',
@@ -1266,8 +1298,6 @@ export class TranslationService {
       'error.attendanceFailed': 'Failed to update attendance. Please try again.',
       'error.duplicateFailed': 'Failed to duplicate course.',
       'error.statusToggleFailed': 'Failed to toggle course status.',
-      'validation.required': 'This field is required',
-      'validation.maxLength': 'Maximum length is',
       'success.sessionAdded': 'Session added successfully! 🎉',
       'success.sessionUpdated': 'Session updated successfully! ✏️',
       'success.sessionDeleted': 'Session deleted successfully! 🗑️',

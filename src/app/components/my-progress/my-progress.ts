@@ -28,6 +28,8 @@ export class MyProgress implements OnInit {
   pendingCount = 0;
   needsReworkCount = 0;
 
+  readonly AttendanceStatus = AttendanceStatus;
+
   async ngOnInit(): Promise<void> {
     try {
       this.isLoading = true;
@@ -71,7 +73,6 @@ export class MyProgress implements OnInit {
   getSubmissionForSession(sessionId: number): Submission | undefined {
     return this.submissions.find(s => s.session_id === sessionId);
   }
-
   getAttendanceForSession(sessionId: number): Attendance | undefined {
     return this.attendanceRecords.find(record => record.session_id === sessionId);
   }
