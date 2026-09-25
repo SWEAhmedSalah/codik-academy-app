@@ -35,6 +35,11 @@ export enum UserRole {
   STUDENT = 'student'
 }
 
+export enum AttendanceStatus {
+  PRESENT = 'Present',
+  ABSENT = 'Absent'
+}
+
 export const ERROR_MESSAGES = {
   LOGIN_FAILED: 'Invalid email or password',
   UNAUTHORIZED: 'You are not authorized to access this page',

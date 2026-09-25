@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../core/services/supabase';
 import { TranslationService } from '../../core/services/translation.service';
-import { Session, Submission } from '../../core/models/session.model';
-import { SubmissionStatus } from '../../core/constants/app.constants';
+import { Session, Submission, Attendance } from '../../core/models/session.model';
+import { SubmissionStatus, AttendanceStatus } from '../../core/constants/app.constants';
 
 @Component({
   selector: 'app-my-progress',
@@ -18,6 +18,7 @@ export class MyProgress implements OnInit {
   isLoading = true;
   sessions: Session[] = [];
   submissions: Submission[] = [];
+  attendance: Attendance[] = [];
   courseProgress = 0;
   sessionsAttended = 0;
   totalSessions = 0;
@@ -27,6 +28,8 @@ export class MyProgress implements OnInit {
   pendingCount = 0;
   needsReworkCount = 0;
 
+  readonly AttendanceStatus = AttendanceStatus;
+
   async ngOnInit(): Promise<void> {
     try {
       this.isLoading = true;
@@ -35,11 +38,12 @@ export class MyProgress implements OnInit {
         const studentName = user.user_metadata?.['full_name'] || user.email?.split('@')[0] || 'Student';
         this.sessions = await this.supabaseService.getSessions();
         this.submissions = await this.supabaseService.getStudentSubmissions(studentName);
+        this.attendance = await this.supabaseService.getStudentAttendance(studentName);
 
         this.totalSessions = this.sessions.length;
         this.totalAssignments = this.sessions.length;
         this.assignmentsCompleted = this.submissions.length;
-        this.sessionsAttended = this.submissions.length;
+        this.sessionsAttended = this.attendance.filter(a => a.status === AttendanceStatus.PRESENT).length;
 
         this.acceptedCount = this.submissions.filter(s => s.status === SubmissionStatus.ACCEPTED).length;
         this.pendingCount = this.submissions.filter(s => s.status === SubmissionStatus.PENDING).length;
@@ -58,6 +62,10 @@ export class MyProgress implements OnInit {
 
   getSubmissionForSession(sessionId: number): Submission | undefined {
     return this.submissions.find(s => s.session_id === sessionId);
+  }
+
+  getAttendanceForSession(sessionId: number): Attendance | undefined {
+    return this.attendance.find(a => a.session_id === sessionId);
   }
 }
 
