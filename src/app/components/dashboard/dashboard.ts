@@ -77,7 +77,7 @@ export class Dashboard implements OnInit {
 
       this.sessions = await this.supabaseService.getPublishedSessions();
       this.mySubmissions = await this.supabaseService.getStudentSubmissions(this.studentName);
-      this.myAttendance = await this.supabaseService.getStudentAttendance(this.studentName);
+      this.myAttendance = await this.supabaseService.getStudentAttendance(this.studentName, user.email || '');
 
       this.calculateMetrics();
       this.setCurrentSessionAndAssignment();

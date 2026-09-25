@@ -38,7 +38,7 @@ export class MyProgress implements OnInit {
         const studentName = user.user_metadata?.['full_name'] || user.email?.split('@')[0] || 'Student';
         this.sessions = await this.supabaseService.getSessions();
         this.submissions = await this.supabaseService.getStudentSubmissions(studentName);
-        this.attendance = await this.supabaseService.getStudentAttendance(studentName);
+        this.attendance = await this.supabaseService.getStudentAttendance(studentName, user.email || '');
 
         this.totalSessions = this.sessions.length;
         this.totalAssignments = this.sessions.length;
