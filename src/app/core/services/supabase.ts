@@ -301,11 +301,20 @@ export class SupabaseService {
     }
   }
 
-  async getStudentAttendance(studentName: string): Promise<Attendance[]> {
+  /**
+   * Get all attendance records for a specific student (for dashboard/profile/progress).
+   * Admin marks attendance using the student's exact `user_roles.email` value, while the
+   * logged-in student's display name may be their `full_name` or the email prefix - so we
+   * match against every identifier that could plausibly have been used to save the record.
+   */
+  async getStudentAttendance(...identifiers: string[]): Promise<Attendance[]> {
+    const names = Array.from(new Set(identifiers.filter(Boolean)));
+    if (names.length === 0) return [];
+
     const { data, error } = await this.supabase
       .from('attendance')
       .select('*, sessions(title, order_index)')
-      .eq('student_name', studentName);
+      .in('student_name', names);
 
     if (error) {
       console.error('Error fetching student attendance:', error);

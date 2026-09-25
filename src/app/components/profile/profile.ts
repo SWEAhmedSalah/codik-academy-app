@@ -39,7 +39,7 @@ export class Profile implements OnInit {
         const [sessions, submissions, attendance] = await Promise.all([
           this.supabaseService.getSessions(),
           this.supabaseService.getStudentSubmissions(this.userName),
-          this.supabaseService.getStudentAttendance(this.userName)
+          this.supabaseService.getStudentAttendance(this.userName, this.userEmail)
         ]);
 
         this.totalSessions = sessions.length;

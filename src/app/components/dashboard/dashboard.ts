@@ -78,7 +78,7 @@ export class Dashboard implements OnInit {
       const [sessions, submissions, attendance] = await Promise.all([
         this.supabaseService.getPublishedSessions(),
         this.supabaseService.getStudentSubmissions(this.studentName),
-        this.supabaseService.getStudentAttendance(this.studentName)
+        this.supabaseService.getStudentAttendance(this.studentName, user.email || '')
       ]);
 
       this.sessions = sessions;

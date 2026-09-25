@@ -39,7 +39,7 @@ export class MyProgress implements OnInit {
         const [sessions, submissions, attendance] = await Promise.all([
           this.supabaseService.getSessions(),
           this.supabaseService.getStudentSubmissions(studentName),
-          this.supabaseService.getStudentAttendance(studentName)
+          this.supabaseService.getStudentAttendance(studentName, user.email || '')
         ]);
 
         this.sessions = sessions;
