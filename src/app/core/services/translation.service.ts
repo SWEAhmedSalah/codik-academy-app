@@ -76,6 +76,11 @@ export interface TranslationKeys {
   'dashboard.viewSchedule': string;
   'dashboard.progressOverview': string;
 
+  // Attendance (shared between admin and student views)
+  'attendance.present': string;
+  'attendance.absent': string;
+  'attendance.notMarked': string;
+
   // Admin
   'admin.sessions': string;
   'admin.searchSessions': string;
@@ -118,6 +123,14 @@ export interface TranslationKeys {
   'admin.reject': string;
   'admin.writeFeedback': string;
   'admin.noSubmissions': string;
+  'admin.attendance': string;
+  'admin.manageAttendance': string;
+  'admin.selectSessionToMark': string;
+  'admin.searchStudents': string;
+  'admin.noStudentsFound': string;
+  'admin.markPresent': string;
+  'admin.markAbsent': string;
+  'admin.attendanceSummary': string;
   'admin.statistics': string;
   'admin.overview': string;
   'admin.dashboardOverview': string;
@@ -150,6 +163,73 @@ export interface TranslationKeys {
   'admin.filterByStatus': string;
   'admin.filterBySession': string;
   'admin.noMatchingSubmissions': string;
+  'admin.courses': string;
+  'admin.coursesSubtitle': string;
+  'admin.addCourse': string;
+  'admin.editCourse': string;
+  'admin.createCourse': string;
+  'admin.updateCourse': string;
+  'admin.courseTitle': string;
+  'admin.courseTitlePlaceholder': string;
+  'admin.courseSlug': string;
+  'admin.courseSlugPlaceholder': string;
+  'admin.generateSlug': string;
+  'admin.thumbnailUrl': string;
+  'admin.thumbnailUrlPlaceholder': string;
+  'admin.descriptionPlaceholder': string;
+  'admin.category': string;
+  'admin.selectCategory': string;
+  'admin.difficulty': string;
+  'admin.type': string;
+  'admin.courseType': string;
+  'admin.price': string;
+  'admin.pricePlaceholder': string;
+  'admin.currency': string;
+  'admin.isFree': string;
+  'admin.markAsFree': string;
+  'admin.instructorName': string;
+  'admin.instructorNamePlaceholder': string;
+  'admin.durationHours': string;
+  'admin.durationPlaceholder': string;
+  'admin.learningObjectives': string;
+  'admin.addObjective': string;
+  'admin.objectivePlaceholder': string;
+  'admin.objectivesHint': string;
+  'admin.noCoursesYet': string;
+  'admin.getStartedCourse': string;
+  'admin.noInstructor': string;
+  'admin.manageSections': string;
+  'admin.sections': string;
+  'admin.lessons': string;
+  'admin.markAsDraft': string;
+  'admin.publish': string;
+  'admin.duplicate': string;
+  'admin.edit': string;
+  'admin.delete': string;
+  'admin.deleteCourseConfirm': string;
+  'admin.duplicateCourseConfirm': string;
+  'admin.curriculumBuilder': string;
+  'admin.searchCurriculum': string;
+  'admin.expandAll': string;
+  'admin.collapseAll': string;
+  'admin.editMode': string;
+  'admin.previewCurriculum': string;
+  'admin.noSections': string;
+  'admin.addFirstSection': string;
+  'admin.addSection': string;
+  'admin.editSection': string;
+  'admin.deleteSection': string;
+  'admin.deleteSectionConfirm': string;
+  'admin.sectionTitle': string;
+  'admin.sectionDescription': string;
+  'admin.sectionOrder': string;
+  'admin.lessonsInSection': string;
+  'admin.preview': string;
+  'admin.editLesson': string;
+  'admin.dragToReorder': string;
+  'admin.moveUp': string;
+  'admin.moveDown': string;
+  'admin.remove': string;
 
   // Session Details
   'session.details': string;
@@ -319,17 +399,37 @@ export interface TranslationKeys {
   'adminBugs.categorySubmission': string;
   'adminBugs.categoryOther': string;
 
+  // Validation
+  'validation.required': string;
+  'validation.maxLength': string;
+
+  // Courses
+  'courses.free': string;
+
   // Errors & Messages
   'error.loadFailed': string;
   'error.loginFailed': string;
   'error.submissionFailed': string;
   'error.sessionExpired': string;
   'error.revertFailed': string;
+  'error.attendanceFailed': string;
+  'error.duplicateFailed': string;
+  'error.statusToggleFailed': string;
   'success.sessionAdded': string;
   'success.sessionUpdated': string;
   'success.sessionDeleted': string;
   'success.statusUpdated': string;
   'success.submissionSuccess': string;
+  'success.attendanceUpdated': string;
+  'success.courseCreated': string;
+  'success.courseUpdated': string;
+  'success.courseDeleted': string;
+  'success.courseDuplicated': string;
+  'success.statusToggled': string;
+  'success.sectionCreated': string;
+  'success.sectionUpdated': string;
+  'success.sectionDeleted': string;
+  'success.sectionReordered': string;
 }
 
 @Injectable({
@@ -413,6 +513,11 @@ export class TranslationService {
       'dashboard.viewSchedule': 'عرض الجدول',
       'dashboard.progressOverview': 'نظرة عامة على التقدم',
 
+      // Attendance
+      'attendance.present': 'حاضر',
+      'attendance.absent': 'غائب',
+      'attendance.notMarked': 'لم يسجل بعد',
+
       // Admin
       'admin.sessions': 'الجلسات',
       'admin.searchSessions': 'ابحث عن جلسة...',
@@ -455,6 +560,14 @@ export class TranslationService {
       'admin.reject': 'رفض',
       'admin.writeFeedback': 'اكتب ملاحظاتك هنا...',
       'admin.noSubmissions': 'لا توجد تسليمات حتى الآن',
+      'admin.attendance': 'الحضور',
+      'admin.manageAttendance': 'إدارة الحضور',
+      'admin.selectSessionToMark': 'اختر جلسة لتسجيل الحضور',
+      'admin.searchStudents': 'ابحث عن طالب...',
+      'admin.noStudentsFound': 'لا يوجد طلاب',
+      'admin.markPresent': 'حاضر',
+      'admin.markAbsent': 'غائب',
+      'admin.attendanceSummary': 'حاضر {present} من {total}',
       'admin.statistics': 'الإحصائيات',
       'admin.overview': 'نظرة عامة',
       'admin.dashboardOverview': 'نظرة عامة على لوحة التحكم',
@@ -487,6 +600,73 @@ export class TranslationService {
       'admin.filterByStatus': 'تصفية حسب الحالة',
       'admin.filterBySession': 'تصفية حسب الجلسة',
       'admin.noMatchingSubmissions': 'لا توجد تسليمات مطابقة للتصفية',
+      'admin.courses': 'الدورات',
+      'admin.coursesSubtitle': 'إدارة الكتالوج والمحتوى التعليمي',
+      'admin.addCourse': 'إضافة دورة',
+      'admin.editCourse': 'تعديل الدورة',
+      'admin.createCourse': 'إنشاء الدورة',
+      'admin.updateCourse': 'تحديث الدورة',
+      'admin.courseTitle': 'عنوان الدورة',
+      'admin.courseTitlePlaceholder': 'أدخل عنوان الدورة',
+      'admin.courseSlug': 'الرابط المختصر',
+      'admin.courseSlugPlaceholder': 'course-slug',
+      'admin.generateSlug': 'إنشاء تلقائي',
+      'admin.thumbnailUrl': 'رابط الصورة المصغرة',
+      'admin.thumbnailUrlPlaceholder': 'https://example.com/thumbnail.jpg',
+      'admin.descriptionPlaceholder': 'اكتب وصف الدورة',
+      'admin.category': 'التصنيف',
+      'admin.selectCategory': 'اختر تصنيفاً',
+      'admin.difficulty': 'المستوى',
+      'admin.type': 'النوع',
+      'admin.courseType': 'نوع الدورة',
+      'admin.price': 'السعر',
+      'admin.pricePlaceholder': '0',
+      'admin.currency': 'جنيه',
+      'admin.isFree': 'مجانية',
+      'admin.markAsFree': 'تحديد الدورة كمجانية',
+      'admin.instructorName': 'اسم المدرب',
+      'admin.instructorNamePlaceholder': 'اسم المدرب',
+      'admin.durationHours': 'مدة الدورة بالساعات',
+      'admin.durationPlaceholder': '0',
+      'admin.learningObjectives': 'أهداف التعلم',
+      'admin.addObjective': 'إضافة هدف',
+      'admin.objectivePlaceholder': 'هدف التعلم',
+      'admin.objectivesHint': 'أضف حتى 10 أهداف تعلم واضحة وقابلة للقياس.',
+      'admin.noCoursesYet': 'لا توجد دورات بعد',
+      'admin.getStartedCourse': 'ابدأ بإضافة أول دورة إلى الكتالوج.',
+      'admin.noInstructor': 'لم يتم تحديد مدرب',
+      'admin.manageSections': 'إدارة الأقسام',
+      'admin.sections': 'أقسام',
+      'admin.lessons': 'دروس',
+      'admin.markAsDraft': 'تحويل إلى مسودة',
+      'admin.publish': 'نشر',
+      'admin.duplicate': 'نسخ',
+      'admin.edit': 'تعديل',
+      'admin.delete': 'حذف',
+      'admin.deleteCourseConfirm': 'هل أنت متأكد من حذف هذه الدورة؟ سيتم حذف الأقسام والدروس المرتبطة بها أيضاً.',
+      'admin.duplicateCourseConfirm': 'هل تريد نسخ هذه الدورة بكل أقسامها ودروسها؟',
+      'admin.curriculumBuilder': 'منشئ المنهج',
+      'admin.searchCurriculum': 'ابحث في المنهج...',
+      'admin.expandAll': 'توسيع الكل',
+      'admin.collapseAll': 'طي الكل',
+      'admin.editMode': 'وضع التعديل',
+      'admin.previewCurriculum': 'معاينة المنهج',
+      'admin.noSections': 'لا توجد أقسام بعد',
+      'admin.addFirstSection': 'أضف أول قسم لبدء بناء المنهج.',
+      'admin.addSection': 'إضافة قسم',
+      'admin.editSection': 'تعديل القسم',
+      'admin.deleteSection': 'حذف القسم',
+      'admin.deleteSectionConfirm': 'هل أنت متأكد من حذف هذا القسم؟',
+      'admin.sectionTitle': 'عنوان القسم',
+      'admin.sectionDescription': 'وصف القسم',
+      'admin.sectionOrder': 'ترتيب القسم',
+      'admin.lessonsInSection': 'درس في هذا القسم',
+      'admin.preview': 'معاينة',
+      'admin.editLesson': 'تعديل الدرس',
+      'admin.dragToReorder': 'اسحب وأفلت لإعادة ترتيب الأقسام.',
+      'admin.moveUp': 'نقل لأعلى',
+      'admin.moveDown': 'نقل لأسفل',
+      'admin.remove': 'إزالة',
 
       // Session Details
       'session.details': 'تفاصيل المحاضره',
@@ -656,17 +836,37 @@ export class TranslationService {
       'adminBugs.categorySubmission': 'تسليم',
       'adminBugs.categoryOther': 'أخرى',
 
+      // Validation
+      'validation.required': 'هذا الحقل مطلوب',
+      'validation.maxLength': 'الحد الأقصى لعدد الأحرف هو',
+
+      // Courses
+      'courses.free': 'مجاني',
+
       // Errors & Messages
       'error.loadFailed': 'فشل تحميل البيانات. يرجى تحديث الصفحة',
       'error.loginFailed': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
       'error.submissionFailed': 'فشل الإرسال. يرجى المحاولة مرة أخرى',
       'error.sessionExpired': 'انتهت جلستك. يرجى تسجيل الدخول مرة أخرى',
       'error.revertFailed': 'فشل التراجع عن التسليم. حاول مرة أخرى',
+      'error.attendanceFailed': 'فشل تحديث الحضور. حاول مرة أخرى',
+      'error.duplicateFailed': 'فشل نسخ الدورة. حاول مرة أخرى',
+      'error.statusToggleFailed': 'فشل تغيير حالة الدورة. حاول مرة أخرى',
       'success.sessionAdded': 'تمت إضافة المحاضره بنجاح! 🎉',
       'success.sessionUpdated': 'تم تحديث المحاضره بنجاح! ✏️',
       'success.sessionDeleted': 'تم حذف المحاضره بنجاح! 🗑️',
       'success.statusUpdated': 'تم تحديث المحاضره بنجاح! ✅',
       'success.submissionSuccess': 'تم إرسال التكليف بنجاح! 🎉',
+      'success.attendanceUpdated': 'تم تحديث الحضور بنجاح! ✅',
+      'success.courseCreated': 'تم إنشاء الدورة بنجاح! 🎉',
+      'success.courseUpdated': 'تم تحديث الدورة بنجاح! ✏️',
+      'success.courseDeleted': 'تم حذف الدورة بنجاح! 🗑️',
+      'success.courseDuplicated': 'تم نسخ الدورة بنجاح! 📚',
+      'success.statusToggled': 'تم تغيير الحالة إلى',
+      'success.sectionCreated': 'تم إنشاء القسم بنجاح! 🎉',
+      'success.sectionUpdated': 'تم تحديث القسم بنجاح! ✏️',
+      'success.sectionDeleted': 'تم حذف القسم بنجاح! 🗑️',
+      'success.sectionReordered': 'تمت إعادة ترتيب الأقسام بنجاح! ↕️',
     },
     en: {
       // Common
@@ -742,6 +942,11 @@ export class TranslationService {
       'dashboard.viewSchedule': 'View Schedule',
       'dashboard.progressOverview': 'Progress Overview',
 
+      // Attendance
+      'attendance.present': 'Present',
+      'attendance.absent': 'Absent',
+      'attendance.notMarked': 'Not Marked',
+
       // Admin
       'admin.sessions': 'Sessions',
       'admin.searchSessions': 'Search sessions...',
@@ -784,6 +989,14 @@ export class TranslationService {
       'admin.reject': 'Reject',
       'admin.writeFeedback': 'Write your feedback here...',
       'admin.noSubmissions': 'No submissions yet',
+      'admin.attendance': 'Attendance',
+      'admin.manageAttendance': 'Manage Attendance',
+      'admin.selectSessionToMark': 'Select a session to mark attendance',
+      'admin.searchStudents': 'Search students...',
+      'admin.noStudentsFound': 'No students found',
+      'admin.markPresent': 'Present',
+      'admin.markAbsent': 'Absent',
+      'admin.attendanceSummary': '{present} of {total} present',
       'admin.statistics': 'Statistics',
       'admin.overview': 'Overview',
       'admin.dashboardOverview': 'Overview',
@@ -816,6 +1029,73 @@ export class TranslationService {
       'admin.filterByStatus': 'Filter by Status',
       'admin.filterBySession': 'Filter by Session',
       'admin.noMatchingSubmissions': 'No submissions match your filters',
+      'admin.courses': 'Courses',
+      'admin.coursesSubtitle': 'Manage the course catalog and learning content',
+      'admin.addCourse': 'Add Course',
+      'admin.editCourse': 'Edit Course',
+      'admin.createCourse': 'Create Course',
+      'admin.updateCourse': 'Update Course',
+      'admin.courseTitle': 'Course Title',
+      'admin.courseTitlePlaceholder': 'Enter course title',
+      'admin.courseSlug': 'Course Slug',
+      'admin.courseSlugPlaceholder': 'course-slug',
+      'admin.generateSlug': 'Generate',
+      'admin.thumbnailUrl': 'Thumbnail URL',
+      'admin.thumbnailUrlPlaceholder': 'https://example.com/thumbnail.jpg',
+      'admin.descriptionPlaceholder': 'Write a course description',
+      'admin.category': 'Category',
+      'admin.selectCategory': 'Select a category',
+      'admin.difficulty': 'Difficulty',
+      'admin.type': 'Type',
+      'admin.courseType': 'Course Type',
+      'admin.price': 'Price',
+      'admin.pricePlaceholder': '0',
+      'admin.currency': 'EGP',
+      'admin.isFree': 'Free',
+      'admin.markAsFree': 'Mark this course as free',
+      'admin.instructorName': 'Instructor Name',
+      'admin.instructorNamePlaceholder': 'Instructor name',
+      'admin.durationHours': 'Duration (hours)',
+      'admin.durationPlaceholder': '0',
+      'admin.learningObjectives': 'Learning Objectives',
+      'admin.addObjective': 'Add Objective',
+      'admin.objectivePlaceholder': 'Learning objective',
+      'admin.objectivesHint': 'Add up to 10 clear and measurable learning objectives.',
+      'admin.noCoursesYet': 'No courses yet',
+      'admin.getStartedCourse': 'Get started by adding your first course to the catalog.',
+      'admin.noInstructor': 'No instructor assigned',
+      'admin.manageSections': 'Manage Sections',
+      'admin.sections': 'sections',
+      'admin.lessons': 'lessons',
+      'admin.markAsDraft': 'Mark as Draft',
+      'admin.publish': 'Publish',
+      'admin.duplicate': 'Duplicate',
+      'admin.edit': 'Edit',
+      'admin.delete': 'Delete',
+      'admin.deleteCourseConfirm': 'Are you sure you want to delete this course? Its sections and lessons will also be removed.',
+      'admin.duplicateCourseConfirm': 'Duplicate this course with all sections and lessons?',
+      'admin.curriculumBuilder': 'Curriculum Builder',
+      'admin.searchCurriculum': 'Search curriculum...',
+      'admin.expandAll': 'Expand All',
+      'admin.collapseAll': 'Collapse All',
+      'admin.editMode': 'Edit Mode',
+      'admin.previewCurriculum': 'Preview Curriculum',
+      'admin.noSections': 'No sections yet',
+      'admin.addFirstSection': 'Add your first section to start building the curriculum.',
+      'admin.addSection': 'Add Section',
+      'admin.editSection': 'Edit Section',
+      'admin.deleteSection': 'Delete Section',
+      'admin.deleteSectionConfirm': 'Are you sure you want to delete this section?',
+      'admin.sectionTitle': 'Section Title',
+      'admin.sectionDescription': 'Section Description',
+      'admin.sectionOrder': 'Section Order',
+      'admin.lessonsInSection': 'lessons in section',
+      'admin.preview': 'Preview',
+      'admin.editLesson': 'Edit Lesson',
+      'admin.dragToReorder': 'Drag and drop to reorder sections.',
+      'admin.moveUp': 'Move up',
+      'admin.moveDown': 'Move down',
+      'admin.remove': 'Remove',
 
       // Session Details
       'session.details': 'Session Details',
@@ -985,17 +1265,37 @@ export class TranslationService {
       'adminBugs.categorySubmission': 'Submission',
       'adminBugs.categoryOther': 'Other',
 
+      // Validation
+      'validation.required': 'This field is required',
+      'validation.maxLength': 'Maximum length is',
+
+      // Courses
+      'courses.free': 'Free',
+
       // Errors & Messages
       'error.loadFailed': 'Failed to load data. Please refresh the page',
       'error.loginFailed': 'Invalid email or password',
       'error.submissionFailed': 'Failed to submit. Please try again',
       'error.sessionExpired': 'Your session has expired. Please login again',
       'error.revertFailed': 'Failed to revert submission. Please try again',
+      'error.attendanceFailed': 'Failed to update attendance. Please try again',
+      'error.duplicateFailed': 'Failed to duplicate course. Please try again',
+      'error.statusToggleFailed': 'Failed to toggle course status. Please try again',
       'success.sessionAdded': 'Session added successfully! 🎉',
       'success.sessionUpdated': 'Session updated successfully! ✏️',
       'success.sessionDeleted': 'Session deleted successfully! 🗑️',
       'success.statusUpdated': 'Status updated successfully! ✅',
       'success.submissionSuccess': 'Assignment submitted successfully! 🎉',
+      'success.attendanceUpdated': 'Attendance updated successfully! ✅',
+      'success.courseCreated': 'Course created successfully! 🎉',
+      'success.courseUpdated': 'Course updated successfully! ✏️',
+      'success.courseDeleted': 'Course deleted successfully! 🗑️',
+      'success.courseDuplicated': 'Course duplicated successfully! 📚',
+      'success.statusToggled': 'Status changed to',
+      'success.sectionCreated': 'Section created successfully! 🎉',
+      'success.sectionUpdated': 'Section updated successfully! ✏️',
+      'success.sectionDeleted': 'Section deleted successfully! 🗑️',
+      'success.sectionReordered': 'Sections reordered successfully! ↕️',
     }
   };
 
@@ -1018,6 +1318,10 @@ export class TranslationService {
 
   t(key: keyof TranslationKeys): string {
     return this.translations[this.currentLang()][key];
+  }
+
+  get(key: keyof TranslationKeys): string {
+    return this.t(key);
   }
 
   setLanguage(lang: Language): void {

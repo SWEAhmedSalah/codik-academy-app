@@ -2,7 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../core/services/supabase';
 import { TranslationService } from '../../core/services/translation.service';
-import { Session, Submission } from '../../core/models/session.model';
+import { Session, Submission, Attendance } from '../../core/models/session.model';
+import { AttendanceStatus } from '../../core/constants/app.constants';
 
 @Component({
   selector: 'app-profile',
@@ -37,11 +38,12 @@ export class Profile implements OnInit {
 
         const sessions: Session[] = await this.supabaseService.getSessions();
         const submissions: Submission[] = await this.supabaseService.getStudentSubmissions(this.userName);
+        const attendance: Attendance[] = await this.supabaseService.getStudentAttendance(this.userName);
 
         this.totalSessions = sessions.length;
         this.totalAssignments = sessions.length;
         this.assignmentsCompleted = submissions.length;
-        this.sessionsAttended = submissions.length;
+        this.sessionsAttended = attendance.filter(a => a.status === AttendanceStatus.PRESENT).length;
 
         if (this.totalAssignments > 0) {
           this.courseProgress = Math.round((this.assignmentsCompleted / this.totalAssignments) * 100);

@@ -67,7 +67,20 @@
               <span class="text-sm font-medium text-gray-800">{{ session.title }}</span>
             </div>
 
-            <div>
+            <div class="flex items-center gap-2">
+              <!-- Attendance Badge -->
+              @if (getAttendanceForSession(session.id); as att) {
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-md"
+                      [class]="att.status === AttendanceStatus.PRESENT ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'">
+                  {{ att.status === AttendanceStatus.PRESENT ? t.t('attendance.present') : t.t('attendance.absent') }}
+                </span>
+              } @else {
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-gray-50 text-gray-400">
+                  {{ t.t('attendance.notMarked') }}
+                </span>
+              }
+
+              <!-- Submission Status Badge -->
               @if (getSubmissionForSession(session.id); as sub) {
                 <span class="text-xs font-semibold px-2.5 py-1 rounded-md"
                       [class]="sub.status === 'Accepted' ? 'bg-emerald-50 text-emerald-700' : sub.status === 'Pending' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'">

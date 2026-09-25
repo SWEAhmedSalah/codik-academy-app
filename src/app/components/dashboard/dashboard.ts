@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../core/services/supabase';
 import { TranslationService } from '../../core/services/translation.service';
 import { StudentStateService } from '../../core/services/student-state';
-import { Session, Submission } from '../../core/models/session.model';
-import { SubmissionStatus, StudentSessionStatus, ERROR_MESSAGES } from '../../core/constants/app.constants';
+import { Session, Submission, Attendance } from '../../core/models/session.model';
+import { SubmissionStatus, StudentSessionStatus, AttendanceStatus, ERROR_MESSAGES } from '../../core/constants/app.constants';
 
 interface CurrentSessionCard {
   number: number;
@@ -49,6 +49,7 @@ export class Dashboard implements OnInit {
   // Data from database
   sessions: Session[] = [];
   mySubmissions: Submission[] = [];
+  myAttendance: Attendance[] = [];
 
   // Dynamic cards
   currentSession: CurrentSessionCard | null = null;
@@ -76,6 +77,7 @@ export class Dashboard implements OnInit {
 
       this.sessions = await this.supabaseService.getPublishedSessions();
       this.mySubmissions = await this.supabaseService.getStudentSubmissions(this.studentName);
+      this.myAttendance = await this.supabaseService.getStudentAttendance(this.studentName);
 
       this.calculateMetrics();
       this.setCurrentSessionAndAssignment();
@@ -94,7 +96,7 @@ export class Dashboard implements OnInit {
     this.assignmentsCompleted = this.mySubmissions.filter(
       sub => sub.status === SubmissionStatus.ACCEPTED
     ).length;
-    this.sessionsAttended = this.mySubmissions.length;
+    this.sessionsAttended = this.myAttendance.filter(a => a.status === AttendanceStatus.PRESENT).length;
 
     if (this.totalAssignments > 0) {
       this.courseProgress = Math.round((this.assignmentsCompleted / this.totalAssignments) * 100);

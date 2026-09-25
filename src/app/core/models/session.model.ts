@@ -1,4 +1,4 @@
-import { SessionStatus, StudentSessionStatus, SubmissionStatus, UserRole } from '../constants/app.constants';
+import { SessionStatus, StudentSessionStatus, SubmissionStatus, AttendanceStatus, UserRole } from '../constants/app.constants';
 
 export interface Session {
   id: number;
@@ -16,6 +16,10 @@ export interface Session {
   assignment_description?: string;
   assignment_due_date?: string | null;
   is_locked?: boolean;
+  course_id?: number | null;
+  section_id?: number | null;
+  is_preview?: boolean | null;
+  content_type?: 'video' | 'live' | 'article' | 'quiz' | 'assignment' | null;
 }
 
 export interface Submission {
@@ -28,6 +32,57 @@ export interface Submission {
   submitted_at: string;
   sessions?: Pick<Session, 'title' | 'order_index'>;
   showFeedback?: boolean;
+}
+
+export interface Attendance {
+  id: number;
+  session_id: number;
+  student_name: string;
+  status: AttendanceStatus;
+  marked_at: string;
+  sessions?: Pick<Session, 'title' | 'order_index'>;
+}
+
+export interface Course {
+  id: number;
+  title: string;
+  slug?: string | null;
+  description?: string | null;
+  thumbnail_url?: string | null;
+  category?: string | null;
+  difficulty_level?: string | null;
+  course_type?: string | null;
+  price?: number | null;
+  is_free?: boolean | null;
+  instructor_name?: string | null;
+  status: 'Draft' | 'Published';
+  rating?: number | null;
+  total_students?: number | null;
+  total_lessons?: number | null;
+  total_sections?: number | null;
+  course_duration_hours?: number | null;
+  learning_objectives?: string[] | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CourseSection {
+  id: number;
+  course_id: number;
+  title: string;
+  description?: string | null;
+  order_index: number;
+  total_lessons?: number | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CurriculumNode {
+  type: 'section' | 'lesson';
+  data: CourseSection | Session;
+  children?: CurriculumNode[];
+  expanded?: boolean;
+  visible?: boolean;
 }
 
 export interface AdminStats {
@@ -56,6 +111,10 @@ export interface CreateSessionData {
   assignment_description?: string;
   assignment_due_date?: string | null;
   is_locked?: boolean;
+  course_id?: number | null;
+  section_id?: number | null;
+  is_preview?: boolean | null;
+  content_type?: 'video' | 'live' | 'article' | 'quiz' | 'assignment' | null;
 }
 
 export interface CreateSubmissionData {
