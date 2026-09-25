@@ -1,0 +1,573 @@
+<div class="curriculum-builder" [class.rtl]="translate.isRTL" [class.preview-mode]="previewMode">
+  <!-- Header -->
+  <div class="header">
+    <button class="back-btn" (click)="navigateBack()">
+      <span class="icon">{{ translate.isRTL ? '←' : '→' }}</span>
+      {{ translate.t('common.back') }}
+    </button>
+
+    <div class="title-section">
+      <h1>{{ translate.t('admin.curriculumBuilder') }}</h1>
+      <p class="course-title" *ngIf="course">{{ course.title }}</p>
+    </div>
+
+    <div class="header-actions">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (input)="filterBySearch()"
+          [placeholder]="translate.t('admin.searchCurriculum')"
+          class="search-input">
+      </div>
+      <button class="btn-secondary" (click)="expandAll()">
+        <span class="icon">⊕</span>
+        {{ translate.t('admin.expandAll') }}
+      </button>
+      <button class="btn-secondary" (click)="collapseAll()">
+        <span class="icon">⊖</span>
+        {{ translate.t('admin.collapseAll') }}
+      </button>
+      <button class="btn-secondary" (click)="togglePreview()">
+        <span class="icon">👁️</span>
+        {{ previewMode ? translate.t('admin.editMode') : translate.t('admin.previewCurriculum') }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="message success" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+  <div class="message error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>{{ translate.t('common.loading') }}...</p>
+  </div>
+
+  <!-- Curriculum Tree -->
+  <div class="curriculum-tree" *ngIf="!isLoading && course">
+    <div class="course-header">
+      <span class="icon">📚</span>
+      <h2>{{ course.title }}</h2>
+      <span class="course-stats">
+        {{ course.total_sections || 0 }} {{ translate.t('admin.sections') }} •
+        {{ course.total_lessons || 0 }} {{ translate.t('admin.lessons') }}
+      </span>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="curriculumTree.length === 0">
+      <p>{{ translate.t('admin.noSections') }}</p>
+      <button class="btn-primary" (click)="navigateBack()">
+        {{ translate.t('admin.addSection') }}
+      </button>
+    </div>
+
+    <!-- Section Nodes -->
+    <div class="tree-nodes">
+      <div
+        *ngFor="let node of curriculumTree"
+        class="tree-node section-node"
+        [class.hidden]="!node.visible"
+        [class.drag-over]="dragOverItem === node"
+        [draggable]="!previewMode"
+        (dragstart)="onDragStart($event, node)"
+        (dragover)="onDragOver($event, node)"
+        (dragleave)="onDragLeave()"
+        (drop)="onDrop($event, node)">
+
+        <div class="section-header">
+          <button class="expand-btn" (click)="toggleSection((node.data).id)">
+            <span class="icon">{{ node.expanded ? '▼' : '▶' }}</span>
+          </button>
+
+          <div class="drag-handle" *ngIf="!previewMode">
+            <span class="icon">⋮⋮</span>
+          </div>
+
+          <span class="section-icon">📂</span>
+
+          <div class="section-info">
+            <h3>{{ (node.data).order_index }}. {{ (node.data).title }}</h3>
+            <p class="section-meta" *ngIf="(node.data).description">
+              {{ (node.data).description }}
+            </p>
+            <span class="lessons-badge">
+              {{ node.children?.length || 0 }} {{ translate.t('admin.lessonsInSection') }}
+            </span>
+          </div>
+
+          <div class="section-actions" *ngIf="!previewMode">
+            <button class="btn-icon" (click)="editSection(asSection(node.data))" [title]="translate.t('admin.editSection')">
+              <span class="icon">✏️</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Lesson Nodes -->
+        <div class="lesson-nodes" *ngIf="node.expanded && node.children">
+          <div
+            *ngFor="let lessonNode of node.children"
+            class="tree-node lesson-node"
+            [class.hidden]="!lessonNode.visible">
+
+            <span class="lesson-icon">{{ getContentIcon(asLesson(lessonNode.data).content_type) }}</span>
+
+            <div class="lesson-info">
+              <h4>{{ asLesson(lessonNode.data).title }}</h4>
+              <span class="lesson-meta">
+                {{ asLesson(lessonNode.data).duration || 'N/A' }}
+                <span *ngIf="asLesson(lessonNode.data).is_preview" class="preview-badge">
+                  🔓 {{ translate.t('admin.preview') }}
+                </span>
+              </span>
+            </div>
+
+            <div class="lesson-actions" *ngIf="!previewMode">
+              <button class="btn-icon" (click)="editLesson(asLesson(lessonNode.data))" [title]="translate.t('admin.editLesson')">
+                <span class="icon">✏️</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drag Hint -->
+    <div class="drag-hint" *ngIf="!previewMode && curriculumTree.length > 0">
+      <span class="icon">💡</span>
+      {{ translate.t('admin.dragToReorder') }}
+    </div>
+  </div>
+</div>
+
+<style>
+.curriculum-builder {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+.header {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.back-btn {
+  background: #f3f4f6;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.back-btn:hover {
+  background: #e5e7eb;
+}
+
+.title-section h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #1f2937;
+}
+
+.course-title {
+  margin: 0.3rem 0 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  min-width: 200px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.message {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.message.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.message.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 0.75rem;
+}
+
+.spinner {
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.curriculum-tree {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.course-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.course-header .icon {
+  font-size: 2rem;
+}
+
+.course-header h2 {
+  margin: 0;
+  flex: 1;
+  font-size: 1.5rem;
+  color: #1f2937;
+}
+
+.course-stats {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.tree-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tree-node {
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #f9fafb;
+  transition: all 0.2s;
+}
+
+.tree-node.hidden {
+  display: none;
+}
+
+.tree-node.drag-over {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.section-node {
+  border-color: #d1d5db;
+}
+
+.section-header {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.section-header:hover {
+  background: #f3f4f6;
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 0.8rem;
+  padding: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drag-handle {
+  color: #9ca3af;
+  font-size: 1rem;
+  cursor: grab;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.section-icon {
+  font-size: 1.5rem;
+}
+
+.section-info {
+  flex: 1;
+}
+
+.section-info h3 {
+  margin: 0 0 0.3rem 0;
+  color: #1f2937;
+  font-size: 1.1rem;
+}
+
+.section-meta {
+  margin: 0 0 0.5rem 0;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.lessons-badge {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.section-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  background: white;
+  border: 1px solid #d1d5db;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.lesson-nodes {
+  padding: 0.5rem 1.25rem 1.25rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lesson-node {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: white;
+  border-color: #e5e7eb;
+}
+
+.lesson-node:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.lesson-icon {
+  font-size: 1.2rem;
+}
+
+.lesson-info {
+  flex: 1;
+}
+
+.lesson-info h4 {
+  margin: 0 0 0.25rem 0;
+  color: #374151;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.lesson-meta {
+  color: #6b7280;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.preview-badge {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+}
+
+.lesson-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.drag-hint {
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.5rem;
+  color: #1e40af;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Preview Mode */
+.preview-mode .drag-handle,
+.preview-mode .section-actions,
+.preview-mode .lesson-actions,
+.preview-mode .drag-hint {
+  display: none;
+}
+
+.preview-mode .section-header {
+  cursor: default;
+}
+
+/* RTL Adjustments */
+.rtl .section-header,
+.rtl .lesson-node {
+  direction: rtl;
+}
+
+.rtl .expand-btn .icon {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1024px) {
+  .curriculum-builder {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions {
+    flex-direction: column;
+  }
+
+  .search-input {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .lesson-nodes {
+    padding-left: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .course-header {
+    flex-wrap: wrap;
+  }
+
+  .lesson-nodes {
+    padding-left: 1rem;
+  }
+}
+</style>
+

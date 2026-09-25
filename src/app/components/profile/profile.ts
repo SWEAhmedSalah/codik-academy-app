@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../core/services/supabase';
 import { TranslationService } from '../../core/services/translation.service';
 import { Session, Submission } from '../../core/models/session.model';
+import { AttendanceStatus, SubmissionStatus } from '../../core/constants/app.constants';
 
 @Component({
   selector: 'app-profile',
@@ -35,13 +36,20 @@ export class Profile implements OnInit {
         this.githubUsername = user.user_metadata?.['github_username'] || '';
         this.linkedIn = user.user_metadata?.['linkedin'] || '';
 
-        const sessions: Session[] = await this.supabaseService.getSessions();
-        const submissions: Submission[] = await this.supabaseService.getStudentSubmissions(this.userName);
+        const [sessions, submissions, attendance] = await Promise.all([
+          this.supabaseService.getSessions(),
+          this.supabaseService.getStudentSubmissions(this.userName),
+          this.supabaseService.getStudentAttendance(this.userName)
+        ]);
 
         this.totalSessions = sessions.length;
-        this.totalAssignments = sessions.length;
-        this.assignmentsCompleted = submissions.length;
-        this.sessionsAttended = submissions.length;
+        this.totalAssignments = sessions.filter(session => !!session.assignment_title).length;
+        this.assignmentsCompleted = submissions.filter(
+          submission => submission.status === SubmissionStatus.ACCEPTED
+        ).length;
+        this.sessionsAttended = attendance.filter(
+          record => record.status === AttendanceStatus.PRESENT
+        ).length;
 
         if (this.totalAssignments > 0) {
           this.courseProgress = Math.round((this.assignmentsCompleted / this.totalAssignments) * 100);
@@ -54,4 +62,3 @@ export class Profile implements OnInit {
     }
   }
 }
-

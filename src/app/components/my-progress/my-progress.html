@@ -68,6 +68,10 @@
             </div>
 
             <div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-md mr-2"
+                    [class]="getAttendanceBadgeClass(session.id)">
+                {{ getAttendanceLabel(session.id) }}
+              </span>
               @if (getSubmissionForSession(session.id); as sub) {
                 <span class="text-xs font-semibold px-2.5 py-1 rounded-md"
                       [class]="sub.status === 'Accepted' ? 'bg-emerald-50 text-emerald-700' : sub.status === 'Pending' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'">
@@ -93,4 +97,3 @@
   }
 
 </div>
-

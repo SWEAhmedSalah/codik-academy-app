@@ -30,6 +30,11 @@ export enum SubmissionStatus {
   NEEDS_REWORK = 'Needs Rework'
 }
 
+export enum AttendanceStatus {
+  PRESENT = 'Present',
+  ABSENT = 'Absent'
+}
+
 export enum UserRole {
   ADMIN = 'admin',
   STUDENT = 'student'
@@ -51,4 +56,3 @@ export const SUCCESS_MESSAGES = {
   SUBMISSION_SUCCESS: 'Assignment submitted successfully! 🎉',
   STATUS_UPDATED: 'Status updated successfully! ✅'
 } as const;
-

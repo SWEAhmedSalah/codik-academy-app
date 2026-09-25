@@ -3,6 +3,8 @@ import { Injectable, signal } from '@angular/core';
 export type Language = 'ar' | 'en';
 
 export interface TranslationKeys {
+  [key: string]: string;
+
   // Common
   'common.loading': string;
   'common.save': string;
@@ -150,6 +152,78 @@ export interface TranslationKeys {
   'admin.filterByStatus': string;
   'admin.filterBySession': string;
   'admin.noMatchingSubmissions': string;
+  'admin.attendance': string;
+  'admin.manageAttendance': string;
+  'admin.selectSessionToMark': string;
+  'admin.searchStudents': string;
+  'admin.noStudentsFound': string;
+  'admin.courses': string;
+  'admin.coursesSubtitle': string;
+  'admin.addCourse': string;
+  'admin.editCourse': string;
+  'admin.createCourse': string;
+  'admin.updateCourse': string;
+  'admin.courseTitle': string;
+  'admin.courseTitlePlaceholder': string;
+  'admin.courseSlug': string;
+  'admin.courseSlugPlaceholder': string;
+  'admin.generateSlug': string;
+  'admin.descriptionPlaceholder': string;
+  'admin.thumbnailUrl': string;
+  'admin.thumbnailUrlPlaceholder': string;
+  'admin.category': string;
+  'admin.selectCategory': string;
+  'admin.difficulty': string;
+  'admin.type': string;
+  'admin.courseType': string;
+  'admin.price': string;
+  'admin.pricePlaceholder': string;
+  'admin.currency': string;
+  'admin.isFree': string;
+  'admin.markAsFree': string;
+  'admin.instructorName': string;
+  'admin.instructorNamePlaceholder': string;
+  'admin.durationHours': string;
+  'admin.durationPlaceholder': string;
+  'admin.learningObjectives': string;
+  'admin.addObjective': string;
+  'admin.objectivePlaceholder': string;
+  'admin.objectivesHint': string;
+  'admin.moveUp': string;
+  'admin.moveDown': string;
+  'admin.remove': string;
+  'admin.noCoursesYet': string;
+  'admin.getStartedCourse': string;
+  'admin.noInstructor': string;
+  'admin.sections': string;
+  'admin.lessons': string;
+  'admin.manageSections': string;
+  'admin.curriculumBuilder': string;
+  'admin.addSection': string;
+  'admin.addFirstSection': string;
+  'admin.noSections': string;
+  'admin.lessonsInSection': string;
+  'admin.editSection': string;
+  'admin.deleteSection': string;
+  'admin.deleteSectionConfirm': string;
+  'admin.sectionTitle': string;
+  'admin.sectionDescription': string;
+  'admin.sectionOrder': string;
+  'admin.searchCurriculum': string;
+  'admin.expandAll': string;
+  'admin.collapseAll': string;
+  'admin.editMode': string;
+  'admin.previewCurriculum': string;
+  'admin.preview': string;
+  'admin.editLesson': string;
+  'admin.dragToReorder': string;
+  'admin.publish': string;
+  'admin.markAsDraft': string;
+  'admin.duplicate': string;
+  'admin.deleteCourseConfirm': string;
+  'admin.duplicateCourseConfirm': string;
+  'admin.delete': string;
+  'admin.edit': string;
 
   // Session Details
   'session.details': string;
@@ -242,6 +316,14 @@ export interface TranslationKeys {
   'progress.tasksCompleted': string;
   'progress.sessionBreakdown': string;
 
+  // Attendance
+  'attendance.present': string;
+  'attendance.absent': string;
+  'attendance.notMarked': string;
+
+  // Courses
+  'courses.free': string;
+
   // Sessions Sidebar
   'sessions.bootcampBatch': string;
 
@@ -325,11 +407,26 @@ export interface TranslationKeys {
   'error.submissionFailed': string;
   'error.sessionExpired': string;
   'error.revertFailed': string;
+  'error.attendanceFailed': string;
+  'error.duplicateFailed': string;
+  'error.statusToggleFailed': string;
+  'validation.required': string;
+  'validation.maxLength': string;
   'success.sessionAdded': string;
   'success.sessionUpdated': string;
   'success.sessionDeleted': string;
   'success.statusUpdated': string;
   'success.submissionSuccess': string;
+  'success.attendanceUpdated': string;
+  'success.courseCreated': string;
+  'success.courseUpdated': string;
+  'success.courseDeleted': string;
+  'success.courseDuplicated': string;
+  'success.statusToggled': string;
+  'success.sectionCreated': string;
+  'success.sectionUpdated': string;
+  'success.sectionDeleted': string;
+  'success.sectionReordered': string;
 }
 
 @Injectable({
@@ -487,6 +584,78 @@ export class TranslationService {
       'admin.filterByStatus': 'تصفية حسب الحالة',
       'admin.filterBySession': 'تصفية حسب الجلسة',
       'admin.noMatchingSubmissions': 'لا توجد تسليمات مطابقة للتصفية',
+      'admin.attendance': 'الحضور',
+      'admin.manageAttendance': 'إدارة الحضور',
+      'admin.selectSessionToMark': 'اختر الجلسة وحدّث حضور الطلاب مباشرة من الجدول',
+      'admin.searchStudents': 'ابحث عن طالب...',
+      'admin.noStudentsFound': 'لا يوجد طلاب مطابقون لنتيجة البحث',
+      'admin.courses': 'الدورات',
+      'admin.coursesSubtitle': 'إدارة كتالوج الدورات ومحتواها',
+      'admin.addCourse': 'إضافة دورة',
+      'admin.editCourse': 'تعديل الدورة',
+      'admin.createCourse': 'إنشاء الدورة',
+      'admin.updateCourse': 'تحديث الدورة',
+      'admin.courseTitle': 'عنوان الدورة',
+      'admin.courseTitlePlaceholder': 'أدخل عنوان الدورة',
+      'admin.courseSlug': 'الرابط المختصر',
+      'admin.courseSlugPlaceholder': 'example-course',
+      'admin.generateSlug': 'إنشاء تلقائي',
+      'admin.descriptionPlaceholder': 'اكتب وصفًا واضحًا للدورة ومخرجاتها',
+      'admin.thumbnailUrl': 'رابط الصورة المصغرة',
+      'admin.thumbnailUrlPlaceholder': 'https://example.com/course-cover.jpg',
+      'admin.category': 'التصنيف',
+      'admin.selectCategory': 'اختر التصنيف',
+      'admin.difficulty': 'مستوى الصعوبة',
+      'admin.type': 'النوع',
+      'admin.courseType': 'نوع الدورة',
+      'admin.price': 'السعر',
+      'admin.pricePlaceholder': '0',
+      'admin.currency': 'ج.م',
+      'admin.isFree': 'مجانية',
+      'admin.markAsFree': 'اعتبار هذه الدورة مجانية',
+      'admin.instructorName': 'اسم المدرّب',
+      'admin.instructorNamePlaceholder': 'أدخل اسم المدرّب',
+      'admin.durationHours': 'مدة الدورة بالساعات',
+      'admin.durationPlaceholder': 'مثال: 24',
+      'admin.learningObjectives': 'أهداف التعلم',
+      'admin.addObjective': 'إضافة هدف',
+      'admin.objectivePlaceholder': 'هدف التعلم',
+      'admin.objectivesHint': 'أضف حتى 10 أهداف تعلم واضحة وقابلة للقياس.',
+      'admin.moveUp': 'نقل لأعلى',
+      'admin.moveDown': 'نقل لأسفل',
+      'admin.remove': 'إزالة',
+      'admin.noCoursesYet': 'لا توجد دورات بعد',
+      'admin.getStartedCourse': 'ابدأ بإضافة أول دورة إلى الكتالوج.',
+      'admin.noInstructor': 'لم يتم تحديد المدرّب',
+      'admin.sections': 'الأقسام',
+      'admin.lessons': 'الدروس',
+      'admin.manageSections': 'إدارة الأقسام',
+      'admin.curriculumBuilder': 'منشئ المنهج',
+      'admin.addSection': 'إضافة قسم',
+      'admin.addFirstSection': 'أضف أول قسم لبدء تنظيم محتوى الدورة.',
+      'admin.noSections': 'لا توجد أقسام في هذه الدورة',
+      'admin.lessonsInSection': 'دروس في القسم',
+      'admin.editSection': 'تعديل القسم',
+      'admin.deleteSection': 'حذف القسم',
+      'admin.deleteSectionConfirm': 'هل أنت متأكد من حذف هذا القسم؟',
+      'admin.sectionTitle': 'عنوان القسم',
+      'admin.sectionDescription': 'وصف القسم',
+      'admin.sectionOrder': 'ترتيب القسم',
+      'admin.searchCurriculum': 'ابحث داخل المنهج...',
+      'admin.expandAll': 'توسيع الكل',
+      'admin.collapseAll': 'طي الكل',
+      'admin.editMode': 'وضع التعديل',
+      'admin.previewCurriculum': 'معاينة المنهج',
+      'admin.preview': 'معاينة',
+      'admin.editLesson': 'تعديل الدرس',
+      'admin.dragToReorder': 'اسحب الأقسام لإعادة ترتيبها.',
+      'admin.publish': 'نشر',
+      'admin.markAsDraft': 'تحويل إلى مسودة',
+      'admin.duplicate': 'نسخ',
+      'admin.deleteCourseConfirm': 'هل أنت متأكد من حذف هذه الدورة؟',
+      'admin.duplicateCourseConfirm': 'هل تريد إنشاء نسخة من هذه الدورة؟',
+      'admin.delete': 'حذف',
+      'admin.edit': 'تعديل',
 
       // Session Details
       'session.details': 'تفاصيل المحاضره',
@@ -579,6 +748,14 @@ export class TranslationService {
       'progress.tasksCompleted': 'تكليفات مكتملة',
       'progress.sessionBreakdown': 'تفاصيل المحاضرات',
 
+      // Attendance
+      'attendance.present': 'حاضر',
+      'attendance.absent': 'غائب',
+      'attendance.notMarked': 'غير محدد',
+
+      // Courses
+      'courses.free': 'مجاني',
+
       // Sessions Sidebar
       'sessions.bootcampBatch': 'Java Spring Bootcamp - الدفعة 5',
 
@@ -662,11 +839,26 @@ export class TranslationService {
       'error.submissionFailed': 'فشل الإرسال. يرجى المحاولة مرة أخرى',
       'error.sessionExpired': 'انتهت جلستك. يرجى تسجيل الدخول مرة أخرى',
       'error.revertFailed': 'فشل التراجع عن التسليم. حاول مرة أخرى',
+      'error.attendanceFailed': 'تعذر تحديث الحضور. حاول مرة أخرى.',
+      'error.duplicateFailed': 'تعذر إنشاء نسخة من الدورة.',
+      'error.statusToggleFailed': 'تعذر تحديث حالة الدورة.',
+      'validation.required': 'هذا الحقل مطلوب',
+      'validation.maxLength': 'الحد الأقصى لعدد الأحرف هو',
       'success.sessionAdded': 'تمت إضافة المحاضره بنجاح! 🎉',
       'success.sessionUpdated': 'تم تحديث المحاضره بنجاح! ✏️',
       'success.sessionDeleted': 'تم حذف المحاضره بنجاح! 🗑️',
       'success.statusUpdated': 'تم تحديث المحاضره بنجاح! ✅',
       'success.submissionSuccess': 'تم إرسال التكليف بنجاح! 🎉',
+      'success.attendanceUpdated': 'تم تحديث الحضور بنجاح.',
+      'success.courseCreated': 'تم إنشاء الدورة بنجاح.',
+      'success.courseUpdated': 'تم تحديث الدورة بنجاح.',
+      'success.courseDeleted': 'تم حذف الدورة بنجاح.',
+      'success.courseDuplicated': 'تم نسخ الدورة بنجاح.',
+      'success.statusToggled': 'تم تغيير الحالة إلى',
+      'success.sectionCreated': 'تم إنشاء القسم بنجاح.',
+      'success.sectionUpdated': 'تم تحديث القسم بنجاح.',
+      'success.sectionDeleted': 'تم حذف القسم بنجاح.',
+      'success.sectionReordered': 'تمت إعادة ترتيب الأقسام بنجاح.',
     },
     en: {
       // Common
@@ -816,6 +1008,78 @@ export class TranslationService {
       'admin.filterByStatus': 'Filter by Status',
       'admin.filterBySession': 'Filter by Session',
       'admin.noMatchingSubmissions': 'No submissions match your filters',
+      'admin.attendance': 'Attendance',
+      'admin.manageAttendance': 'Manage Attendance',
+      'admin.selectSessionToMark': 'Select a session and update student attendance from the sheet',
+      'admin.searchStudents': 'Search students...',
+      'admin.noStudentsFound': 'No students found',
+      'admin.courses': 'Courses',
+      'admin.coursesSubtitle': 'Manage the course catalog and its content',
+      'admin.addCourse': 'Add Course',
+      'admin.editCourse': 'Edit Course',
+      'admin.createCourse': 'Create Course',
+      'admin.updateCourse': 'Update Course',
+      'admin.courseTitle': 'Course Title',
+      'admin.courseTitlePlaceholder': 'Enter course title',
+      'admin.courseSlug': 'Course Slug',
+      'admin.courseSlugPlaceholder': 'example-course',
+      'admin.generateSlug': 'Generate',
+      'admin.descriptionPlaceholder': 'Write a short description for this course',
+      'admin.thumbnailUrl': 'Thumbnail URL',
+      'admin.thumbnailUrlPlaceholder': 'https://example.com/course-cover.jpg',
+      'admin.category': 'Category',
+      'admin.selectCategory': 'Select category',
+      'admin.difficulty': 'Difficulty',
+      'admin.type': 'Type',
+      'admin.courseType': 'Course Type',
+      'admin.price': 'Price',
+      'admin.pricePlaceholder': '0',
+      'admin.currency': 'EGP',
+      'admin.isFree': 'Free',
+      'admin.markAsFree': 'Mark this course as free',
+      'admin.instructorName': 'Instructor Name',
+      'admin.instructorNamePlaceholder': 'Enter instructor name',
+      'admin.durationHours': 'Duration (hours)',
+      'admin.durationPlaceholder': 'Example: 24',
+      'admin.learningObjectives': 'Learning Objectives',
+      'admin.addObjective': 'Add Objective',
+      'admin.objectivePlaceholder': 'Objective',
+      'admin.objectivesHint': 'Add up to 10 clear, measurable learning objectives.',
+      'admin.moveUp': 'Move up',
+      'admin.moveDown': 'Move down',
+      'admin.remove': 'Remove',
+      'admin.noCoursesYet': 'No courses yet',
+      'admin.getStartedCourse': 'Get started by creating your first course.',
+      'admin.noInstructor': 'No instructor assigned',
+      'admin.sections': 'Sections',
+      'admin.lessons': 'Lessons',
+      'admin.manageSections': 'Manage Sections',
+      'admin.curriculumBuilder': 'Curriculum Builder',
+      'admin.addSection': 'Add Section',
+      'admin.addFirstSection': 'Add your first section to organize this course.',
+      'admin.noSections': 'No sections found for this course',
+      'admin.lessonsInSection': 'lessons in section',
+      'admin.editSection': 'Edit Section',
+      'admin.deleteSection': 'Delete Section',
+      'admin.deleteSectionConfirm': 'Are you sure you want to delete this section?',
+      'admin.sectionTitle': 'Section Title',
+      'admin.sectionDescription': 'Section Description',
+      'admin.sectionOrder': 'Section Order',
+      'admin.searchCurriculum': 'Search curriculum...',
+      'admin.expandAll': 'Expand All',
+      'admin.collapseAll': 'Collapse All',
+      'admin.editMode': 'Edit Mode',
+      'admin.previewCurriculum': 'Preview Curriculum',
+      'admin.preview': 'Preview',
+      'admin.editLesson': 'Edit Lesson',
+      'admin.dragToReorder': 'Drag sections to reorder them.',
+      'admin.publish': 'Publish',
+      'admin.markAsDraft': 'Mark as Draft',
+      'admin.duplicate': 'Duplicate',
+      'admin.deleteCourseConfirm': 'Are you sure you want to delete this course?',
+      'admin.duplicateCourseConfirm': 'Do you want to duplicate this course?',
+      'admin.delete': 'Delete',
+      'admin.edit': 'Edit',
 
       // Session Details
       'session.details': 'Session Details',
@@ -908,6 +1172,14 @@ export class TranslationService {
       'progress.tasksCompleted': 'tasks completed',
       'progress.sessionBreakdown': 'Session Breakdown',
 
+      // Attendance
+      'attendance.present': 'Present',
+      'attendance.absent': 'Absent',
+      'attendance.notMarked': 'Not Marked',
+
+      // Courses
+      'courses.free': 'Free',
+
       // Sessions Sidebar
       'sessions.bootcampBatch': 'Java Spring Bootcamp - Batch 5',
 
@@ -991,11 +1263,26 @@ export class TranslationService {
       'error.submissionFailed': 'Failed to submit. Please try again',
       'error.sessionExpired': 'Your session has expired. Please login again',
       'error.revertFailed': 'Failed to revert submission. Please try again',
+      'error.attendanceFailed': 'Failed to update attendance. Please try again.',
+      'error.duplicateFailed': 'Failed to duplicate course.',
+      'error.statusToggleFailed': 'Failed to toggle course status.',
+      'validation.required': 'This field is required',
+      'validation.maxLength': 'Maximum length is',
       'success.sessionAdded': 'Session added successfully! 🎉',
       'success.sessionUpdated': 'Session updated successfully! ✏️',
       'success.sessionDeleted': 'Session deleted successfully! 🗑️',
       'success.statusUpdated': 'Status updated successfully! ✅',
       'success.submissionSuccess': 'Assignment submitted successfully! 🎉',
+      'success.attendanceUpdated': 'Attendance updated successfully.',
+      'success.courseCreated': 'Course created successfully.',
+      'success.courseUpdated': 'Course updated successfully.',
+      'success.courseDeleted': 'Course deleted successfully.',
+      'success.courseDuplicated': 'Course duplicated successfully.',
+      'success.statusToggled': 'Status changed to',
+      'success.sectionCreated': 'Section created successfully.',
+      'success.sectionUpdated': 'Section updated successfully.',
+      'success.sectionDeleted': 'Section deleted successfully.',
+      'success.sectionReordered': 'Sections reordered successfully.',
     }
   };
 
@@ -1016,8 +1303,12 @@ export class TranslationService {
     return this.currentLang() === 'ar';
   }
 
-  t(key: keyof TranslationKeys): string {
-    return this.translations[this.currentLang()][key];
+  t(key: keyof TranslationKeys | string): string {
+    return this.translations[this.currentLang()][key] ?? key;
+  }
+
+  get(key: string): string {
+    return this.t(key);
   }
 
   setLanguage(lang: Language): void {

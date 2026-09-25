@@ -85,6 +85,14 @@
         {{ t.t('admin.submissions') }}
       </button>
 
+      <button type="button" (click)="onNavigate('attendance')"
+              [class.bg-indigo-600]="activeTab === 'attendance'" [class.text-white]="activeTab === 'attendance'"
+              [class.text-slate-400]="activeTab !== 'attendance'" [class.hover:bg-slate-800]="activeTab !== 'attendance'"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors text-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h4m-6 6v2m-6-8a4 4 0 118 0 4 4 0 01-8 0zm-5 8a5 5 0 0110 0v1H4v-1z"></path></svg>
+        {{ t.t('sidebar.attendance') }}
+      </button>
+
       <!-- زرار تقارير الأخطاء -->
       <button type="button" (click)="activeTab = 'bugs'"
               [class.bg-indigo-600]="activeTab === 'bugs'" [class.text-white]="activeTab === 'bugs'"
@@ -121,6 +129,7 @@
       @case ('dashboard') { <app-admin-statistics (navigateTo)="onNavigate($event)"></app-admin-statistics> }
       @case ('sessions') { <app-admin-sessions></app-admin-sessions> }
       @case ('submissions') { <app-admin-submissions></app-admin-submissions> }
+      @case ('attendance') { <app-admin-attendance></app-admin-attendance> }
       @case ('bugs') { <app-admin-bug-reports></app-admin-bug-reports> }
     }
   </div>

@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../../environment/environment';
 import {
+  Attendance,
+  Course,
+  CourseSection,
   Session,
   Submission,
   AdminStats,
@@ -9,7 +12,7 @@ import {
   CreateSubmissionData,
   BugReportData
 } from '../models/session.model';
-import { UserRole, SubmissionStatus, SessionStatus } from '../constants/app.constants';
+import { AttendanceStatus, UserRole, SubmissionStatus, SessionStatus } from '../constants/app.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -238,6 +241,340 @@ export class SupabaseService {
     }
 
     console.log('✅ Submission deleted successfully:', data);
+  }
+
+  // ================= Attendance Management =================
+
+  async getStudentRoster(): Promise<string[]> {
+    const { data, error } = await this.supabase
+      .from('user_roles')
+      .select('email, role');
+
+    if (error) {
+      console.error('Error fetching student roster:', error);
+      throw error;
+    }
+
+    return (data || [])
+      .filter(user => user.email && user.role?.toLowerCase() !== UserRole.ADMIN)
+      .map(user => user.email)
+      .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  }
+
+  async getAllAttendance(): Promise<Attendance[]> {
+    const { data, error } = await this.supabase
+      .from('attendance')
+      .select('*');
+
+    if (error) {
+      console.error('Error fetching attendance:', error);
+      throw error;
+    }
+
+    return (data as Attendance[]) || [];
+  }
+
+  async getSessionAttendance(sessionId: number): Promise<Attendance[]> {
+    const { data, error } = await this.supabase
+      .from('attendance')
+      .select('*')
+      .eq('session_id', sessionId);
+
+    if (error) {
+      console.error('Error fetching session attendance:', error);
+      throw error;
+    }
+
+    return (data as Attendance[]) || [];
+  }
+
+  async markAttendance(sessionId: number, studentName: string, status: AttendanceStatus): Promise<void> {
+    const { error } = await this.supabase.rpc('mark_attendance', {
+      p_session_id: sessionId,
+      p_student_name: studentName,
+      p_status: status
+    });
+
+    if (error) {
+      console.error('Error marking attendance:', error);
+      throw error;
+    }
+  }
+
+  async getStudentAttendance(studentName: string): Promise<Attendance[]> {
+    const { data, error } = await this.supabase
+      .from('attendance')
+      .select('*, sessions(title, order_index)')
+      .eq('student_name', studentName);
+
+    if (error) {
+      console.error('Error fetching student attendance:', error);
+      throw error;
+    }
+
+    return (data as Attendance[]) || [];
+  }
+
+  // ================= Course Management =================
+
+  async getAllCourses(): Promise<Course[]> {
+    const { data, error } = await this.supabase
+      .from('courses')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching courses:', error);
+      throw error;
+    }
+
+    return (data as Course[]) || [];
+  }
+
+  async getCourseDetails(courseId: number): Promise<Course | null> {
+    const { data, error } = await this.supabase
+      .from('courses')
+      .select('*')
+      .eq('id', courseId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching course details:', error);
+      throw error;
+    }
+
+    return data as Course;
+  }
+
+  async createCourse(courseData: Partial<Course>): Promise<Course> {
+    const { data, error } = await this.supabase
+      .from('courses')
+      .insert([courseData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating course:', error);
+      throw error;
+    }
+
+    return data as Course;
+  }
+
+  async updateCourse(courseId: number, courseData: Partial<Course>): Promise<Course> {
+    const { data, error } = await this.supabase
+      .from('courses')
+      .update(courseData)
+      .eq('id', courseId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating course:', error);
+      throw error;
+    }
+
+    return data as Course;
+  }
+
+  async deleteCourse(courseId: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('courses')
+      .delete()
+      .eq('id', courseId);
+
+    if (error) {
+      console.error('Error deleting course:', error);
+      throw error;
+    }
+  }
+
+  async duplicateCourse(courseId: number): Promise<Course> {
+    const course = await this.getCourseDetails(courseId);
+    if (!course) {
+      throw new Error('Course not found');
+    }
+
+    const sections = await this.getCourseSections(courseId);
+    const { data: lessons, error: lessonsError } = await this.supabase
+      .from('sessions')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('order_index', { ascending: true });
+
+    if (lessonsError) {
+      console.error('Error loading lessons for course duplication:', lessonsError);
+      throw lessonsError;
+    }
+
+    const duplicatePayload: Partial<Course> = {
+      title: `${course.title} (Copy)`,
+      slug: course.slug ? `${course.slug}-copy-${Date.now()}` : null,
+      description: course.description ?? null,
+      thumbnail_url: course.thumbnail_url ?? null,
+      category: course.category ?? null,
+      difficulty_level: course.difficulty_level ?? null,
+      course_type: course.course_type ?? null,
+      price: course.price ?? 0,
+      is_free: course.is_free ?? true,
+      instructor_name: course.instructor_name ?? null,
+      status: SessionStatus.DRAFT,
+      rating: course.rating ?? 0,
+      total_students: 0,
+      total_lessons: course.total_lessons ?? 0,
+      course_duration_hours: course.course_duration_hours ?? 0,
+      total_sections: course.total_sections ?? 0,
+      learning_objectives: course.learning_objectives ?? []
+    };
+
+    const duplicatedCourse = await this.createCourse(duplicatePayload);
+
+    const sectionIdMap = new Map<number, number>();
+    for (const section of sections) {
+      const createdSection = await this.createCourseSection({
+        course_id: duplicatedCourse.id,
+        title: section.title,
+        description: section.description ?? null,
+        order_index: section.order_index
+      });
+      sectionIdMap.set(section.id, createdSection.id);
+    }
+
+    for (const lesson of (lessons as Session[] || [])) {
+      const { id: _ignoreId, ...lessonPayload } = lesson;
+      const duplicatedLesson: Partial<CreateSessionData> = {
+        ...lessonPayload,
+        course_id: duplicatedCourse.id,
+        section_id: lesson.section_id ? sectionIdMap.get(lesson.section_id) ?? null : null
+      };
+
+      await this.supabase
+        .from('sessions')
+        .insert([duplicatedLesson]);
+    }
+
+    return duplicatedCourse;
+  }
+
+  async quickToggleCourseStatus(courseId: number): Promise<void> {
+    const course = await this.getCourseDetails(courseId);
+    if (!course) {
+      throw new Error('Course not found');
+    }
+
+    const nextStatus = course.status === SessionStatus.PUBLISHED
+      ? SessionStatus.DRAFT
+      : SessionStatus.PUBLISHED;
+
+    const { error } = await this.supabase
+      .from('courses')
+      .update({ status: nextStatus })
+      .eq('id', courseId);
+
+    if (error) {
+      console.error('Error toggling course status:', error);
+      throw error;
+    }
+  }
+
+  // ================= Course Sections =================
+
+  async getCourseSections(courseId: number): Promise<CourseSection[]> {
+    const { data, error } = await this.supabase
+      .from('course_sections')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching course sections:', error);
+      throw error;
+    }
+
+    return (data as CourseSection[]) || [];
+  }
+
+  async createCourseSection(sectionData: Partial<CourseSection>): Promise<CourseSection> {
+    const { data, error } = await this.supabase
+      .from('course_sections')
+      .insert([sectionData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating course section:', error);
+      throw error;
+    }
+
+    return data as CourseSection;
+  }
+
+  async updateCourseSection(sectionId: number, sectionData: Partial<CourseSection>): Promise<CourseSection> {
+    const { data, error } = await this.supabase
+      .from('course_sections')
+      .update(sectionData)
+      .eq('id', sectionId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating course section:', error);
+      throw error;
+    }
+
+    return data as CourseSection;
+  }
+
+  async deleteCourseSection(sectionId: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('course_sections')
+      .delete()
+      .eq('id', sectionId);
+
+    if (error) {
+      console.error('Error deleting course section:', error);
+      throw error;
+    }
+  }
+
+  async reorderCourseSection(sectionId: number, orderIndex: number): Promise<void> {
+    const { error } = await this.supabase
+      .from('course_sections')
+      .update({ order_index: orderIndex })
+      .eq('id', sectionId);
+
+    if (error) {
+      console.error('Error reordering course section:', error);
+      throw error;
+    }
+  }
+
+  async getCourseCurriculum(courseId: number): Promise<{
+    course: Course | null;
+    sections: CourseSection[];
+    lessons: Session[];
+  }> {
+    const [course, sections, lessonsResponse] = await Promise.all([
+      this.getCourseDetails(courseId),
+      this.getCourseSections(courseId),
+      this.supabase
+        .from('sessions')
+        .select('*')
+        .eq('course_id', courseId)
+        .order('section_id', { ascending: true })
+        .order('order_index', { ascending: true })
+    ]);
+
+    if (lessonsResponse.error) {
+      console.error('Error fetching course curriculum lessons:', lessonsResponse.error);
+      throw lessonsResponse.error;
+    }
+
+    return {
+      course,
+      sections,
+      lessons: (lessonsResponse.data as Session[]) || []
+    };
   }
 
   // ================= Bug Reports =================

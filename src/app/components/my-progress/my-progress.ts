@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../core/services/supabase';
 import { TranslationService } from '../../core/services/translation.service';
-import { Session, Submission } from '../../core/models/session.model';
-import { SubmissionStatus } from '../../core/constants/app.constants';
+import { Attendance, Session, Submission } from '../../core/models/session.model';
+import { AttendanceStatus, SubmissionStatus } from '../../core/constants/app.constants';
 
 @Component({
   selector: 'app-my-progress',
@@ -18,6 +18,7 @@ export class MyProgress implements OnInit {
   isLoading = true;
   sessions: Session[] = [];
   submissions: Submission[] = [];
+  attendanceRecords: Attendance[] = [];
   courseProgress = 0;
   sessionsAttended = 0;
   totalSessions = 0;
@@ -33,13 +34,24 @@ export class MyProgress implements OnInit {
       const user = await this.supabaseService.getCurrentUser();
       if (user) {
         const studentName = user.user_metadata?.['full_name'] || user.email?.split('@')[0] || 'Student';
-        this.sessions = await this.supabaseService.getSessions();
-        this.submissions = await this.supabaseService.getStudentSubmissions(studentName);
+        const [sessions, submissions, attendance] = await Promise.all([
+          this.supabaseService.getSessions(),
+          this.supabaseService.getStudentSubmissions(studentName),
+          this.supabaseService.getStudentAttendance(studentName)
+        ]);
+
+        this.sessions = sessions;
+        this.submissions = submissions;
+        this.attendanceRecords = attendance;
 
         this.totalSessions = this.sessions.length;
-        this.totalAssignments = this.sessions.length;
-        this.assignmentsCompleted = this.submissions.length;
-        this.sessionsAttended = this.submissions.length;
+        this.totalAssignments = this.sessions.filter(session => !!session.assignment_title).length;
+        this.assignmentsCompleted = this.submissions.filter(
+          submission => submission.status === SubmissionStatus.ACCEPTED
+        ).length;
+        this.sessionsAttended = this.attendanceRecords.filter(
+          record => record.status === AttendanceStatus.PRESENT
+        ).length;
 
         this.acceptedCount = this.submissions.filter(s => s.status === SubmissionStatus.ACCEPTED).length;
         this.pendingCount = this.submissions.filter(s => s.status === SubmissionStatus.PENDING).length;
@@ -59,5 +71,30 @@ export class MyProgress implements OnInit {
   getSubmissionForSession(sessionId: number): Submission | undefined {
     return this.submissions.find(s => s.session_id === sessionId);
   }
-}
 
+  getAttendanceForSession(sessionId: number): Attendance | undefined {
+    return this.attendanceRecords.find(record => record.session_id === sessionId);
+  }
+
+  getAttendanceLabel(sessionId: number): string {
+    const attendance = this.getAttendanceForSession(sessionId);
+    if (!attendance) {
+      return this.t.t('attendance.notMarked');
+    }
+
+    return attendance.status === AttendanceStatus.PRESENT
+      ? this.t.t('attendance.present')
+      : this.t.t('attendance.absent');
+  }
+
+  getAttendanceBadgeClass(sessionId: number): string {
+    const attendance = this.getAttendanceForSession(sessionId);
+    if (!attendance) {
+      return 'bg-gray-50 text-gray-400';
+    }
+
+    return attendance.status === AttendanceStatus.PRESENT
+      ? 'bg-emerald-50 text-emerald-700'
+      : 'bg-red-50 text-red-700';
+  }
+}

@@ -1,0 +1,480 @@
+<div class="p-6 bg-gray-50 min-h-screen" [dir]="t.isRTL ? 'rtl' : 'ltr'">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">{{ t.t('admin.courses') }}</h1>
+      <p class="text-gray-600 mt-1">{{ t.t('admin.coursesSubtitle') }}</p>
+    </div>
+    <button
+      (click)="openAddMode()"
+      class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      {{ t.t('admin.addCourse') }}
+    </button>
+  </div>
+
+  <!-- Success/Error Messages -->
+  @if (successMessage) {
+    <div class="mb-4 p-4 bg-green-50 border-l-4 border-green-500 text-green-800 rounded-lg">
+      {{ successMessage }}
+    </div>
+  }
+  @if (errorMessage) {
+    <div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-800 rounded-lg">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <!-- Courses Table -->
+  <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+    @if (isLoading) {
+      <div class="flex items-center justify-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    } @else if (courses.length === 0) {
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">{{ t.t('admin.noCoursesYet') }}</h3>
+        <p class="mt-1 text-sm text-gray-500">{{ t.t('admin.getStartedCourse') }}</p>
+      </div>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ t.t('admin.courseTitle') }}
+              </th>
+              <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ t.t('admin.category') }}
+              </th>
+              <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ t.t('admin.difficulty') }}
+              </th>
+              <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ t.t('admin.type') }}
+              </th>
+              <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ t.t('admin.price') }}
+              </th>
+              <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ t.t('admin.status') }}
+              </th>
+              <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ t.t('admin.students') }}
+              </th>
+              <th class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {{ t.t('admin.actions') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @for (course of courses; track course.id) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    @if (course.thumbnail_url) {
+                      <img [src]="course.thumbnail_url" [alt]="course.title" class="h-10 w-16 rounded object-cover" [class.ml-3]="t.isRTL" [class.mr-3]="!t.isRTL">
+                    }
+                    <div>
+                      <div class="text-sm font-medium text-gray-900">{{ course.title }}</div>
+                      <div class="text-xs text-gray-500">{{ course.instructor_name || t.t('admin.noInstructor') }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="text-sm text-gray-900">{{ course.category || '-' }}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="text-sm text-gray-900">{{ course.difficulty_level || '-' }}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="text-sm text-gray-900">{{ course.course_type || '-' }}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span [class]="'px-2 inline-flex text-xs leading-5 font-semibold rounded-full ' + getPriceBadgeClass(course.is_free)">
+                    {{ course.is_free ? t.t('courses.free') : (course.price + ' ' + t.t('admin.currency')) }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span [class]="'px-2 inline-flex text-xs leading-5 font-semibold rounded-full ' + getStatusBadgeClass(course.status)">
+                    {{ course.status === 'Published' ? t.t('admin.published') : t.t('admin.draft') }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                        📂 {{ getSectionCount(course) }} {{ t.t('admin.sections') }}
+                      </span>
+                      <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                        📹 {{ getLessonCount(course) }} {{ t.t('admin.lessons') }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ course.total_students || 0 }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium relative">
+                  <button
+                    (click)="toggleActionMenu(course.id, $event)"
+                    class="text-gray-600 hover:text-gray-900 px-3 py-1 rounded hover:bg-gray-100 transition-colors">
+                    ⋮
+                  </button>
+
+                  <!-- Action Menu Dropdown -->
+                  @if (activeMenuCourseId === course.id) {
+                    <div class="absolute z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                         [class.right-0]="!t.isRTL"
+                         [class.left-0]="t.isRTL">
+                      <div class="py-1">
+                        <button
+                          (click)="editCourse(course)"
+                          class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-start">
+                          <span>✏️</span>
+                          <span>{{ t.t('admin.edit') }}</span>
+                        </button>
+                        <button
+                          (click)="manageSections(course, $event)"
+                          class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-start">
+                          <span>📚</span>
+                          <span>{{ t.t('admin.manageSections') }}</span>
+                        </button>
+                        <button
+                          (click)="quickToggleStatus(course, $event)"
+                          class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-start">
+                          <span>{{ course.status === 'Published' ? '📝' : '✅' }}</span>
+                          <span>{{ course.status === 'Published' ? t.t('admin.markAsDraft') : t.t('admin.publish') }}</span>
+                        </button>
+                        <button
+                          (click)="duplicateCourse(course, $event)"
+                          class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-start">
+                          <span>📋</span>
+                          <span>{{ t.t('admin.duplicate') }}</span>
+                        </button>
+                        <hr class="my-1">
+                        <button
+                          (click)="deleteCourse(course.id)"
+                          class="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-start">
+                          <span>🗑️</span>
+                          <span>{{ t.t('admin.delete') }}</span>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  <!-- Drawer for Add/Edit Course -->
+  @if (isDrawerOpen) {
+    <div class="fixed inset-0 overflow-hidden z-50" (click)="closeDrawer()">
+      <div class="absolute inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+
+      <div class="fixed inset-y-0 max-w-full flex"
+           [class.right-0]="!t.isRTL"
+           [class.left-0]="t.isRTL"
+           (click)="$event.stopPropagation()">
+        <div class="w-screen max-w-2xl">
+          <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="h-full flex flex-col bg-white shadow-xl">
+
+            <!-- Drawer Header -->
+            <div class="px-6 py-6 bg-indigo-600 text-white">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold">
+                  {{ isEditMode ? t.t('admin.editCourse') : t.t('admin.addCourse') }}
+                </h2>
+                <button type="button" (click)="closeDrawer()" class="text-white hover:text-gray-200">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Drawer Body -->
+            <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+
+              <!-- Title -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {{ t.t('admin.courseTitle') }} <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  formControlName="title"
+                  (blur)="generateSlug()"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  [placeholder]="t.t('admin.courseTitlePlaceholder')">
+                @if (courseForm.get('title')?.touched && courseForm.get('title')?.errors?.['required']) {
+                  <p class="mt-1 text-sm text-red-600">{{ t.t('validation.required') }}</p>
+                }
+              </div>
+
+              <!-- Slug -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {{ t.t('admin.courseSlug') }}
+                  <button type="button" (click)="generateSlug()" class="text-indigo-600 text-xs hover:text-indigo-700" [class.mr-2]="t.isRTL" [class.ml-2]="!t.isRTL">
+                    {{ t.t('admin.generateSlug') }}
+                  </button>
+                </label>
+                <input
+                  type="text"
+                  formControlName="slug"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  [placeholder]="t.t('admin.courseSlugPlaceholder')">
+              </div>
+
+              <!-- Description -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {{ t.t('admin.description') }}
+                </label>
+                <textarea
+                  formControlName="description"
+                  rows="4"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  [placeholder]="t.t('admin.descriptionPlaceholder')"></textarea>
+              </div>
+
+              <!-- Thumbnail URL -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {{ t.t('admin.thumbnailUrl') }}
+                </label>
+                <input
+                  type="url"
+                  formControlName="thumbnail_url"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  [placeholder]="t.t('admin.thumbnailUrlPlaceholder')">
+                @if (courseForm.get('thumbnail_url')?.value) {
+                  <img [src]="courseForm.get('thumbnail_url')?.value" class="mt-2 h-32 w-auto rounded-lg object-cover" alt="Preview">
+                }
+              </div>
+
+              <!-- Category, Difficulty, Type Row -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Category -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ t.t('admin.category') }} <span class="text-red-500">*</span>
+                  </label>
+                  <select
+                    formControlName="category"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option value="">{{ t.t('admin.selectCategory') }}</option>
+                    @for (cat of categories; track cat) {
+                      <option [value]="cat">{{ cat }}</option>
+                    }
+                  </select>
+                </div>
+
+                <!-- Difficulty -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ t.t('admin.difficulty') }} <span class="text-red-500">*</span>
+                  </label>
+                  <select
+                    formControlName="difficulty_level"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    @for (level of difficultyLevels; track level) {
+                      <option [value]="level">{{ level }}</option>
+                    }
+                  </select>
+                </div>
+
+                <!-- Course Type -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ t.t('admin.courseType') }} <span class="text-red-500">*</span>
+                  </label>
+                  <select
+                    formControlName="course_type"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    @for (type of courseTypes; track type) {
+                      <option [value]="type">{{ type }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <!-- Price & Free Toggle -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ t.t('admin.price') }}
+                  </label>
+                  <input
+                    type="number"
+                    formControlName="price"
+                    min="0"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    [placeholder]="t.t('admin.pricePlaceholder')">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ t.t('admin.isFree') }}
+                  </label>
+                  <div class="flex items-center h-10">
+                    <input
+                      type="checkbox"
+                      formControlName="is_free"
+                      class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      [class.ml-2]="t.isRTL"
+                      [class.mr-2]="!t.isRTL">
+                    <span class="text-sm text-gray-700">{{ t.t('admin.markAsFree') }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Instructor Name, Status, Duration Row -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ t.t('admin.instructorName') }}
+                  </label>
+                  <input
+                    type="text"
+                    formControlName="instructor_name"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    [placeholder]="t.t('admin.instructorNamePlaceholder')">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ t.t('admin.status') }} <span class="text-red-500">*</span>
+                  </label>
+                  <select
+                    formControlName="status"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    @for (status of statusOptions; track status) {
+                      <option [value]="status">{{ status === 'Published' ? t.t('admin.published') : t.t('admin.draft') }}</option>
+                    }
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ t.t('admin.durationHours') }}
+                  </label>
+                  <input
+                    type="number"
+                    formControlName="course_duration_hours"
+                    min="0"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    [placeholder]="t.t('admin.durationPlaceholder')">
+                </div>
+              </div>
+
+              <!-- Learning Objectives -->
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <label class="block text-sm font-medium text-gray-700">
+                    {{ t.t('admin.learningObjectives') }}
+                  </label>
+                  <button
+                    type="button"
+                    (click)="addObjective()"
+                    [disabled]="learningObjectives.length >= 10"
+                    class="text-sm text-indigo-600 hover:text-indigo-700 font-medium disabled:text-gray-400 disabled:cursor-not-allowed">
+                    + {{ t.t('admin.addObjective') }}
+                  </button>
+                </div>
+
+                <div class="space-y-2">
+                  @for (objective of learningObjectives.controls; track $index; let idx = $index) {
+                    <div class="flex items-start gap-2">
+                      <div class="flex-1">
+                        <input
+                          type="text"
+                          [formControl]="$any(objective)"
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+                          [placeholder]="t.t('admin.objectivePlaceholder') + ' ' + (idx + 1)">
+                        @if (objective.touched && objective.errors?.['required']) {
+                          <p class="mt-1 text-xs text-red-600">{{ t.t('validation.required') }}</p>
+                        }
+                        @if (objective.errors?.['maxlength']) {
+                          <p class="mt-1 text-xs text-red-600">{{ t.t('validation.maxLength') }} 150</p>
+                        }
+                      </div>
+
+                      <div class="flex gap-1">
+                        <button
+                          type="button"
+                          (click)="moveObjectiveUp(idx)"
+                          [disabled]="idx === 0"
+                          class="p-2 text-gray-400 hover:text-gray-600 disabled:cursor-not-allowed"
+                          title="{{ t.t('admin.moveUp') }}">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          (click)="moveObjectiveDown(idx)"
+                          [disabled]="idx === learningObjectives.length - 1"
+                          class="p-2 text-gray-400 hover:text-gray-600 disabled:cursor-not-allowed"
+                          title="{{ t.t('admin.moveDown') }}">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          (click)="removeObjective(idx)"
+                          [disabled]="learningObjectives.length <= 1"
+                          class="p-2 text-red-400 hover:text-red-600 disabled:cursor-not-allowed"
+                          title="{{ t.t('admin.remove') }}">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+                <p class="mt-2 text-xs text-gray-500">{{ t.t('admin.objectivesHint') }}</p>
+              </div>
+
+            </div>
+
+            <!-- Drawer Footer -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
+              <button
+                type="button"
+                (click)="closeDrawer()"
+                class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                {{ t.t('common.cancel') }}
+              </button>
+              <button
+                type="submit"
+                [disabled]="courseForm.invalid || isLoading"
+                class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                @if (isLoading) {
+                  <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                }
+                {{ isEditMode ? t.t('admin.updateCourse') : t.t('admin.createCourse') }}
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>
+
